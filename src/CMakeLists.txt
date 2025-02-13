@@ -27,7 +27,9 @@ add_executable(MediaManager main.cpp
         Model/ArticlesClasses/AcademicArticle.cpp
         Model/ArticlesClasses/AcademicArticle.h
         Model/ArticlesClasses/NewspaperArticle.cpp
-        Model/ArticlesClasses/NewspaperArticle.h)
+        Model/ArticlesClasses/NewspaperArticle.h
+        MainWindow.cpp
+        MainWindow.h)
 target_link_libraries(MediaManager
   Qt::Core
   Qt::Gui
