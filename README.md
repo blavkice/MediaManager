@@ -5,7 +5,6 @@ Extensibility is a key aspect of the project, as it is possible to add new types
 For the purpose of the project, there are 4 concrete classes:
 - Poem 
 - Book
-both derived from the abstract class Literature, and
 - AcademicArticle
 - NewspaperArticle
-both derived from the abstract class Article.
+the first two derived from the abstract class Literature while the last two derived from the abstract class Article.
