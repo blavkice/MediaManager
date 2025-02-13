@@ -8,4 +8,5 @@ For the purpose of the project, there are 4 concrete classes:
 - AcademicArticle
 - NewspaperArticle
 \
+\
 the first two derived from the abstract class Literature while the last two derived from the abstract class Article.
