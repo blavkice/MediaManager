@@ -1,0 +1,15 @@
+#include "Poem.h"
+
+Poem::Poem(const unsigned int id, const QString& title, const QString& short_description, const QString& image_path,
+    const QString& author, const QString& long_description, int publication_year, short rating,
+    const QString& city)
+    : Literature(id, title, short_description, image_path, author, long_description, publication_year, rating),
+      city(city) { }
+
+QString Poem::getCity() const {
+    return city;
+}
+
+void Poem::setCity(const QString& city) {
+    this->city = city;
+}

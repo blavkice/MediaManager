@@ -15,7 +15,19 @@ find_package(Qt6 COMPONENTS
 
 add_executable(MediaManager main.cpp
         Model/Media.cpp
-        Model/Media.h)
+        Model/Media.h
+        Model/Literature.cpp
+        Model/Literature.h
+        Model/LiteratureClasses/Book.cpp
+        Model/LiteratureClasses/Book.h
+        Model/LiteratureClasses/Poem.cpp
+        Model/LiteratureClasses/Poem.h
+        Model/Articles.cpp
+        Model/Articles.h
+        Model/ArticlesClasses/AcademicArticle.cpp
+        Model/ArticlesClasses/AcademicArticle.h
+        Model/ArticlesClasses/NewspaperArticle.cpp
+        Model/ArticlesClasses/NewspaperArticle.h)
 target_link_libraries(MediaManager
   Qt::Core
   Qt::Gui
