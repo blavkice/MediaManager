@@ -13,7 +13,9 @@ find_package(Qt6 COMPONENTS
   Widgets
   REQUIRED)
 
-add_executable(MediaManager main.cpp)
+add_executable(MediaManager main.cpp
+        Model/Media.cpp
+        Model/Media.h)
 target_link_libraries(MediaManager
   Qt::Core
   Qt::Gui
