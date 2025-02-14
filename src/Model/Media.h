@@ -1,8 +1,10 @@
 #ifndef MEDIA_H
 #define MEDIA_H
+#include "Visitable.h"
+#include "Visitor.h"
 #include <QString>
 
-class Media {
+class Media : public Visitable {
 private:
     unsigned int id;
     QString title;
@@ -19,6 +21,8 @@ public:
     void setTitle(const QString &title);
     void setShortDescription(const QString &short_description);
     void setImagePath(const QString &image_path);
+    // methods for the design patterns
+    virtual void accept(Visitor *visitor) override;
 };
 
 #endif //MEDIA_H

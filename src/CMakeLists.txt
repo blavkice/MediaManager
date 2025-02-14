@@ -29,7 +29,9 @@ add_executable(MediaManager main.cpp
         Model/ArticlesClasses/NewspaperArticle.cpp
         Model/ArticlesClasses/NewspaperArticle.h
         MainWindow.cpp
-        MainWindow.h)
+        MainWindow.h
+        Model/Visitor.h
+        Model/Visitable.h)
 target_link_libraries(MediaManager
   Qt::Core
   Qt::Gui

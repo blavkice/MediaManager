@@ -8,6 +8,10 @@ Media::Media(const unsigned int id, const QString &title, const QString &short_d
 
 Media::~Media() = default;
 
+void Media::accept(Visitor *visitor) {
+    visitor->visit(this);
+}
+
 unsigned int Media::getId() const {
     return id;
 }
