@@ -2,4 +2,95 @@ src/cmake-build-debug/
 .idea/
 **/.DS_Store
 **/*.iml
-/src/View/Main.ui
+
+# Qt6 Build and Generated Files
+*.pro.user
+*.pro.user.*
+*.pro.user/
+Makefile
+qmake.stash
+qmake.cache
+*.qmake.cache
+*.qmake.stash
+*.moc
+*.ui.h
+*.qrc.h
+*.cpp~  # Backup files
+
+# Qt Creator specific
+.idea/
+.vscode/
+*.user
+*.user.*
+*.creator
+
+# Qt6 Build and Generated Files
+*.pro.user
+*.pro.user.*
+*.pro.user/
+Makefile
+qmake.stash
+qmake.cache
+*.qmake.cache
+*.qmake.stash
+*.moc
+*.ui.h
+*.qrc.h
+*.cpp~  # Backup files
+
+# Qt Creator specific
+.idea/
+.vscode/
+*.user
+*.user.*
+*.creator
+
+# Build directories (including Qt-specific build directories)
+build-*/         # Qt Creator default build directories
+*/build-*/       # CMake build directories
+*/.ninja/        # Ninja build files
+*.qmake.cache
+*.qmake.stash
+
+# Compiled object files
+*.o
+*.obj
+*.lo
+*.a
+*.lib
+*.dll
+*.so
+*.dylib
+*.exe
+*.out
+*.app
+
+# Dependency files (if using make)
+*.d
+
+# CMake files
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# Visual Studio files (if applicable)
+.vs/
+.vs2017/
+.vs2019/
+.vs2022/
+.vsconfig
+
+# macOS files
+*.DS_Store
+*.AppleDouble
+*.LSOverride
+Icon
+
+# Linux files
+*~
+
+# Windows-specific files
+Thumbs.db
+ehthumbs.db
