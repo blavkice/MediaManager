@@ -37,6 +37,8 @@ void MainWindow::initMenuBar() {
 
     actionsMenu->addAction(save);
     actionsMenu->addAction(exit);
+    // in order to show the personalized exit button in MacOS
+    exit->setMenuRole(QAction::NoRole);
 
     connect(exit, &QAction::triggered, this, &MainWindow::close);
 }
