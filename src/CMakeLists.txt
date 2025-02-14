@@ -31,7 +31,9 @@ add_executable(MediaManager main.cpp
         MainWindow.cpp
         MainWindow.h
         Model/Visitor.h
-        Model/Visitable.h)
+        Model/Visitable.h
+        Model/JSONVisitor.cpp
+        Model/JSONVisitor.h)
 target_link_libraries(MediaManager
   Qt::Core
   Qt::Gui
