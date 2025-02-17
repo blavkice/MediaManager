@@ -20,8 +20,8 @@ void StyleManager::applyMaterialStyle(QApplication& app) {
     app.setPalette(palette);
 }
 
-void StyleManager::setComputerModernFont(QApplication& app) {
-    const int fontId = QFontDatabase::addApplicationFont(":/fonts/ComputerModern-Regular.ttf");
+void StyleManager::setFont(QApplication& app) {
+    const int fontId = QFontDatabase::addApplicationFont(":Fonts/Quicksand-Regular-400.ttf");
     if (fontId != -1) {
         QString fontFamily = QFontDatabase::applicationFontFamilies(fontId).at(0);
         QFont font(fontFamily);

@@ -2,6 +2,7 @@
 //#include <QApplication>
 #include <QImage>
 #include <QPainterPath>
+#include <QFontDatabase>
 
 InfoListPainter::InfoListPainter(QObject* parent) : QStyledItemDelegate(parent) { }
 
@@ -17,29 +18,29 @@ void InfoListPainter::paint(QPainter* painter, const QStyleOptionViewItem& optio
     auto titleRect = QRect(rect.left() + 60, rect.top(), rect.width() - 80, 20);
     auto descriptionRect = QRect(rect.left() + 60, rect.top() + 20, rect.width() - 80, rect.height() - 20);
 
-    // draw image (rounded)
+    // draw image, rounded
     QPainterPath path;
     path.addRoundedRect(imgRect, 25, 25);
     painter->setClipPath(path);
     painter->drawImage(imgRect, img);
     painter->setClipping(false);
 
-    // draw title
-    QFont titleFont = painter->font();
-    titleFont.setBold(true);
-    titleFont.setPointSize(titleFont.pointSize() + 2); // Increase font size by 2 points
-    painter->setFont(titleFont);
+    // draw title with the AceSansExtrabold font
+    const int titleFontId = QFontDatabase::addApplicationFont(":/Fonts/AceSansExtrabold.ttf");
+    if (titleFontId != -1) {
+        QString titleFontFamily = QFontDatabase::applicationFontFamilies(titleFontId).at(0);
+        QFont titleFont(titleFontFamily);
+        titleFont.setPointSize(titleFont.pointSize() + 2);
+        painter->setFont(titleFont);
+    }
     painter->drawText(titleRect, Qt::AlignLeft | Qt::AlignVCenter, title);
 
-    // resetting the font back to normal
-    QFont descriptionFont = painter->font();
-    descriptionFont.setBold(false);
-    descriptionFont.setPointSize(descriptionFont.pointSize() - 2); // Reset font size
-    painter->setFont(descriptionFont);
+    // reset the font to the default for the description
+    painter->setFont(option.font);
 
     // draw the description and avoid text overflow
     QTextOption textOption;
-    textOption.setWrapMode(QTextOption::WordWrap); // Enable word wrap
+    textOption.setWrapMode(QTextOption::WordWrap);
     painter->drawText(descriptionRect, description, textOption);
 
     painter->restore();

@@ -2,5 +2,9 @@
 <RCC>
     <qresource>
         <file>default.jpg</file>
+        <file>Fonts/cmu.concrete-roman.ttf</file>
+        <file>Fonts/cmu.serif-bold.ttf</file>
+        <file>Fonts/AceSansExtrabold.ttf</file>
+        <file>Fonts/Quicksand-Regular-400.ttf</file>
     </qresource>
 </RCC>

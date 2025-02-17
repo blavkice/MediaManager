@@ -5,7 +5,7 @@
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
     StyleManager::applyMaterialStyle(app);
-    StyleManager::setComputerModernFont(app);
+    StyleManager::setFont(app);
 
     MainWindow w;
     w.show();
