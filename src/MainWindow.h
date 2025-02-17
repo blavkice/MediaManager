@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 #include <QMainWindow>
 #include <QMenu>
-// ReSharper disable once CppUnusedIncludeDirective
 #include <QMenuBar>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -10,6 +9,7 @@
 #include <QGridLayout>
 #include <QLineEdit>
 #include <QLabel>
+#include <QPushButton>
 #include "View/MediaListController.h"
 
 // ReSharper disable once CppClassCanBeFinal
@@ -25,8 +25,12 @@ private:
     void initMenuBar();
     void initLayouts();
     QHBoxLayout* hMainViewLayout;
+    // vertical left layout elements
     QVBoxLayout* vLeftLayout;
     QLineEdit* searchBox;
+    QPushButton* addButton;
+    QPushButton* removeButton;
+
     QListView* listView;
     QGridLayout* gridLayout;
     // to populate the list view

@@ -20,14 +20,27 @@ void MainWindow::initLayouts() {
     gridLayout = new QGridLayout(rightInfoWidget);
     // the widget for the left "fixed" part
     auto vLeftWidget = new QWidget(centralWidget);
-    auto searchLabel = new QLabel("Search item:", vLeftWidget);
+    // the widget containing the search box and add and remove buttons
+    auto utilsWidget = new QWidget(vLeftWidget);
+    auto utilsHorizontalLayout = new QHBoxLayout(utilsWidget);
+    utilsWidget->setLayout(utilsHorizontalLayout);
+    auto searchLabel = new QLabel("Search:", utilsWidget);
     vLeftLayout = new QVBoxLayout(vLeftWidget);
-    searchBox = new QLineEdit(vLeftWidget);
+    searchBox = new QLineEdit(utilsWidget);
+    addButton = new QPushButton("+", utilsWidget);
+    addButton->setToolTip("add new media");
+    addButton->setFixedSize(25, 25);
+    removeButton = new QPushButton("-", utilsWidget);
+    removeButton->setToolTip("remove selected media");
+    removeButton->setFixedSize(25, 25);
     listView = new QListView(vLeftWidget);
     mediaListController = new MediaListController(listView);
 
-    vLeftLayout->addWidget(searchLabel);
-    vLeftLayout->addWidget(searchBox);
+    utilsHorizontalLayout->addWidget(searchLabel);
+    utilsHorizontalLayout->addWidget(searchBox);
+    utilsHorizontalLayout->addWidget(addButton);
+    utilsHorizontalLayout->addWidget(removeButton);
+    vLeftLayout->addWidget(utilsWidget);
     vLeftLayout->addWidget(listView);
     // listView->sIDelegate is already set in MediaListController
     vLeftWidget->setFixedWidth(250);

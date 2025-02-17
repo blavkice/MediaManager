@@ -22,7 +22,7 @@ void MediaListController::addMedia(Media* media) {
 void MediaListController::populateList() const {
     model->clear();
     for(const auto& media : mediaList) {
-        QStandardItem* item = new QStandardItem();
+        const auto item = new QStandardItem();
         QImage image(media->getImagePath());
         if (image.isNull()) {
             image.load(":default.jpg");
