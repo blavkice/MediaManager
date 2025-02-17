@@ -6,6 +6,7 @@ class Poem : public Literature {
 private:
     QString city;
 public:
+    Poem() = default;
     Poem(unsigned int id, const QString &title, const QString &short_description, const QString &image_path,
         const QString &author, const QString &long_description, int publication_year, short rating,
         const QString &city);

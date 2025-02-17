@@ -9,6 +9,7 @@ private:
     int publicationYear;
     short rating;
 public:
+    Literature() = default;
     Literature(unsigned int id, const QString &title, const QString &short_description, const QString &image_path,
         const QString &author, const QString &long_description, int publication_year, short rating);
     ~Literature() override = 0; // to make the class abstract

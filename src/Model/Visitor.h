@@ -2,12 +2,6 @@
 #define VISITOR_H
 
 class Media;
-class Literature;
-class Articles;
-class Book;
-class Poem;
-class AcademicArticle;
-class NewspaperArticle;
 
 class Visitor {
 public:

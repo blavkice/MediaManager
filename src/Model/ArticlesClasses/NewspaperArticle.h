@@ -7,6 +7,7 @@ private:
     QString headline;
     bool politics;
 public:
+    NewspaperArticle() = default;
     NewspaperArticle(const unsigned id, const QString &title, const QString &short_description, const QString &image_path,
         const QString &author, const QString &category, const QString &url, const QDate &date, const unsigned int word_count,
         const QString &headline, const bool politics);

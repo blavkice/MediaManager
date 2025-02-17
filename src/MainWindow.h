@@ -10,6 +10,7 @@
 #include <QLineEdit>
 #include <QLabel>
 #include <QPushButton>
+#include <QComboBox>
 #include "View/MediaListController.h"
 
 // ReSharper disable once CppClassCanBeFinal
@@ -24,18 +25,22 @@ private:
     QAction* save; // TBD real persistence
     void initMenuBar();
     void initLayouts();
+    void initAddComboBox();
     QHBoxLayout* hMainViewLayout;
     // vertical left layout elements
     QVBoxLayout* vLeftLayout;
     QLineEdit* searchBox;
     QPushButton* addButton;
     QPushButton* removeButton;
-
+    QComboBox* addComboBox;
     QListView* listView;
-    QGridLayout* gridLayout;
     // to populate the list view
     MediaListController* mediaListController;
-
+private slots:
+    void onAddButtonClicked() const;
+    void onComboBoxActivated(int index);
+    void onMediaSelected(int index);
+    void onMediaCreated(Media* media);
 public:
     explicit MainWindow(QWidget* parent = nullptr);
 };

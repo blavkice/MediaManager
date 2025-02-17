@@ -40,7 +40,11 @@ add_executable(MediaManager main.cpp
         View/InfoListPainter.h
         resources.qrc
         View/StyleManager.cpp
-        View/StyleManager.h)
+        View/StyleManager.h
+        Model/AddVisitor.cpp
+        Model/AddVisitor.h
+        View/CreateMediaWidget.cpp
+        View/CreateMediaWidget.h)
 target_link_libraries(MediaManager
   Qt::Core
   Qt::Gui

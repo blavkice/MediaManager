@@ -1,6 +1,11 @@
+#include <QComboBox>
 #include "MainWindow.h"
 #include "Model/LiteratureClasses/Book.h"
 #include "Model/LiteratureClasses/Poem.h"
+#include "Model/ArticlesClasses/NewspaperArticle.h"
+#include "Model/ArticlesClasses/AcademicArticle.h"
+#include "View/CreateMediaWidget.h"
+#include "Model/AddVisitor.h"
 
 MainWindow::MainWindow(QWidget* parent):
     QMainWindow(parent),
@@ -11,13 +16,13 @@ MainWindow::MainWindow(QWidget* parent):
     setCentralWidget(centralWidget);
     initMenuBar();
     initLayouts();
+    initAddComboBox();
 }
 
 void MainWindow::initLayouts() {
     hMainViewLayout = new QHBoxLayout(centralWidget);
     // the "multifunctional" widget that will be used to display the media info
     rightInfoWidget = new QWidget(centralWidget);
-    gridLayout = new QGridLayout(rightInfoWidget);
     // the widget for the left "fixed" part
     auto vLeftWidget = new QWidget(centralWidget);
     // the widget containing the search box and add and remove buttons
@@ -40,11 +45,11 @@ void MainWindow::initLayouts() {
     utilsHorizontalLayout->addWidget(searchBox);
     utilsHorizontalLayout->addWidget(addButton);
     utilsHorizontalLayout->addWidget(removeButton);
+
     vLeftLayout->addWidget(utilsWidget);
     vLeftLayout->addWidget(listView);
     // listView->sIDelegate is already set in MediaListController
     vLeftWidget->setFixedWidth(250);
-    rightInfoWidget->setLayout(gridLayout);
 
     hMainViewLayout->addWidget(vLeftWidget);
     hMainViewLayout->addItem(new QSpacerItem(20, 0, QSizePolicy::Expanding, QSizePolicy::Minimum));
@@ -66,6 +71,19 @@ void MainWindow::initLayouts() {
     mediaListController->addMedia(book3);
 }
 
+
+void MainWindow::initAddComboBox() {
+    connect(addButton, &QPushButton::clicked, this, &MainWindow::onAddButtonClicked);
+    addComboBox = new QComboBox(this);
+    addComboBox->addItem("Select media type:");
+    addComboBox->addItem("Book");
+    addComboBox->addItem("Poem");
+    addComboBox->addItem("Academic Article");
+    addComboBox->addItem("Newspaper Article");
+    addComboBox->setVisible(false);
+    connect(addComboBox, QOverload<int>::of(&QComboBox::activated), this, &MainWindow::onComboBoxActivated);
+}
+
 void MainWindow::initMenuBar() {
     actionsMenu = menuBar->addMenu(tr("Actions"));
     exit = new QAction(tr("Exit MediaManager"), this);
@@ -77,4 +95,54 @@ void MainWindow::initMenuBar() {
     exit->setMenuRole(QAction::NoRole);
 
     connect(exit, &QAction::triggered, this, &MainWindow::close);
+}
+
+void MainWindow::onAddButtonClicked() const {
+    QPoint pos = addButton->mapToGlobal(QPoint(0, addButton->height()));
+    pos = mapFromGlobal(pos);
+    addComboBox->move(pos);
+    addComboBox->setVisible(true);
+    addComboBox->showPopup();
+}
+
+void MainWindow::onComboBoxActivated(const int index) {
+    onMediaSelected(index);
+    addComboBox->setVisible(false);
+}
+
+void MainWindow::onMediaSelected(const int index) {
+    if (index < 1) return;
+    Media* media = nullptr;
+    switch (index) {
+        case 1: media = new Book(); break;
+        case 2: media = new Poem(); break;
+        case 3: media = new AcademicArticle(); break;
+        case 4: media = new NewspaperArticle(); break;
+    }
+    if (media) {
+        auto createMediaWidget = new CreateMediaWidget(rightInfoWidget);
+        AddVisitor addVisitor(createMediaWidget);
+        media->accept(&addVisitor);
+        rightInfoWidget->hide();
+        if (rightInfoWidget->layout()) {
+            QLayoutItem* item;
+            while ((item = rightInfoWidget->layout()->takeAt(0)) != nullptr) {
+                delete item->widget();
+                delete item;
+            }
+            delete rightInfoWidget->layout();
+        }
+        rightInfoWidget->setParent(nullptr);
+        rightInfoWidget = createMediaWidget;
+        hMainViewLayout->addWidget(rightInfoWidget);
+        rightInfoWidget->show();
+    }
+}
+
+void MainWindow::onMediaCreated(Media* media) {
+    mediaListController->addMedia(media);
+    rightInfoWidget->hide();
+    rightInfoWidget = new QWidget(centralWidget);
+    rightInfoWidget->setLayout(new QVBoxLayout());
+    rightInfoWidget->show();
 }
