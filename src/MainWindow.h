@@ -10,7 +10,7 @@
 #include <QGridLayout>
 #include <QLineEdit>
 #include <QLabel>
-#include "Controller/MediaListController.h"
+#include "View/MediaListController.h"
 
 // ReSharper disable once CppClassCanBeFinal
 class MainWindow : public QMainWindow {

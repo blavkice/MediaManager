@@ -13,9 +13,9 @@ void InfoListPainter::paint(QPainter* painter, const QStyleOptionViewItem& optio
     QString title = index.data(Qt::DisplayRole).toString();
     QString description = index.data(Qt::UserRole + 1).toString();
 
-    QRect imgRect = QRect(rect.left(), rect.top(), 50, 50);
-    QRect titleRect = QRect(rect.left() + 60, rect.top(), rect.width() - 60, 20);
-    QRect descriptionRect = QRect(rect.left() + 60, rect.top() + 20, rect.width() - 60, rect.height() - 20);
+    auto imgRect = QRect(rect.left(), rect.top(), 50, 50);
+    auto titleRect = QRect(rect.left() + 60, rect.top(), rect.width() - 80, 20);
+    auto descriptionRect = QRect(rect.left() + 60, rect.top() + 20, rect.width() - 80, rect.height() - 20);
 
     // draw image (rounded)
     QPainterPath path;
@@ -39,7 +39,7 @@ void InfoListPainter::paint(QPainter* painter, const QStyleOptionViewItem& optio
 
     // draw the description and avoid text overflow
     QTextOption textOption;
-    textOption.setWrapMode(QTextOption::WordWrap);
+    textOption.setWrapMode(QTextOption::WordWrap); // Enable word wrap
     painter->drawText(descriptionRect, description, textOption);
 
     painter->restore();
@@ -49,5 +49,5 @@ QSize InfoListPainter::sizeHint(const QStyleOptionViewItem& option, const QModel
     QFontMetrics fontMetrics(option.font);
     QString description = index.data(Qt::UserRole + 1).toString();
     int textHeight = fontMetrics.boundingRect(QRect(0, 0, option.rect.width() - 60, 0), Qt::TextWordWrap, description).height();
-    return QSize(option.rect.width(), 50 + textHeight);
+    return QSize(option.rect.width(), 70 + textHeight);
 }

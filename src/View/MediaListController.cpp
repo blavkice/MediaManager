@@ -5,8 +5,12 @@
 
 MediaListController::MediaListController(QListView* listView) : listView(listView) {
     model = new QStandardItemModel(listView);
+    if (listView == nullptr) {
+        throw std::invalid_argument("listView cannot be null");
+    }
     listView->setModel(model);
     listView->setItemDelegate(new InfoListPainter(listView));
+    listView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     listView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 }
 
