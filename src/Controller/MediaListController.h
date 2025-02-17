@@ -12,7 +12,7 @@ private:
     QListView* listView;
     QStandardItemModel* model;
     vector<Media*> mediaList;
-    void populateList();
+    void populateList() const;
 public:
     explicit MediaListController(QListView* listView);
     void addMedia(Media* media);

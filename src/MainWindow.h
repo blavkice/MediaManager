@@ -10,12 +10,14 @@
 #include <QGridLayout>
 #include <QLineEdit>
 #include <QLabel>
+#include "Controller/MediaListController.h"
 
 // ReSharper disable once CppClassCanBeFinal
 class MainWindow : public QMainWindow {
     Q_OBJECT
 private:
     QWidget* centralWidget;
+    QWidget* rightInfoWidget;
     QMenuBar* menuBar;
     QMenu* actionsMenu;
     QAction* exit;
@@ -27,6 +29,9 @@ private:
     QLineEdit* searchBox;
     QListView* listView;
     QGridLayout* gridLayout;
+    // to populate the list view
+    MediaListController* mediaListController;
+
 public:
     explicit MainWindow(QWidget* parent = nullptr);
 };

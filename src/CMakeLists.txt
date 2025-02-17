@@ -35,7 +35,10 @@ add_executable(MediaManager main.cpp
         Model/JSONVisitor.cpp
         Model/JSONVisitor.h
         Controller/MediaListController.cpp
-        Controller/MediaListController.h)
+        Controller/MediaListController.h
+        Controller/InfoListPainter.cpp
+        Controller/InfoListPainter.h
+        resources.qrc)
 target_link_libraries(MediaManager
   Qt::Core
   Qt::Gui
