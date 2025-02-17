@@ -94,3 +94,4 @@ Icon
 # Windows-specific files
 Thumbs.db
 ehthumbs.db
+/cmake-build-debug/
