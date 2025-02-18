@@ -12,13 +12,17 @@
 MainWindow::MainWindow(QWidget* parent):
     QMainWindow(parent),
     centralWidget(new QWidget(this)),
-    menuBar(new QMenuBar(this)) {
+    menuBar(new MenuBar(this)) {
     resize(800, 600);
     setMenuBar(menuBar);
     setCentralWidget(centralWidget);
-    initMenuBar();
     initLayouts();
     initAddComboBox();
+    // json visitor for the import/export actions
+    auto jsonVisitor = new JSONEditor();
+    menuBar->setJSONVisitor(jsonVisitor);
+    // connections for json import/export
+    connect(menuBar, &MenuBar::mediaImported, this, &MainWindow::synchronizeMediaList);
 }
 
 void MainWindow::initLayouts() {
@@ -76,26 +80,12 @@ void MainWindow::initLayouts() {
 void MainWindow::initAddComboBox() {
     connect(addButton, &QPushButton::clicked, this, &MainWindow::onAddButtonClicked);
     addComboBox = new QComboBox(this);
-    addComboBox->addItem("Select media type:");
     addComboBox->addItem("Book");
     addComboBox->addItem("Poem");
     addComboBox->addItem("Academic Article");
     addComboBox->addItem("Newspaper Article");
     addComboBox->setVisible(false);
     connect(addComboBox, QOverload<int>::of(&QComboBox::activated), this, &MainWindow::onComboBoxActivated);
-}
-
-void MainWindow::initMenuBar() {
-    actionsMenu = menuBar->addMenu(tr("Actions"));
-    exit = new QAction(tr("Exit MediaManager"), this);
-    save = new QAction(tr("Save"), this);
-
-    actionsMenu->addAction(save);
-    actionsMenu->addAction(exit);
-    // in order to show the personalized exit button in macOS
-    exit->setMenuRole(QAction::NoRole);
-
-    connect(exit, &QAction::triggered, this, &MainWindow::close);
 }
 
 void MainWindow::onAddButtonClicked() const {
@@ -112,13 +102,13 @@ void MainWindow::onComboBoxActivated(const int index) const {
 }
 
 void MainWindow::onMediaSelected(const int index) const {
-    if (index < 1) return;
+    if (index < 0) return;
     Media* media = nullptr;
     switch (index) {
-        case 1: media = new Book(); break;
-        case 2: media = new Poem(); break;
-        case 3: media = new AcademicArticle(); break;
-        case 4: media = new NewspaperArticle(); break;
+        case 0: media = new Book(); break;
+        case 1: media = new Poem(); break;
+        case 2: media = new AcademicArticle(); break;
+        case 3: media = new NewspaperArticle(); break;
     }
     const auto createMediaWidget = new CreateMediaWidget(rightInfoWidget, media);
 
@@ -130,4 +120,13 @@ void MainWindow::onMediaSelected(const int index) const {
 void MainWindow::onMediaCreated(Media* media) const {
     mediaListController->addMedia(media);
     rightInfoWidget->setMediaCreated();
+    // the clear up is done by rightInfoWidget after a widget is set: the previous widget is deleted from heap
+    // and so createMediaWidget is deleted correctly everytime
+}
+
+void MainWindow::synchronizeMediaList(const QList<Media*>& mediaList) const {
+    mediaListController->clearMedia();
+    for (auto* media : mediaList) {
+        mediaListController->addMedia(media);
+    }
 }

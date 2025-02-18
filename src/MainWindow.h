@@ -11,6 +11,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QComboBox>
+#include "View/MenuBar.h"
 #include "View/MediaListController.h"
 #include "View/RightDynamicWidget.h"
 
@@ -19,14 +20,9 @@ class MainWindow : public QMainWindow {
     Q_OBJECT
 private:
     QWidget* centralWidget;
+    // the two personalized elements
     RightDynamicWidget* rightInfoWidget;
-    QMenuBar* menuBar;
-    QMenu* actionsMenu;
-    QAction* exit;
-    QAction* save; // TBD real persistence
-    void initMenuBar();
-    void initLayouts();
-    void initAddComboBox();
+    MenuBar* menuBar;
     QHBoxLayout* hMainViewLayout;
     // vertical left layout elements
     QVBoxLayout* vLeftLayout;
@@ -35,13 +31,17 @@ private:
     QPushButton* removeButton;
     QComboBox* addComboBox;
     QListView* listView;
-    // to populate the list view
+    // for the list of currently active elements
     MediaListController* mediaListController;
+    QList<Media*>* mediaList;
+    void initLayouts();
+    void initAddComboBox();
 private slots:
     void onAddButtonClicked() const;
     void onComboBoxActivated(int index) const;
     void onMediaSelected(int index) const;
     void onMediaCreated(Media* media) const;
+    void synchronizeMediaList(const QList<Media*>& mediaList) const;
 public:
     explicit MainWindow(QWidget* parent = nullptr);
 };

@@ -22,7 +22,7 @@ CreateMediaWidget::CreateMediaWidget(QWidget* parent, Media* media)
     addVisitor = new AddVisitor(contentLayout);
     media->accept(addVisitor);
 
-    auto createButton = new QPushButton("Create", this);
+    const auto createButton = new QPushButton("Create", this);
     contentLayout->addWidget(createButton);
 
     contentWidget->setLayout(contentLayout);
@@ -36,6 +36,7 @@ CreateMediaWidget::CreateMediaWidget(QWidget* parent, Media* media)
         if (currentMedia) {
             addVisitor->saveInput(currentMedia);
             emit mediaCreated(currentMedia);
+            delete addVisitor;
         }
     });
 }

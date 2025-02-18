@@ -2,20 +2,21 @@
 #define MEDIALISTCONTROLLER_H
 #include <QListView>
 #include <QStandardItemModel>
-#include <vector>
+#include <QList>
 #include "../Model/Media.h"
-
-using std::vector;
 
 class MediaListController {
 private:
     QListView* listView;
     QStandardItemModel* model;
-    vector<Media*> mediaList;
+    QList<Media*> mediaList;
     void populateList() const;
 public:
     explicit MediaListController(QListView* listView);
     void addMedia(Media* media);
+    void clearMedia();
+    QList<Media*> getMediaList() const;
+    void setMediaList(const QList<Media*>& mediaList);
 };
 
 #endif //MEDIALISTCONTROLLER_H

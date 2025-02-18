@@ -32,8 +32,8 @@ add_executable(MediaManager main.cpp
         MainWindow.h
         Model/Visitor.h
         Model/Visitable.h
-        Model/JSONVisitor.cpp
-        Model/JSONVisitor.h
+        Model/JSONEditor.cpp
+        Model/JSONEditor.h
         View/MediaListController.cpp
         View/MediaListController.h
         View/InfoListPainter.cpp
@@ -46,7 +46,11 @@ add_executable(MediaManager main.cpp
         View/CreateMediaWidget.cpp
         View/CreateMediaWidget.h
         View/RightDynamicWidget.cpp
-        View/RightDynamicWidget.h)
+        View/RightDynamicWidget.h
+        Model/ImageValidator.cpp
+        Model/ImageValidator.h
+        View/MenuBar.cpp
+        View/MenuBar.h)
 target_link_libraries(MediaManager
   Qt::Core
   Qt::Gui

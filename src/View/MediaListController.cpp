@@ -15,8 +15,13 @@ MediaListController::MediaListController(QListView* listView) : listView(listVie
 }
 
 void MediaListController::addMedia(Media* media) {
-    mediaList.push_back(media);
+    mediaList.append(media);
     populateList();
+}
+
+void MediaListController::clearMedia() {
+    mediaList.clear();
+    model->clear();
 }
 
 void MediaListController::populateList() const {
@@ -32,4 +37,13 @@ void MediaListController::populateList() const {
         item->setData(media->getShortDescription(), Qt::UserRole + 1);
         model->appendRow(item);
     }
+}
+
+QList<Media*> MediaListController::getMediaList() const {
+    return mediaList;
+}
+
+void MediaListController::setMediaList(const QList<Media*>& mediaList) {
+    this->mediaList = mediaList;
+    populateList();
 }
