@@ -18,6 +18,10 @@ CreateMediaWidget::CreateMediaWidget(QWidget* parent, Media* media)
         delete item;
     }
 
+    // visualize the input fields for the selected concrete media
+    addVisitor = new AddVisitor(contentLayout);
+    media->accept(addVisitor);
+
     auto createButton = new QPushButton("Create", this);
     contentLayout->addWidget(createButton);
 
@@ -30,9 +34,7 @@ CreateMediaWidget::CreateMediaWidget(QWidget* parent, Media* media)
 
     connect(createButton, &QPushButton::clicked, this, [this]() {
         if (currentMedia) {
-            AddVisitor visitor(contentLayout);
-            currentMedia->accept(&visitor);
-            visitor.saveInput(currentMedia);
+            addVisitor->saveInput(currentMedia);
             emit mediaCreated(currentMedia);
         }
     });

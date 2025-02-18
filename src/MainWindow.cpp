@@ -124,12 +124,7 @@ void MainWindow::onMediaSelected(const int index) const {
 
     connect(createMediaWidget, &CreateMediaWidget::mediaCreated, this, &MainWindow::onMediaCreated);
 
-    if (const auto contentLayout = createMediaWidget->getContentLayout()) {
-        auto* addVisitor = new AddVisitor(contentLayout);
-        media->accept(addVisitor);
-        rightInfoWidget->setWidget(createMediaWidget);
-        delete addVisitor;
-    }
+    rightInfoWidget->setWidget(createMediaWidget);
 }
 
 void MainWindow::onMediaCreated(Media* media) const {
