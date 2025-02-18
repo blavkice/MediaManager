@@ -22,7 +22,7 @@ public:
     void setLongDescription(const QString &long_description);
     void setPublicationYear(int publication_year);
     void setRating(short rating);
-    void accept(Visitor *visitor) override;
+    virtual void accept(Visitor *visitor) override = 0;
 };
 
 #endif //LITERATURE_H

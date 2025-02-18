@@ -25,7 +25,7 @@ public:
     void setUrl(const QString &url);
     void setDate(const QDate &date);
     void setWordCount(unsigned int word_count);
-    void accept(Visitor *visitor) override;
+    virtual void accept(Visitor *visitor) override = 0;
 };
 
 #endif //ARTICLES_H

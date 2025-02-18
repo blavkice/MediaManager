@@ -23,7 +23,7 @@ public:
     void setShortDescription(const QString &short_description);
     void setImagePath(const QString &image_path);
     // methods for the design patterns
-    void accept(Visitor *visitor) override;
+    virtual void accept(Visitor *visitor) override = 0;
 };
 
 #endif //MEDIA_H

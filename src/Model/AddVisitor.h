@@ -2,6 +2,8 @@
 #define ADDVISITOR_H
 #include <QWidget>
 #include <QLayout>
+#include <QMap>
+#include <QLineEdit>
 #include "Visitor.h"
 #include "Literature.h"
 #include "Articles.h"
@@ -12,19 +14,18 @@
 
 class AddVisitor : public Visitor {
 private:
-    QWidget* widget;
     QLayout* layout;
-    // the layout will be taken from the widget, specifically
-    // from CreateMediaWidget, and it will be a QVBoxLayout
+    QMap<QString, QLineEdit*> inputFields;
 public:
-    explicit AddVisitor(QWidget* widget);
+    explicit AddVisitor(QLayout* layout);
     void visit(Media* media) override;
-    virtual void visit(Literature* literature);
-    virtual void visit(Articles* article);
-    virtual void visit(Book* book);
-    virtual void visit(Poem* poem);
-    virtual void visit(AcademicArticle* academicArticle);
-    virtual void visit(NewspaperArticle* newspaperArticle);
+    void visit(Literature* literature) override;
+    void visit(Articles* article) override;
+    void visit(Book* book) override;
+    void visit(Poem* poem) override;
+    void visit(AcademicArticle* academicArticle) override;
+    void visit(NewspaperArticle* newspaperArticle) override;
+    void saveInput(Media* media);
 };
 
-#endif //ADDVISITOR_H
+#endif // ADDVISITOR_H

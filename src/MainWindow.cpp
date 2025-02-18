@@ -7,6 +7,8 @@
 #include "View/CreateMediaWidget.h"
 #include "Model/AddVisitor.h"
 
+#include <QDebug>
+
 MainWindow::MainWindow(QWidget* parent):
     QMainWindow(parent),
     centralWidget(new QWidget(this)),
@@ -118,9 +120,9 @@ void MainWindow::onMediaSelected(const int index) const {
         case 3: media = new AcademicArticle(); break;
         case 4: media = new NewspaperArticle(); break;
     }
-    if (media) {
-        auto createMediaWidget = new CreateMediaWidget(rightInfoWidget, media);
-        AddVisitor* addVisitor = new AddVisitor(createMediaWidget);
+    const auto createMediaWidget = new CreateMediaWidget(rightInfoWidget, media);
+    if (const auto contentLayout = createMediaWidget->getContentLayout()) {
+        auto* addVisitor = new AddVisitor(contentLayout);
         media->accept(addVisitor);
         rightInfoWidget->setWidget(createMediaWidget);
         delete addVisitor;
