@@ -20,10 +20,7 @@ RightDynamicWidget::RightDynamicWidget(QWidget* parent) : QWidget(parent), curre
 }
 
 void RightDynamicWidget::setWidget(QWidget* widget) {
-    if(currentWidget) {
-        layout()->removeWidget(currentWidget);
-        currentWidget->hide();
-    }
+    clear();
     currentWidget = widget;
     if(currentWidget) {
         layout()->addWidget(currentWidget);
@@ -32,11 +29,16 @@ void RightDynamicWidget::setWidget(QWidget* widget) {
 }
 
 void RightDynamicWidget::setMediaCreated() {
-    if(currentWidget) {
-        layout()->removeWidget(currentWidget);
-        currentWidget->hide();
+    clear();
+    setWidget(new QLabel("Media created!", this));
+}
+
+void RightDynamicWidget::clear() {
+    // to delete recursively all the widgets in the layout
+    QLayoutItem* item;
+    while ((item = layout()->takeAt(0)) != nullptr) {
+        delete item->widget();
+        delete item;
     }
-    currentWidget = new QLabel("Media created!", this);
-    layout()->addWidget(currentWidget);
-    currentWidget->show();
+    currentWidget = nullptr;
 }

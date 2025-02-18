@@ -6,6 +6,10 @@ Poem::Poem(const unsigned int id, const QString& title, const QString& short_des
     : Literature(id, title, short_description, image_path, author, long_description, publication_year, rating),
       city(city) { }
 
+void Poem::accept(Visitor *visitor) {
+    visitor->visit(this);
+}
+
 QString Poem::getCity() const {
     return city;
 }

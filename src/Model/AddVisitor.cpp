@@ -1,6 +1,6 @@
-#include "AddVisitor.h"
 #include <QLabel>
 #include <QLineEdit>
+#include "AddVisitor.h"
 
 AddVisitor::AddVisitor(QWidget* widget) : widget(widget) {
     if (!widget->layout()) {

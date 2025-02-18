@@ -15,6 +15,7 @@ public:
     bool isPolitics() const;
     void setHeadline(const QString &headline);
     void setPolitics(const bool politics);
+    void accept(Visitor *visitor) override;
 };
 
 #endif //NEWSPAPERARTICLE_H

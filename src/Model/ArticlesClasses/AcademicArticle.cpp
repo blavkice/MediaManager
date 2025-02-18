@@ -9,6 +9,10 @@ AcademicArticle::AcademicArticle(const unsigned int id, const QString &title, co
           peerReviewed(peer_reviewed) {
 }
 
+void AcademicArticle::accept(Visitor *visitor) {
+    visitor->visit(this);
+}
+
 QString AcademicArticle::getUniversityName() const {
     return universityName;
 }

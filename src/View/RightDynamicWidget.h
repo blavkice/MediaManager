@@ -10,6 +10,7 @@ public:
     explicit RightDynamicWidget(QWidget* parent = nullptr);
     void setWidget(QWidget* widget);
     void setMediaCreated();
+    void clear();
 };
 
 #endif //RIGHTDYNAMICWIDGET_H

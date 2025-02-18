@@ -11,6 +11,10 @@ Articles::Articles(const unsigned int id, const QString &title, const QString &s
 
 Articles::~Articles() = default;
 
+void Articles::accept(Visitor *visitor) {
+    visitor->visit(this);
+}
+
 QString Articles::getAuthor() const {
     return author;
 }

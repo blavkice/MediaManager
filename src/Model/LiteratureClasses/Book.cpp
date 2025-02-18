@@ -7,6 +7,10 @@ Book::Book(const unsigned int id, const QString &title, const QString &short_des
       publishing(publishing),
       pages(pages) { }
 
+void Book::accept(Visitor *visitor) {
+    visitor->visit(this);
+}
+
 QString Book::getPublishing() const {
     return publishing;
 }

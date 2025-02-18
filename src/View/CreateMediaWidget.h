@@ -8,8 +8,7 @@ class CreateMediaWidget : public QWidget {
 private:
     Media* currentMedia;
 public:
-    explicit CreateMediaWidget(QWidget* parent = nullptr);
-    void setMedia(Media* media);
+    explicit CreateMediaWidget(QWidget* parent = nullptr, Media* media = nullptr);
 signals:
     void mediaCreated(Media* media);
 };

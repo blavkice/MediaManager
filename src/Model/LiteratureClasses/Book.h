@@ -15,6 +15,7 @@ public:
     unsigned int getPages() const;
     void setPublishing(const QString &publishing);
     void setPages(unsigned int pages);
+    void accept(Visitor *visitor) override;
 };
 
 #endif //BOOK_H

@@ -12,6 +12,7 @@ public:
         const QString &city);
     QString getCity() const;
     void setCity(const QString &city);
+    void accept(Visitor *visitor) override;
 };
 
 #endif //POEM_H

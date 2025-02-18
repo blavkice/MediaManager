@@ -7,6 +7,10 @@ NewspaperArticle::NewspaperArticle(const unsigned id, const QString &title, cons
           headline(headline),
           politics(politics) { }
 
+void NewspaperArticle::accept(Visitor *visitor) {
+    visitor->visit(this);
+}
+
 QString NewspaperArticle::getHeadline() const {
     return headline;
 }

@@ -18,6 +18,7 @@ public:
     void setCitationCount(unsigned int citation_count);
     void setPeerReviewed(bool peer_reviewed);
     void setUniversityName(const QString &university_name);
+    void accept(Visitor *visitor) override;
 };
 
 #endif //ACADEMICARTICLE_H

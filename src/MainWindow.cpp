@@ -52,8 +52,8 @@ void MainWindow::initLayouts() {
     vLeftWidget->setFixedWidth(250);
 
     hMainViewLayout->addWidget(vLeftWidget);
-    hMainViewLayout->addItem(new QSpacerItem(20, 0, QSizePolicy::Expanding, QSizePolicy::Minimum));
     hMainViewLayout->addWidget(rightInfoWidget);
+    rightInfoWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     centralWidget->setLayout(hMainViewLayout);
 
 
@@ -70,7 +70,6 @@ void MainWindow::initLayouts() {
     mediaListController->addMedia(poem2);
     mediaListController->addMedia(book3);
 }
-
 
 void MainWindow::initAddComboBox() {
     connect(addButton, &QPushButton::clicked, this, &MainWindow::onAddButtonClicked);
@@ -105,7 +104,7 @@ void MainWindow::onAddButtonClicked() const {
     addComboBox->showPopup();
 }
 
-void MainWindow::onComboBoxActivated(const int index) {
+void MainWindow::onComboBoxActivated(const int index) const {
     onMediaSelected(index);
     addComboBox->setVisible(false);
 }
@@ -120,10 +119,11 @@ void MainWindow::onMediaSelected(const int index) const {
         case 4: media = new NewspaperArticle(); break;
     }
     if (media) {
-        auto createMediaWidget = new CreateMediaWidget(rightInfoWidget);
-        AddVisitor addVisitor(createMediaWidget);
-        media->accept(&addVisitor);
+        auto createMediaWidget = new CreateMediaWidget(rightInfoWidget, media);
+        AddVisitor* addVisitor = new AddVisitor(createMediaWidget);
+        media->accept(addVisitor);
         rightInfoWidget->setWidget(createMediaWidget);
+        delete addVisitor;
     }
 }
 

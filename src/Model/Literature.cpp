@@ -10,6 +10,10 @@ Literature::Literature(unsigned int id, const QString &title, const QString &sho
 
 Literature::~Literature() = default;
 
+void Literature::accept(Visitor *visitor) {
+    visitor->visit(this);
+}
+
 QString Literature::getAuthor() const {
     return author;
 }

@@ -2,8 +2,11 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 
-CreateMediaWidget::CreateMediaWidget(QWidget* parent) : QWidget(parent), currentMedia(nullptr) {
+CreateMediaWidget::CreateMediaWidget(QWidget* parent, Media* media)
+    : QWidget(parent),
+      currentMedia(media) {
     auto layout = new QVBoxLayout(this);
+
     auto createButton = new QPushButton("Add media", this);
     layout->addWidget(createButton);
 
@@ -12,9 +15,4 @@ CreateMediaWidget::CreateMediaWidget(QWidget* parent) : QWidget(parent), current
             emit mediaCreated(currentMedia);
         }
     });
-}
-
-void CreateMediaWidget::setMedia(Media* media) {
-    // for UI update
-    currentMedia = media;
 }
