@@ -32,8 +32,8 @@ add_executable(MediaManager main.cpp
         MainWindow.h
         Model/Visitor.h
         Model/Visitable.h
-        Model/JSONEditor.cpp
-        Model/JSONEditor.h
+        Model/JSONVisitor.cpp
+        Model/JSONVisitor.h
         View/MediaListController.cpp
         View/MediaListController.h
         View/InfoListPainter.cpp

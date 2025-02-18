@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget* parent):
     setCentralWidget(centralWidget);
     initAddComboBox();
     // json visitor for the import/export actions
-    auto jsonVisitor = new JSONEditor(mediaListController);
+    auto jsonVisitor = new JSONVisitor(mediaListController);
     menuBar->setJSONVisitor(jsonVisitor);
 }
 

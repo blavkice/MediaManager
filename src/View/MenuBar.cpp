@@ -22,8 +22,8 @@ MenuBar::MenuBar(QWidget* parent)
 }
 
 void MenuBar::onImportActionTriggered() {
-    if (jsonEditor) {
-        if (jsonEditor->importFromFile(QFileDialog::getOpenFileName(this, tr("Import JSON"), "", tr("JSON Files (*.json)")))) {
+    if (jsonVisitor) {
+        if (jsonVisitor->importFromFile(QFileDialog::getOpenFileName(this, tr("Import JSON"), "", tr("JSON Files (*.json)")))) {
             emit mediaImported();
         } else {
             QMessageBox::warning(this, tr("Import"), tr("Import failed!"));
@@ -34,7 +34,7 @@ void MenuBar::onImportActionTriggered() {
 void MenuBar::onExportActionTriggered() {
     QString filePath = QFileDialog::getSaveFileName(this, tr("Export JSON"), "", tr("JSON Files (*.json)"));
     if (!filePath.isEmpty()) {
-        if (jsonEditor->exportToFile(filePath)) {
+        if (jsonVisitor->exportToFile(filePath)) {
             QMessageBox::information(this, tr("Export"), tr("Export successful!"));
         } else {
             QMessageBox::warning(this, tr("Export"), tr("Export failed!"));
@@ -42,8 +42,8 @@ void MenuBar::onExportActionTriggered() {
     }
 }
 
-void MenuBar::setJSONVisitor(JSONEditor* jsonVisitor) {
-    this->jsonEditor = jsonVisitor;
+void MenuBar::setJSONVisitor(JSONVisitor* jsonVisitor) {
+    this->jsonVisitor = jsonVisitor;
 }
 
 QAction* MenuBar::getExit() const {

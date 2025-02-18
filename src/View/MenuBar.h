@@ -2,7 +2,7 @@
 #define MENUBAR_H
 #include <QMenuBar>
 #include <QAction>
-#include "../Model/JSONEditor.h"
+#include "../Model/JSONVisitor.h"
 
 class MenuBar : public QMenuBar {
     Q_OBJECT
@@ -11,13 +11,13 @@ private:
     QAction* exit;
     QAction* importAction;
     QAction* exportAction;
-    JSONEditor* jsonEditor;
+    JSONVisitor* jsonVisitor;
 public:
     explicit MenuBar(QWidget* parent);
     QAction* getExit() const;
     QAction* getImportAction() const;
     QAction* getExportAction() const;
-    void setJSONVisitor(JSONEditor* jsonVisitor);
+    void setJSONVisitor(JSONVisitor* jsonVisitor);
 signals:
     void mediaImported();
 public slots:
