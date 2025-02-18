@@ -7,22 +7,18 @@
 #include "View/CreateMediaWidget.h"
 #include "Model/AddVisitor.h"
 
-#include <QDebug>
-
 MainWindow::MainWindow(QWidget* parent):
     QMainWindow(parent),
     centralWidget(new QWidget(this)),
     menuBar(new MenuBar(this)) {
     resize(800, 600);
+    initLayouts();
     setMenuBar(menuBar);
     setCentralWidget(centralWidget);
-    initLayouts();
     initAddComboBox();
     // json visitor for the import/export actions
-    auto jsonVisitor = new JSONEditor();
+    auto jsonVisitor = new JSONEditor(mediaListController);
     menuBar->setJSONVisitor(jsonVisitor);
-    // connections for json import/export
-    connect(menuBar, &MenuBar::mediaImported, this, &MainWindow::synchronizeMediaList);
 }
 
 void MainWindow::initLayouts() {
@@ -72,8 +68,6 @@ void MainWindow::initLayouts() {
 
     mediaListController->addMedia(book1);
     mediaListController->addMedia(poem1);
-    mediaListController->addMedia(book2);
-    mediaListController->addMedia(poem2);
     mediaListController->addMedia(book3);
 }
 
@@ -122,11 +116,4 @@ void MainWindow::onMediaCreated(Media* media) const {
     rightInfoWidget->setMediaCreated();
     // the clear up is done by rightInfoWidget after a widget is set: the previous widget is deleted from heap
     // and so createMediaWidget is deleted correctly everytime
-}
-
-void MainWindow::synchronizeMediaList(const QList<Media*>& mediaList) const {
-    mediaListController->clearMedia();
-    for (auto* media : mediaList) {
-        mediaListController->addMedia(media);
-    }
 }

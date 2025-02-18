@@ -13,13 +13,13 @@ private:
     QAction* exportAction;
     JSONEditor* jsonEditor;
 public:
-    explicit MenuBar(QWidget* parent = nullptr);
+    explicit MenuBar(QWidget* parent);
     QAction* getExit() const;
     QAction* getImportAction() const;
     QAction* getExportAction() const;
     void setJSONVisitor(JSONEditor* jsonVisitor);
 signals:
-    void mediaImported(const QList<Media*>& mediaList);
+    void mediaImported();
 public slots:
     void onImportActionTriggered();
     void onExportActionTriggered();

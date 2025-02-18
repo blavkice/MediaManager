@@ -1,19 +1,18 @@
-#ifndef JSONVISITOR_H
-#define JSONVISITOR_H
-#include <QList>
+#ifndef JSONEDITOR_H
+#define JSONEDITOR_H
 #include <QString>
 #include <QJsonObject>
-#include "Media.h"
+#include "../View/MediaListController.h"
 
 class JSONEditor {
 public:
+    explicit JSONEditor(MediaListController* mediaListController);
     bool importFromFile(const QString& filePath);
     bool exportToFile(const QString& filePath);
-    QList<Media*> getMediaList() const;
 private:
-    QList<Media*> mediaList;
+    MediaListController* mediaListController;
     static void mediaToJson(const Media* media, QJsonObject& json);
     static Media* jsonToMedia(const QJsonObject& json);
 };
 
-#endif // JSONVISITOR_H
+#endif // JSONEDITOR_H

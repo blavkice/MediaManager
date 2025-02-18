@@ -2,7 +2,8 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-MenuBar::MenuBar(QWidget* parent) : QMenuBar(parent), jsonEditor(new JSONEditor) {
+MenuBar::MenuBar(QWidget* parent)
+    : QMenuBar(parent) {
     actionsMenu = new QMenu(tr("Actions"), this);
     exit = new QAction(tr("Exit MediaManager"), this);
     importAction = new QAction(tr("Import"), this);
@@ -22,8 +23,11 @@ MenuBar::MenuBar(QWidget* parent) : QMenuBar(parent), jsonEditor(new JSONEditor)
 
 void MenuBar::onImportActionTriggered() {
     if (jsonEditor) {
-        QList<Media*> mediaList = jsonEditor->getMediaList();
-        emit mediaImported(mediaList);
+        if (jsonEditor->importFromFile(QFileDialog::getOpenFileName(this, tr("Import JSON"), "", tr("JSON Files (*.json)")))) {
+            emit mediaImported();
+        } else {
+            QMessageBox::warning(this, tr("Import"), tr("Import failed!"));
+        }
     }
 }
 

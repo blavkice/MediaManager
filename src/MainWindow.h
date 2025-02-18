@@ -33,7 +33,6 @@ private:
     QListView* listView;
     // for the list of currently active elements
     MediaListController* mediaListController;
-    QList<Media*>* mediaList;
     void initLayouts();
     void initAddComboBox();
 private slots:
@@ -41,7 +40,6 @@ private slots:
     void onComboBoxActivated(int index) const;
     void onMediaSelected(int index) const;
     void onMediaCreated(Media* media) const;
-    void synchronizeMediaList(const QList<Media*>& mediaList) const;
 public:
     explicit MainWindow(QWidget* parent = nullptr);
 };

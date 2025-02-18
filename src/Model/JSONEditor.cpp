@@ -8,6 +8,9 @@
 #include "ArticlesClasses/AcademicArticle.h"
 #include "ArticlesClasses/NewspaperArticle.h"
 
+JSONEditor::JSONEditor(MediaListController* mediaListController)
+    : mediaListController(mediaListController) { }
+
 bool JSONEditor::importFromFile(const QString& filePath) {
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly)) {
@@ -18,14 +21,16 @@ bool JSONEditor::importFromFile(const QString& filePath) {
     QJsonDocument doc(QJsonDocument::fromJson(data));
     QJsonArray jsonArray = doc.array();
 
-    mediaList.clear();
+    mediaListController->clearMedia();
     for (const QJsonValue& value : jsonArray) {
         QJsonObject jsonObject = value.toObject();
         Media* media = jsonToMedia(jsonObject);
         if (media) {
-            mediaList.append(media);
+            mediaListController->addMedia(media);
         }
     }
+    // now we have to refresh the list view ui
+    mediaListController->populateList();
     return true;
 }
 
@@ -37,7 +42,7 @@ bool JSONEditor::exportToFile(const QString& filePath) {
     }
 
     QJsonArray jsonArray;
-    for (const Media* media : mediaList) {
+    for (const Media* media : mediaListController->getMediaList()) {
         QJsonObject jsonObject;
         mediaToJson(media, jsonObject);
         jsonArray.append(jsonObject);
@@ -47,10 +52,6 @@ bool JSONEditor::exportToFile(const QString& filePath) {
     qDebug() << "Writing JSON data to file:" << doc.toJson();
     file.write(doc.toJson());
     return true;
-}
-
-QList<Media*> JSONEditor::getMediaList() const {
-    return mediaList;
 }
 
 void JSONEditor::mediaToJson(const Media* media, QJsonObject& json) {
