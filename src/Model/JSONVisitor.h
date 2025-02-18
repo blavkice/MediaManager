@@ -11,13 +11,13 @@ class JSONVisitor : public Visitor {
 private:
     QJsonObject json;
 public:
-    virtual void visit(Media* media) override;
-    virtual void visit(Literature* literature);
-    virtual void visit(Book* book);
-    virtual void visit(Poem* poem);
-    virtual void visit(Articles* article);
-    virtual void visit(AcademicArticle* academicArticle);
-    virtual void visit(NewspaperArticle* newspaperArticle);
+    void visit(Media* media) override;
+    void visit(Literature* literature) override;
+    void visit(Articles* article) override;
+    void visit(Book* book) override;
+    void visit(Poem* poem) override;
+    void visit(AcademicArticle* academicArticle) override;
+    void visit(NewspaperArticle* newspaperArticle) override;
     QJsonObject getJson() const;
 };
 
