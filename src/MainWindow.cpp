@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget* parent):
 void MainWindow::initLayouts() {
     hMainViewLayout = new QHBoxLayout(centralWidget);
     // the "multifunctional" widget that will be used to display the media info
-    rightInfoWidget = new QWidget(centralWidget);
+    rightInfoWidget = new RightDynamicWidget(centralWidget);
     // the widget for the left "fixed" part
     auto vLeftWidget = new QWidget(centralWidget);
     // the widget containing the search box and add and remove buttons
@@ -110,7 +110,7 @@ void MainWindow::onComboBoxActivated(const int index) {
     addComboBox->setVisible(false);
 }
 
-void MainWindow::onMediaSelected(const int index) {
+void MainWindow::onMediaSelected(const int index) const {
     if (index < 1) return;
     Media* media = nullptr;
     switch (index) {
@@ -123,26 +123,11 @@ void MainWindow::onMediaSelected(const int index) {
         auto createMediaWidget = new CreateMediaWidget(rightInfoWidget);
         AddVisitor addVisitor(createMediaWidget);
         media->accept(&addVisitor);
-        rightInfoWidget->hide();
-        if (rightInfoWidget->layout()) {
-            QLayoutItem* item;
-            while ((item = rightInfoWidget->layout()->takeAt(0)) != nullptr) {
-                delete item->widget();
-                delete item;
-            }
-            delete rightInfoWidget->layout();
-        }
-        rightInfoWidget->setParent(nullptr);
-        rightInfoWidget = createMediaWidget;
-        hMainViewLayout->addWidget(rightInfoWidget);
-        rightInfoWidget->show();
+        rightInfoWidget->setWidget(createMediaWidget);
     }
 }
 
-void MainWindow::onMediaCreated(Media* media) {
+void MainWindow::onMediaCreated(Media* media) const {
     mediaListController->addMedia(media);
-    rightInfoWidget->hide();
-    rightInfoWidget = new QWidget(centralWidget);
-    rightInfoWidget->setLayout(new QVBoxLayout());
-    rightInfoWidget->show();
+    rightInfoWidget->setMediaCreated();
 }

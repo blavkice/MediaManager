@@ -4,7 +4,7 @@
 
 CreateMediaWidget::CreateMediaWidget(QWidget* parent) : QWidget(parent), currentMedia(nullptr) {
     auto layout = new QVBoxLayout(this);
-    auto createButton = new QPushButton("Create!", this);
+    auto createButton = new QPushButton("Add media", this);
     layout->addWidget(createButton);
 
     connect(createButton, &QPushButton::clicked, this, [this]() {

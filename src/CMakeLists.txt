@@ -44,7 +44,9 @@ add_executable(MediaManager main.cpp
         Model/AddVisitor.cpp
         Model/AddVisitor.h
         View/CreateMediaWidget.cpp
-        View/CreateMediaWidget.h)
+        View/CreateMediaWidget.h
+        View/RightDynamicWidget.cpp
+        View/RightDynamicWidget.h)
 target_link_libraries(MediaManager
   Qt::Core
   Qt::Gui

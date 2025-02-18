@@ -3,8 +3,9 @@
 #include <QLineEdit>
 
 AddVisitor::AddVisitor(QWidget* widget) : widget(widget) {
-    layout = new QVBoxLayout(widget);
-    widget->setLayout(layout);
+    if (!widget->layout()) {
+        widget->setLayout(new QVBoxLayout(widget));
+    } else layout = widget->layout();
 }
 
 void AddVisitor::visit(Media* media) {

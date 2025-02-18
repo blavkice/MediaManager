@@ -1,7 +1,7 @@
 #ifndef ADDVISITOR_H
 #define ADDVISITOR_H
 #include <QWidget>
-#include <QVBoxLayout>
+#include <QLayout>
 #include "Visitor.h"
 #include "Literature.h"
 #include "Articles.h"
@@ -13,10 +13,12 @@
 class AddVisitor : public Visitor {
 private:
     QWidget* widget;
-    QVBoxLayout* layout;
+    QLayout* layout;
+    // the layout will be taken from the widget, specifically
+    // from CreateMediaWidget, and it will be a QVBoxLayout
 public:
     explicit AddVisitor(QWidget* widget);
-    virtual void visit(Media* media) override;
+    void visit(Media* media) override;
     virtual void visit(Literature* literature);
     virtual void visit(Articles* article);
     virtual void visit(Book* book);

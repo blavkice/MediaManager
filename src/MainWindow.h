@@ -12,13 +12,14 @@
 #include <QPushButton>
 #include <QComboBox>
 #include "View/MediaListController.h"
+#include "View/RightDynamicWidget.h"
 
 // ReSharper disable once CppClassCanBeFinal
 class MainWindow : public QMainWindow {
     Q_OBJECT
 private:
     QWidget* centralWidget;
-    QWidget* rightInfoWidget;
+    RightDynamicWidget* rightInfoWidget;
     QMenuBar* menuBar;
     QMenu* actionsMenu;
     QAction* exit;
@@ -39,8 +40,8 @@ private:
 private slots:
     void onAddButtonClicked() const;
     void onComboBoxActivated(int index);
-    void onMediaSelected(int index);
-    void onMediaCreated(Media* media);
+    void onMediaSelected(int index) const;
+    void onMediaCreated(Media* media) const;
 public:
     explicit MainWindow(QWidget* parent = nullptr);
 };
