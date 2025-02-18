@@ -1,5 +1,7 @@
 #include "Book.h"
 
+Book::Book() : publishing("General publishing"), pages(0) { }
+
 Book::Book(const unsigned int id, const QString &title, const QString &short_description, const QString &image_path,
     const QString &author, const QString &long_description, const int publication_year, const short rating,
     const QString &publishing, const unsigned int pages)

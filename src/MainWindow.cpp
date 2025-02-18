@@ -121,6 +121,9 @@ void MainWindow::onMediaSelected(const int index) const {
         case 4: media = new NewspaperArticle(); break;
     }
     const auto createMediaWidget = new CreateMediaWidget(rightInfoWidget, media);
+
+    connect(createMediaWidget, &CreateMediaWidget::mediaCreated, this, &MainWindow::onMediaCreated);
+
     if (const auto contentLayout = createMediaWidget->getContentLayout()) {
         auto* addVisitor = new AddVisitor(contentLayout);
         media->accept(addVisitor);

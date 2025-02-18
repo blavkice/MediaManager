@@ -1,5 +1,7 @@
 #include "Media.h"
 
+Media::Media() : id(0), title("Unknown"), shortDescription(" "), imagePath(":/img/default.jpg") { }
+
 Media::Media(const unsigned int id, const QString &title, const QString &short_description, const QString &image_path)
     : id(id),
       title(title),

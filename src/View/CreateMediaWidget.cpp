@@ -11,6 +11,13 @@ CreateMediaWidget::CreateMediaWidget(QWidget* parent, Media* media)
     auto contentWidget = new QWidget(scrollArea);
     contentLayout = new QVBoxLayout(contentWidget);
 
+    // to clear if different kind of media is chosen before adding the previous one
+    QLayoutItem* item;
+    while ((item = contentLayout->takeAt(0)) != nullptr) {
+        delete item->widget();
+        delete item;
+    }
+
     auto createButton = new QPushButton("Create", this);
     contentLayout->addWidget(createButton);
 

@@ -11,7 +11,7 @@ private:
     QString shortDescription;
     QString imagePath;
 public:
-    Media() = default;
+    Media();
     Media(unsigned int id, const QString &title, const QString &short_description, const QString &image_path = ":/img/default.jpg");
     virtual ~Media() = 0; // to make the class abstract
     unsigned int getId() const;
