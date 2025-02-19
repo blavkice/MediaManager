@@ -21,7 +21,6 @@ void InfoListPainter::paint(QPainter* painter, const QStyleOptionViewItem& optio
     QString title = index.data(Qt::DisplayRole).toString();
     QString description = index.data(Qt::UserRole + 1).toString();
 
-    // background with rounded corners
     if (option.state & QStyle::State_Selected) {
         QPainterPath selectionPath;
         selectionPath.addRoundedRect(rect, 12, 12);
@@ -49,8 +48,14 @@ void InfoListPainter::paint(QPainter* painter, const QStyleOptionViewItem& optio
         titleFont.setPointSize(12);  // Set modern readable size
         titleFont.setBold(true);
         painter->setFont(titleFont);
+
+        // wrapping
+        QTextOption titleOption;
+        titleOption.setWrapMode(QTextOption::WordWrap);
+        titleOption.setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+        painter->drawText(titleRect, title, titleOption);
     }
-    painter->drawText(titleRect, Qt::AlignLeft | Qt::AlignVCenter, title);
+    //painter->drawText(titleRect, Qt::AlignLeft | Qt::AlignVCenter, title);
 
     // reset font to default font for description
     QFont descFont = option.font;
@@ -60,7 +65,6 @@ void InfoListPainter::paint(QPainter* painter, const QStyleOptionViewItem& optio
 
     QTextOption textOption;
     textOption.setWrapMode(QTextOption::WordWrap);
-    textOption.setAlignment(Qt::AlignTop | Qt::AlignLeft);
     painter->drawText(descriptionRect, description, textOption);
 
     painter->restore();

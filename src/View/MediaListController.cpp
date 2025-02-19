@@ -2,6 +2,7 @@
 #include "InfoListPainter.h"
 #include <QApplication>
 #include <QImage>
+#include <QScrollBar>
 
 MediaListController::MediaListController(QListView* listView, QObject* parent) : listView(listView), QObject(parent) {
     // connect the selectionChanged signal to the onSelectionChanged slot
@@ -17,7 +18,8 @@ MediaListController::MediaListController(QListView* listView, QObject* parent) :
     listView->setItemDelegate(new InfoListPainter(listView));
     listView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     listView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    listView->setStyleSheet("QListView::item:selected { background-color: blue; }");
+    listView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    listView->verticalScrollBar()->setSingleStep(10);
 }
 
 void MediaListController::onSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected) {
