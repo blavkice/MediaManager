@@ -30,7 +30,6 @@ bool JSONVisitor::importFromFile(const QString& filePath) const {
     }
 
     QJsonArray jsonArray = doc.array();
-    qDebug() << "JSON Array size:" << jsonArray.size();
 
     mediaListController->clearMedia();
     for (const QJsonValue& value : jsonArray) {

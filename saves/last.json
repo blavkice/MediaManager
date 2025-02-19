@@ -1,0 +1,90 @@
+[
+    {
+        "author": "Harper Lee",
+        "imagePath": "",
+        "longDescription": "Published in 1960, it was immediately successful, winning the Pulitzer Prize, and has become a classic of modern American literature.",
+        "pages": 281,
+        "publicationYear": 1960,
+        "publishing": "J.B. Lippincott & Co.",
+        "rating": 5,
+        "shortDescription": "A novel about the serious issues of rape and racial inequality.",
+        "title": "To Kill a Mockingbird",
+        "type": "Book"
+    },
+    {
+        "author": "Robert Frost",
+        "city": "New York",
+        "imagePath": "",
+        "longDescription": "Published in 1916, it is one of Frost's most popular works.",
+        "publicationYear": 1916,
+        "rating": 4,
+        "shortDescription": "A poem about the choices we make in life.",
+        "title": "The Road Not Taken",
+        "type": "Poem"
+    },
+    {
+        "author": "George Orwell",
+        "imagePath": "",
+        "longDescription": "Published in 1949, the novel is set in a totalitarian society ruled by the Party and its leader, Big Brother.",
+        "pages": 328,
+        "publicationYear": 1949,
+        "publishing": "Secker & Warburg",
+        "rating": 5,
+        "shortDescription": "A dystopian social science fiction novel and cautionary tale about the dangers of totalitarianism.",
+        "title": "1984",
+        "type": "Book"
+    },
+    {
+        "author": "Jane Austen",
+        "imagePath": "",
+        "longDescription": "Published in 1813, it is a critique of the British landed gentry at the end of the 18th century.",
+        "pages": 432,
+        "publicationYear": 1813,
+        "publishing": "T. Egerton, Whitehall",
+        "rating": 5,
+        "shortDescription": "A romantic novel that charts the emotional development of the protagonist, Elizabeth Bennet.",
+        "title": "Pride and Prejudice",
+        "type": "Book"
+    },
+    {
+        "author": "Alice Smith",
+        "category": "Quantum Computing Journal",
+        "citationCount": 150,
+        "date": "2021-05-15",
+        "imagePath": "",
+        "peerReviewed": true,
+        "shortDescription": "An overview of the principles and applications of quantum computing.",
+        "title": "Quantum Computing: An Overview",
+        "type": "AcademicArticle",
+        "universityName": "MIT",
+        "url": "https://example.com/quantum-computing",
+        "wordCount": 5000
+    },
+    {
+        "author": "Emily Johnson",
+        "category": "Healthcare Innovations",
+        "citationCount": 200,
+        "date": "2020-11-20",
+        "imagePath": "",
+        "peerReviewed": true,
+        "shortDescription": "Exploring the use of AI in healthcare and its potential benefits.",
+        "title": "Artificial Intelligence in Healthcare",
+        "type": "AcademicArticle",
+        "universityName": "Stanford University",
+        "url": "https://example.com/ai-healthcare",
+        "wordCount": 4500
+    },
+    {
+        "author": "Michael Brown",
+        "category": "Financial Times",
+        "date": "2023-01-05",
+        "headline": "Economic Forecasts",
+        "imagePath": "",
+        "politics": false,
+        "shortDescription": "An analysis of the economic trends and predictions for the year 2023.",
+        "title": "Economic Trends in 2023",
+        "type": "NewspaperArticle",
+        "url": "https://example.com/economic-trends-2023",
+        "wordCount": 1500
+    }
+]

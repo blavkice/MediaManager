@@ -12,12 +12,14 @@ private:
     QAction* importAction;
     QAction* exportAction;
     JSONVisitor* jsonVisitor;
+    static void replaceLastDefaultMedia(const QString& filePath);
 public:
     explicit MenuBar(QWidget* parent);
     QAction* getExit() const;
     QAction* getImportAction() const;
     QAction* getExportAction() const;
     void setJSONVisitor(JSONVisitor* jsonVisitor);
+    void importLastDefaultMedia();
 signals:
     void mediaImported();
 public slots:

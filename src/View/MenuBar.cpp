@@ -1,6 +1,9 @@
 #include "MenuBar.h"
 #include <QFileDialog>
+#include <QCoreApplication>
+#include <QDir>
 #include <QMessageBox>
+#include <QDebug>
 
 MenuBar::MenuBar(QWidget* parent)
     : QMenuBar(parent) {
@@ -21,10 +24,40 @@ MenuBar::MenuBar(QWidget* parent)
     connect(exportAction, &QAction::triggered, this, &MenuBar::onExportActionTriggered);
 }
 
+// IMPORTANT NOTE: it is working because exec is being started from MM/src/build-debug, adjust accordingly!
+void MenuBar::importLastDefaultMedia() {
+    if (jsonVisitor) {
+        QString appDirPath = QCoreApplication::applicationDirPath();
+        QDir dir(appDirPath);
+        dir.cdUp(); dir.cdUp();
+        QString filePath = dir.filePath("saves/last.json");
+        qDebug() << "Importing last default media from:" << filePath;
+        if (jsonVisitor->importFromFile(filePath)) {
+            emit mediaImported();
+        } else {
+            QMessageBox::warning(this, tr("Import"), tr("Default import failed!"));
+        }
+    }
+}
+
+void MenuBar::replaceLastDefaultMedia(const QString& filePath) {
+    const QFile file(filePath);
+    if (!file.exists() || !filePath.endsWith(".json")) return;
+
+    const QString appDirPath = QCoreApplication::applicationDirPath();
+    QDir dir(appDirPath);
+    dir.cdUp(); dir.cdUp();
+    const QString lastJsonPath = dir.filePath("saves/last.json");
+
+    if (QFile::remove(lastJsonPath)) QFile::copy(filePath, lastJsonPath);
+}
+
 void MenuBar::onImportActionTriggered() {
     if (jsonVisitor) {
-        if (jsonVisitor->importFromFile(QFileDialog::getOpenFileName(this, tr("Import JSON"), "", tr("JSON Files (*.json)")))) {
+        const QString path = QFileDialog::getOpenFileName(this, tr("Import JSON"), "", tr("JSON Files (*.json)"));
+        if (jsonVisitor->importFromFile(path)) {
             emit mediaImported();
+            replaceLastDefaultMedia(path);
         } else {
             QMessageBox::warning(this, tr("Import"), tr("Import failed!"));
         }
@@ -35,6 +68,7 @@ void MenuBar::onExportActionTriggered() {
     QString filePath = QFileDialog::getSaveFileName(this, tr("Export JSON"), "", tr("JSON Files (*.json)"));
     if (!filePath.isEmpty()) {
         if (jsonVisitor->exportToFile(filePath)) {
+            replaceLastDefaultMedia(filePath);
             QMessageBox::information(this, tr("Export"), tr("Export successful!"));
         } else {
             QMessageBox::warning(this, tr("Export"), tr("Export failed!"));
