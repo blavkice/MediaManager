@@ -18,8 +18,8 @@ bool JSONVisitor::importFromFile(const QString& filePath) const {
         return false;
     }
 
-    QByteArray data = file.readAll();
-    QJsonDocument doc(QJsonDocument::fromJson(data));
+    const QByteArray data = file.readAll();
+    const QJsonDocument doc(QJsonDocument::fromJson(data));
     if (doc.isNull()) {
         qDebug() << "Failed to create JSON doc.";
         return false;
@@ -50,7 +50,6 @@ bool JSONVisitor::importFromFile(const QString& filePath) const {
     return true;
 }
 
-// Export to JSON file
 bool JSONVisitor::exportToFile(const QString& filePath) {
     QFile file(filePath);
     if (!file.open(QIODevice::WriteOnly)) {
@@ -63,7 +62,7 @@ bool JSONVisitor::exportToFile(const QString& filePath) {
         media->accept(this);
     }
 
-    QJsonDocument doc(jsonArray);
+    const QJsonDocument doc(jsonArray);
     qDebug() << "Writing JSON data to file:" << doc.toJson();
     file.write(doc.toJson());
     return true;

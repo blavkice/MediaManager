@@ -1,46 +1,66 @@
 #include "InfoListPainter.h"
-//#include <QApplication>
 #include <QImage>
 #include <QPainterPath>
 #include <QFontDatabase>
+#include <QTextOption>
+#include <QGraphicsDropShadowEffect>
 
 InfoListPainter::InfoListPainter(QObject* parent) : QStyledItemDelegate(parent) { }
 
 void InfoListPainter::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const {
     painter->save();
 
-    QRect rect = option.rect;
+    // antialiasing lol
+    painter->setRenderHint(QPainter::Antialiasing);
+    painter->setRenderHint(QPainter::TextAntialiasing);
+    painter->setRenderHint(QPainter::SmoothPixmapTransform);
+
+    // rectangle with a little bit of padding
+    QRect rect = option.rect.adjusted(10, 10, -10, -10);
     QImage img = index.data(Qt::DecorationRole).value<QImage>();
     QString title = index.data(Qt::DisplayRole).toString();
     QString description = index.data(Qt::UserRole + 1).toString();
 
-    auto imgRect = QRect(rect.left(), rect.top(), 50, 50);
-    auto titleRect = QRect(rect.left() + 60, rect.top(), rect.width() - 80, 20);
-    auto descriptionRect = QRect(rect.left() + 60, rect.top() + 20, rect.width() - 80, rect.height() - 20);
+    // background with rounded corners
+    if (option.state & QStyle::State_Selected) {
+        QPainterPath selectionPath;
+        selectionPath.addRoundedRect(rect, 12, 12);
+        painter->fillPath(selectionPath, option.palette.highlight());
+        painter->setPen(option.palette.highlightedText().color());
+    } else {
+        painter->setPen(option.palette.text().color());
+    }
 
-    // draw image, rounded
-    QPainterPath path;
-    path.addRoundedRect(imgRect, 25, 25);
-    painter->setClipPath(path);
+    auto imgRect = QRect(rect.left(), rect.top() + 5, 60, 60);
+    auto titleRect = QRect(rect.left() + 75, rect.top() + 5, rect.width() - 85, 25);
+    auto descriptionRect = QRect(rect.left() + 75, rect.top() + 30, rect.width() - 85, rect.height() - 35);
+
+    // draw rounded image with shadow effect
+    QPainterPath imgPath;
+    imgPath.addRoundedRect(imgRect, 30, 30);
+    painter->setClipPath(imgPath);
     painter->drawImage(imgRect, img);
     painter->setClipping(false);
 
-    // draw title with the AceSansExtrabold font
     const int titleFontId = QFontDatabase::addApplicationFont(":/Fonts/AceSansExtrabold.ttf");
     if (titleFontId != -1) {
         QString titleFontFamily = QFontDatabase::applicationFontFamilies(titleFontId).at(0);
         QFont titleFont(titleFontFamily);
-        titleFont.setPointSize(titleFont.pointSize() + 2);
+        titleFont.setPointSize(12);  // Set modern readable size
+        titleFont.setBold(true);
         painter->setFont(titleFont);
     }
     painter->drawText(titleRect, Qt::AlignLeft | Qt::AlignVCenter, title);
 
-    // reset the font to the default for the description
-    painter->setFont(option.font);
+    // reset font to default font for description
+    QFont descFont = option.font;
+    descFont.setPointSize(descFont.pointSize() + 1);
+    painter->setFont(descFont);
+    painter->setPen(option.palette.text().color());
 
-    // draw the description and avoid text overflow
     QTextOption textOption;
     textOption.setWrapMode(QTextOption::WordWrap);
+    textOption.setAlignment(Qt::AlignTop | Qt::AlignLeft);
     painter->drawText(descriptionRect, description, textOption);
 
     painter->restore();
@@ -49,6 +69,6 @@ void InfoListPainter::paint(QPainter* painter, const QStyleOptionViewItem& optio
 QSize InfoListPainter::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const {
     QFontMetrics fontMetrics(option.font);
     QString description = index.data(Qt::UserRole + 1).toString();
-    int textHeight = fontMetrics.boundingRect(QRect(0, 0, option.rect.width() - 60, 0), Qt::TextWordWrap, description).height();
-    return QSize(option.rect.width(), 70 + textHeight);
+    int textHeight = fontMetrics.boundingRect(QRect(0, 0, option.rect.width() - 85, 0), Qt::TextWordWrap, description).height();
+    return QSize(option.rect.width(), 80 + textHeight);
 }

@@ -3,7 +3,12 @@
 #include <QApplication>
 #include <QImage>
 
-MediaListController::MediaListController(QListView* listView) : listView(listView) {
+MediaListController::MediaListController(QListView* listView, QObject* parent) : listView(listView), QObject(parent) {
+    // connect the selectionChanged signal to the onSelectionChanged slot
+    connect(listView->selectionModel(), &QItemSelectionModel::selectionChanged,
+            this, &MediaListController::onSelectionChanged);
+
+    // populate the list view
     model = new QStandardItemModel(listView);
     if (listView == nullptr) {
         throw std::invalid_argument("listView cannot be null");
@@ -12,6 +17,11 @@ MediaListController::MediaListController(QListView* listView) : listView(listVie
     listView->setItemDelegate(new InfoListPainter(listView));
     listView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     listView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    listView->setStyleSheet("QListView::item:selected { background-color: blue; }");
+}
+
+void MediaListController::onSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected) {
+    emit elementSelected(!selected.isEmpty());
 }
 
 void MediaListController::addMedia(Media* media) {
@@ -37,6 +47,13 @@ void MediaListController::populateList() const {
         item->setData(media->getShortDescription(), Qt::UserRole + 1);
         model->appendRow(item);
     }
+}
+
+void MediaListController::removeMedia(const int index) {
+    if (index < 0 || index >= mediaList.size()) return;
+    delete mediaList.takeAt(index);
+    listView->model()->removeRow(index);
+    populateList();
 }
 
 QList<Media*> MediaListController::getMediaList() const {
