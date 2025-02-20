@@ -3,11 +3,12 @@
 #include <QImage>
 #include <QCoreApplication>
 #include <QDir>
+#include <QFileDialog>
 #include "AddVisitor.h"
 
+#include <QPushButton>
 
-
-AddVisitor::AddVisitor(QLayout* layout) : layout(layout) { }
+AddVisitor::AddVisitor(QLayout* layout, QWidget* parent) : layout(layout) { }
 
 void AddVisitor::visit(Media* media) {
     layout->addWidget(new QLabel("Title:"));
@@ -20,10 +21,7 @@ void AddVisitor::visit(Media* media) {
     layout->addWidget(shortDescriptionEdit);
     inputFields["shortDescription"] = shortDescriptionEdit;
 
-    layout->addWidget(new QLabel("Image Path:"));
-    auto imagePathEdit = new QLineEdit(media->getImagePath());
-    layout->addWidget(imagePathEdit);
-    inputFields["imagePath"] = imagePathEdit;
+    // image selection is managed by createMediaWidget
 }
 
 void AddVisitor::visit(Literature* literature) {
@@ -134,7 +132,7 @@ void AddVisitor::saveInput(Media* media) {
     media->setShortDescription(inputFields["shortDescription"]->text());
 
     // now for the image there is a separate method checking its integrity and saving it into ./media/
-    saveImage(media, inputFields["imagePath"]->text());
+    saveImage(media, media->getImagePath());
 
     // do for literature
     if (auto literature = dynamic_cast<Literature*>(media)) {
@@ -169,15 +167,17 @@ void AddVisitor::saveInput(Media* media) {
 }
 
 void AddVisitor::saveImage(Media* media, const QString& imagePath) {
+    qDebug() << "media uuid:" << media->getId();
     if (imagePath.isEmpty()) {
         media->setImagePath(":default.jpg");
-        return;
     }
     QImage image(imagePath);
     if (image.isNull()) {
+        qDebug() << "Error: Invalid image at path:" << imagePath;
         media->setImagePath(":default.jpg");
         return;
     }
+
     // then the image is valid
     const QString appDirPath = QCoreApplication::applicationDirPath();
     QDir dir(appDirPath);
@@ -194,7 +194,6 @@ void AddVisitor::saveImage(Media* media, const QString& imagePath) {
 
     if (image.save(newFilePath, "JPG", 75)) {
         media->setImagePath(media->getId() + ".jpg");
-    } else {
-        media->setImagePath(":default.jpg");
-    }
+        qDebug() << "Image saved to:" << newFilePath;
+    } else media->setImagePath(":default.jpg");
 }

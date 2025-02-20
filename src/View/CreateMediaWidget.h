@@ -10,6 +10,10 @@ private:
     Media* currentMedia;
     QVBoxLayout* contentLayout;
     AddVisitor* addVisitor;
+    // to add image from dialog
+    QLineEdit* imagePathEdit;
+    QPushButton* chooseButton;
+    void chooseImage();
 public:
     explicit CreateMediaWidget(QWidget* parent = nullptr, Media* media = nullptr);
     QVBoxLayout* getContentLayout() const;

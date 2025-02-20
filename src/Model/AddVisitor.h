@@ -16,8 +16,10 @@ class AddVisitor : public Visitor {
 private:
     QLayout* layout;
     QMap<QString, QLineEdit*> inputFields;
+    QPushButton* chooseButton;
 public:
-    explicit AddVisitor(QLayout* layout);
+    explicit AddVisitor(QLayout* layout, QWidget* parent = nullptr);
+    void chooseImage();
     void visit(Media* media) override;
     void visit(Literature* literature) override;
     void visit(Articles* article) override;
@@ -26,7 +28,8 @@ public:
     void visit(AcademicArticle* academicArticle) override;
     void visit(NewspaperArticle* newspaperArticle) override;
     void saveInput(Media* media);
-    void saveImage(Media* media, const QString& imagePath);
+
+    static void saveImage(Media* media, const QString& imagePath);
 };
 
 #endif // ADDVISITOR_H

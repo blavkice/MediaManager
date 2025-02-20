@@ -1,7 +1,10 @@
 #include <QUuid>
 #include "Media.h"
 
-Media::Media() : id("default"), title("Unknown"), shortDescription(" "), imagePath(":/img/default.jpg") { }
+Media::Media() :
+    id(QUuid::createUuid().toString(QUuid::WithoutBraces)),
+    title("Unknown"), shortDescription(" "),
+    imagePath(":/img/default.jpg") { }
 
 Media::Media(const QString &title, const QString &short_description, const QString &image_path)
     : title(title),
@@ -32,7 +35,7 @@ QString Media::getImagePath() const {
     return imagePath;
 }
 
-void Media::setId(QString id) {
+void Media::setId(const QString &id) {
     this->id = id;
 }
 

@@ -1,6 +1,8 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QScrollArea>
+#include <QFileDialog>
+#include <QLabel>
 #include "CreateMediaWidget.h"
 #include "../Model/AddVisitor.h"
 
@@ -18,6 +20,15 @@ CreateMediaWidget::CreateMediaWidget(QWidget* parent, Media* media)
         delete item;
     }
 
+    // to add image from dialog
+    contentLayout->addWidget(new QLabel("Image Path:"));
+    imagePathEdit = new QLineEdit();
+    imagePathEdit->setReadOnly(true);
+    contentLayout->addWidget(imagePathEdit);
+    chooseButton = new QPushButton("Choose");
+    contentLayout->addWidget(chooseButton);
+    connect(chooseButton, &QPushButton::clicked, this, &CreateMediaWidget::chooseImage);
+
     // visualize the input fields for the selected concrete media
     addVisitor = new AddVisitor(contentLayout);
     media->accept(addVisitor);
@@ -34,11 +45,19 @@ CreateMediaWidget::CreateMediaWidget(QWidget* parent, Media* media)
 
     connect(createButton, &QPushButton::clicked, this, [this]() {
         if (currentMedia) {
+            currentMedia->setImagePath(imagePathEdit->text());
             addVisitor->saveInput(currentMedia);
             emit mediaCreated(currentMedia);
             delete addVisitor;
         }
     });
+}
+
+void CreateMediaWidget::chooseImage() {
+    const auto selectedImagePath = QFileDialog::getOpenFileName(this, "Choose Image", "", "Images (*.png *.jpg *.jpeg)");
+    if (!selectedImagePath.isEmpty()) {
+        imagePathEdit->setText(selectedImagePath);
+    }
 }
 
 QVBoxLayout* CreateMediaWidget::getContentLayout() const {

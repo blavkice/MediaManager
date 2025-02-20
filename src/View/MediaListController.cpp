@@ -49,10 +49,12 @@ void MediaListController::populateList() const {
         QDir dir(appDirPath);
         dir.cdUp(); dir.cdUp();
         const QString imgPath = dir.filePath("media") + "/" + media->getId() + ".jpg";
+        qDebug() << "imgPath:" << imgPath;
 
         QImage image(imgPath);
         if (image.isNull()) {
             image.load(":default.jpg");
+            qDebug() << "image is null";
         }
 
         item->setData(QVariant::fromValue(image), Qt::DecorationRole);

@@ -19,7 +19,7 @@ public:
     QString getShortDescription() const;
     QString getImagePath() const;
     // note: setId is to be used only on imports!
-    void setId(QString id);
+    void setId(const QString &id);
     void setTitle(const QString &title);
     void setShortDescription(const QString &short_description);
     void setImagePath(const QString &image_path);
