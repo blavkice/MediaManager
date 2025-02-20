@@ -69,6 +69,7 @@ build-*/         # Qt Creator default build directories
 *.d
 
 # CMake files
+*.clion-Debug-log.txt
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles/
