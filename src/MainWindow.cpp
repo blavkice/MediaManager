@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget* parent):
     initAddComboBox();
 
     // delete button is activated only if a media is selected
-    connect(mediaListController, &MediaListController::elementSelected, this, &MainWindow::updateDeleteButtonState);
+    connect(mediaListController, &MediaListController::elementSelected, this, &MainWindow::updateSelectionState);
     connect(removeButton, &QPushButton::clicked, this, &MainWindow::onRemoveButtonClicked);
 
     // json visitor for the import/export actions
@@ -77,8 +77,14 @@ void MainWindow::initAddComboBox() {
     connect(addComboBox, QOverload<int>::of(&QComboBox::activated), this, &MainWindow::onComboBoxActivated);
 }
 
-void MainWindow::updateDeleteButtonState(bool selected) const {
-    removeButton->setEnabled(selected);
+// view the element selected in the list and activate the delete button
+void MainWindow::updateSelectionState(bool selected) const {
+    if (selected) {
+        rightInfoWidget->viewMedia(mediaListController->getCurrentSelectedMedia());
+        removeButton->setEnabled(selected);
+    } else {
+        rightInfoWidget->clear();
+    }
 }
 
 void MainWindow::onRemoveButtonClicked() {

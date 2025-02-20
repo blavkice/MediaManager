@@ -19,6 +19,7 @@ public:
     void populateList() const;
     void setMediaList(const QList<Media*>& mediaList);
     void removeMedia(int index);
+    Media* getCurrentSelectedMedia() const;
 signals:
     void elementSelected(bool selected);
 private slots:

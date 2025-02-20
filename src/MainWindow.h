@@ -41,7 +41,7 @@ private slots:
     void onComboBoxActivated(int index) const;
     void onMediaSelected(int index) const;
     void onMediaCreated(Media* media) const;
-    void updateDeleteButtonState(bool selected) const;
+    void updateSelectionState(bool selected) const;
 public:
     explicit MainWindow(QWidget* parent = nullptr);
 };

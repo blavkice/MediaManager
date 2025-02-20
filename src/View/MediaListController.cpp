@@ -8,26 +8,30 @@
 
 
 MediaListController::MediaListController(QListView* listView, QObject* parent) : listView(listView), QObject(parent) {
-    // connect the selectionChanged signal to the onSelectionChanged slot
-    connect(listView->selectionModel(), &QItemSelectionModel::selectionChanged,
-            this, &MediaListController::onSelectionChanged);
-
     // populate the list view
     model = new QStandardItemModel(listView);
     if (listView == nullptr) {
         throw std::invalid_argument("listView cannot be null");
     }
+
+    // important attributes for listview
+    listView->setSelectionMode(QAbstractItemView::SingleSelection);
     listView->setModel(model);
     listView->setItemDelegate(new InfoListPainter(listView));
     listView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     listView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     listView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     listView->verticalScrollBar()->setSingleStep(10);
+
+    // connect the selectionChanged signal to the onSelectionChanged slot
+    connect(listView->selectionModel(), &QItemSelectionModel::selectionChanged,
+            this, &MediaListController::onSelectionChanged);
 }
 
 void MediaListController::onSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected) {
     emit elementSelected(!selected.isEmpty());
 }
+
 
 void MediaListController::addMedia(Media* media) {
     mediaList.append(media);
@@ -73,6 +77,14 @@ void MediaListController::removeMedia(const int index) {
 
 QList<Media*> MediaListController::getMediaList() const {
     return mediaList;
+}
+
+Media* MediaListController::getCurrentSelectedMedia() const {
+    const QModelIndex currentIndex = listView->currentIndex();
+    if (!currentIndex.isValid()) {
+        return nullptr;
+    }
+    return mediaList.at(currentIndex.row());
 }
 
 void MediaListController::setMediaList(const QList<Media*>& mediaList) {

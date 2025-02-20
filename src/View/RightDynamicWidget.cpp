@@ -2,6 +2,7 @@
 #include <QLabel>
 #include <QFontDatabase>
 #include "RightDynamicWidget.h"
+#include "ViewMediaWidget.h"
 
 RightDynamicWidget::RightDynamicWidget(QWidget* parent) : QWidget(parent), currentWidget(nullptr) {
     auto layout = new QVBoxLayout(this);
@@ -31,6 +32,12 @@ void RightDynamicWidget::setWidget(QWidget* widget) {
 void RightDynamicWidget::setMediaCreated() {
     clear();
     setWidget(new QLabel("Media created!", this));
+}
+
+void RightDynamicWidget::viewMedia(Media* media) {
+    clear();
+    const auto viewMediaWidget = new ViewMediaWidget(media, this);
+    setWidget(viewMediaWidget);
 }
 
 void RightDynamicWidget::clear() {
