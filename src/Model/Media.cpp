@@ -1,12 +1,14 @@
+#include <QUuid>
 #include "Media.h"
 
-Media::Media() : id(0), title("Unknown"), shortDescription(" "), imagePath(":/img/default.jpg") { }
+Media::Media() : id("default"), title("Unknown"), shortDescription(" "), imagePath(":/img/default.jpg") { }
 
-Media::Media(const unsigned int id, const QString &title, const QString &short_description, const QString &image_path)
-    : id(id),
-      title(title),
+Media::Media(const QString &title, const QString &short_description, const QString &image_path)
+    : title(title),
       shortDescription(short_description),
-      imagePath(image_path) { }
+      imagePath(image_path) {
+    id = QUuid::createUuid().toString(QUuid::WithoutBraces);
+}
 
 Media::~Media() = default;
 
@@ -14,7 +16,7 @@ void Media::accept(Visitor *visitor) {
     visitor->visit(this);
 }
 
-unsigned int Media::getId() const {
+QString Media::getId() const {
     return id;
 }
 
@@ -30,7 +32,7 @@ QString Media::getImagePath() const {
     return imagePath;
 }
 
-void Media::setId(const unsigned int id) {
+void Media::setId(QString id) {
     this->id = id;
 }
 

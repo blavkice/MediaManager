@@ -26,6 +26,7 @@ public:
     void visit(AcademicArticle* academicArticle) override;
     void visit(NewspaperArticle* newspaperArticle) override;
     void saveInput(Media* media);
+    void saveImage(Media* media, const QString& imagePath);
 };
 
 #endif // ADDVISITOR_H

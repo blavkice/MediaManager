@@ -47,8 +47,6 @@ add_executable(MediaManager main.cpp
         View/CreateMediaWidget.h
         View/RightDynamicWidget.cpp
         View/RightDynamicWidget.h
-        Model/ImageValidator.cpp
-        Model/ImageValidator.h
         View/MenuBar.cpp
         View/MenuBar.h)
 target_link_libraries(MediaManager

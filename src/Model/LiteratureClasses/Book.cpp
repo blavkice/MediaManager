@@ -2,10 +2,10 @@
 
 Book::Book() : publishing("General publishing"), pages(0) { }
 
-Book::Book(const unsigned int id, const QString &title, const QString &short_description, const QString &image_path,
+Book::Book(const QString &title, const QString &short_description, const QString &image_path,
     const QString &author, const QString &long_description, const int publication_year, const short rating,
     const QString &publishing, const unsigned int pages)
-    : Literature(id, title, short_description, image_path, author, long_description, publication_year, rating),
+    : Literature(title, short_description, image_path, author, long_description, publication_year, rating),
       publishing(publishing),
       pages(pages) { }
 

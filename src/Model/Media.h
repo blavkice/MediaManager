@@ -6,19 +6,20 @@
 
 class Media : public Visitable {
 private:
-    unsigned int id;
+    QString id;
     QString title;
     QString shortDescription;
     QString imagePath;
 public:
     Media();
-    Media(unsigned int id, const QString &title, const QString &short_description, const QString &image_path = ":/img/default.jpg");
+    Media(const QString &title, const QString &short_description, const QString &image_path = ":/img/default.jpg");
     virtual ~Media() = 0; // to make the class abstract
-    unsigned int getId() const;
+    QString getId() const;
     QString getTitle() const;
     QString getShortDescription() const;
     QString getImagePath() const;
-    void setId(unsigned int id);
+    // note: setId is to be used only on imports!
+    void setId(QString id);
     void setTitle(const QString &title);
     void setShortDescription(const QString &short_description);
     void setImagePath(const QString &image_path);

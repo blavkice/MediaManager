@@ -1,6 +1,11 @@
 #include <QLabel>
 #include <QLineEdit>
+#include <QImage>
+#include <QCoreApplication>
+#include <QDir>
 #include "AddVisitor.h"
+
+
 
 AddVisitor::AddVisitor(QLayout* layout) : layout(layout) { }
 
@@ -127,7 +132,10 @@ void AddVisitor::visit(NewspaperArticle* newspaperArticle) {
 void AddVisitor::saveInput(Media* media) {
     media->setTitle(inputFields["title"]->text());
     media->setShortDescription(inputFields["shortDescription"]->text());
-    media->setImagePath(inputFields["imagePath"]->text());
+
+    // now for the image there is a separate method checking its integrity and saving it into ./media/
+    saveImage(media, inputFields["imagePath"]->text());
+
     // do for literature
     if (auto literature = dynamic_cast<Literature*>(media)) {
         literature->setAuthor(inputFields["author"]->text());
@@ -157,5 +165,36 @@ void AddVisitor::saveInput(Media* media) {
             newspaperArticle->setHeadline(inputFields["headline"]->text());
             newspaperArticle->setPolitics(inputFields["politics"]->text() == "Yes");
         }
+    }
+}
+
+void AddVisitor::saveImage(Media* media, const QString& imagePath) {
+    if (imagePath.isEmpty()) {
+        media->setImagePath(":default.jpg");
+        return;
+    }
+    QImage image(imagePath);
+    if (image.isNull()) {
+        media->setImagePath(":default.jpg");
+        return;
+    }
+    // then the image is valid
+    const QString appDirPath = QCoreApplication::applicationDirPath();
+    QDir dir(appDirPath);
+    dir.cdUp(); dir.cdUp();
+
+    // check existence of media directory
+    const QString mediaDirPath = dir.filePath("media");
+    if (!dir.exists(mediaDirPath)) {
+        dir.mkpath(mediaDirPath);
+    }
+
+    // TBD, saveFilePath is maybe redundant, we can just access the media folder and search for id.jpg
+    const QString newFilePath = mediaDirPath + "/" + media->getId() + ".jpg";
+
+    if (image.save(newFilePath, "JPG", 75)) {
+        media->setImagePath(media->getId() + ".jpg");
+    } else {
+        media->setImagePath(":default.jpg");
     }
 }

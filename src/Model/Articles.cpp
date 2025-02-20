@@ -2,9 +2,9 @@
 
 Articles::Articles() : author("No author set"), category("General"), url("No url"), date(QDate()), wordCount(0) { }
 
-Articles::Articles(const unsigned int id, const QString &title, const QString &short_description, const QString &image_path,
+Articles::Articles(const QString &title, const QString &short_description, const QString &image_path,
     const QString &author, const QString &category, const QString &url, const QDate &date, const unsigned int word_count)
-    : Media(id, title, short_description, image_path),
+    : Media(title, short_description, image_path),
       author(author),
       category(category),
       url(url),

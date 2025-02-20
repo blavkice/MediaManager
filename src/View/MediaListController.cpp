@@ -2,7 +2,10 @@
 #include "InfoListPainter.h"
 #include <QApplication>
 #include <QImage>
+#include <QDir>
 #include <QScrollBar>
+#include <QCoreApplication>
+
 
 MediaListController::MediaListController(QListView* listView, QObject* parent) : listView(listView), QObject(parent) {
     // connect the selectionChanged signal to the onSelectionChanged slot
@@ -40,10 +43,18 @@ void MediaListController::populateList() const {
     model->clear();
     for(const auto& media : mediaList) {
         const auto item = new QStandardItem();
-        QImage image(media->getImagePath());
+
+        // check if the image is valid and load it into the item
+        const QString appDirPath = QCoreApplication::applicationDirPath();
+        QDir dir(appDirPath);
+        dir.cdUp(); dir.cdUp();
+        const QString imgPath = dir.filePath("media") + "/" + media->getId() + ".jpg";
+
+        QImage image(imgPath);
         if (image.isNull()) {
             image.load(":default.jpg");
         }
+
         item->setData(QVariant::fromValue(image), Qt::DecorationRole);
         item->setData(media->getTitle(), Qt::DisplayRole);
         item->setData(media->getShortDescription(), Qt::UserRole + 1);

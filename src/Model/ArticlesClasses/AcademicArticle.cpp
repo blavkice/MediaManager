@@ -2,10 +2,10 @@
 
 AcademicArticle::AcademicArticle() : universityName("University"), citationCount(0), peerReviewed(false) { }
 
-AcademicArticle::AcademicArticle(const unsigned int id, const QString &title, const QString &short_description, const QString &image_path,
+AcademicArticle::AcademicArticle(const QString &title, const QString &short_description, const QString &image_path,
         const QString &author, const QString &category, const QString &url, const QDate &date, const unsigned int word_count,
         const QString &university_name, const unsigned int citation_count, const bool peer_reviewed)
-        : Articles(id, title, short_description, image_path, author, category, url, date, word_count),
+        : Articles(title, short_description, image_path, author, category, url, date, word_count),
           universityName(university_name),
           citationCount(citation_count),
           peerReviewed(peer_reviewed) {

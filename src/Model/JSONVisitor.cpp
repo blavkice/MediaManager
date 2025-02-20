@@ -69,6 +69,7 @@ bool JSONVisitor::exportToFile(const QString& filePath) {
 
 void JSONVisitor::visit(Media* media) {
     QJsonObject json;
+    json["id"] = media->getId();
     json["title"] = media->getTitle();
     json["shortDescription"] = media->getShortDescription();
     json["imagePath"] = media->getImagePath();
@@ -77,6 +78,7 @@ void JSONVisitor::visit(Media* media) {
 
 void JSONVisitor::visit(Literature* literature) {
     QJsonObject json;
+    json["id"] = literature->getId();
     json["title"] = literature->getTitle();
     json["shortDescription"] = literature->getShortDescription();
     json["imagePath"] = literature->getImagePath();
@@ -89,6 +91,7 @@ void JSONVisitor::visit(Literature* literature) {
 
 void JSONVisitor::visit(Articles* article) {
     QJsonObject json;
+    json["id"] = article->getId();
     json["title"] = article->getTitle();
     json["shortDescription"] = article->getShortDescription();
     json["imagePath"] = article->getImagePath();
@@ -102,6 +105,7 @@ void JSONVisitor::visit(Articles* article) {
 
 void JSONVisitor::visit(Book* book) {
     QJsonObject json;
+    json["id"] = book->getId();
     json["title"] = book->getTitle();
     json["shortDescription"] = book->getShortDescription();
     json["imagePath"] = book->getImagePath();
@@ -117,6 +121,7 @@ void JSONVisitor::visit(Book* book) {
 
 void JSONVisitor::visit(Poem* poem) {
     QJsonObject json;
+    json["id"] = poem->getId();
     json["title"] = poem->getTitle();
     json["shortDescription"] = poem->getShortDescription();
     json["imagePath"] = poem->getImagePath();
@@ -131,6 +136,7 @@ void JSONVisitor::visit(Poem* poem) {
 
 void JSONVisitor::visit(AcademicArticle* academicArticle) {
     QJsonObject json;
+    json["id"] = academicArticle->getId();
     json["title"] = academicArticle->getTitle();
     json["shortDescription"] = academicArticle->getShortDescription();
     json["imagePath"] = academicArticle->getImagePath();
@@ -148,6 +154,7 @@ void JSONVisitor::visit(AcademicArticle* academicArticle) {
 
 void JSONVisitor::visit(NewspaperArticle* newspaperArticle) {
     QJsonObject json;
+    json["id"] = newspaperArticle->getId();
     json["title"] = newspaperArticle->getTitle();
     json["shortDescription"] = newspaperArticle->getShortDescription();
     json["imagePath"] = newspaperArticle->getImagePath();
@@ -185,6 +192,7 @@ Media* JSONVisitor::deserialize(const QJsonObject& json) {
     }
 
     if (media) {
+        media->setId(json["id"].toString());
         media->setTitle(json["title"].toString());
         media->setShortDescription(json["shortDescription"].toString());
         media->setImagePath(json["imagePath"].toString());
