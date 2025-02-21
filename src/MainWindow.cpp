@@ -123,6 +123,10 @@ void MainWindow::onComboBoxActivated(const int index) const {
 }
 
 void MainWindow::onMediaSelected(const int index) const {
+    // clear search box when adding a new media
+    searchBox->clear();
+
+    // get type of media and create the widget for it
     if (index < 0) return;
     Media* media = nullptr;
     switch (index) {
