@@ -14,7 +14,7 @@ ViewMediaWidget::ViewMediaWidget(Media* media, QWidget* parent)
     scrollArea->setWidget(contentWidget);
     mainLayout->addWidget(scrollArea);
 
-    // Image loading
+    // image loading
     const QString appDirPath = QCoreApplication::applicationDirPath();
     QDir dir(appDirPath);
     dir.cdUp();
@@ -24,7 +24,7 @@ ViewMediaWidget::ViewMediaWidget(Media* media, QWidget* parent)
 
     QImage image(imgPath);
     if (image.isNull()) {
-        image.load(":/img/default.jpg");
+        image.load(":default.jpg");
         qDebug() << "image is null";
     }
     QLabel* imageLabel = new QLabel;

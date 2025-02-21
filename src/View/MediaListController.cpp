@@ -40,6 +40,8 @@ void MediaListController::onSelectionChanged(const QItemSelection& selected, con
 
 
 void MediaListController::addMedia(Media* media) {
+    // block signals to avoid unnecessary selection (stability...)
+    QSignalBlocker blocker(listView->selectionModel());
     mediaList.append(media);
     populateList();
 }

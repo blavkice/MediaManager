@@ -12,19 +12,19 @@ void ViewVisitor::addLabel(const QString& text, const QString& style) const {
 void ViewVisitor::addTextBlock(const QString& text) const {
     auto* textEdit = new QTextEdit(text);
     textEdit->setReadOnly(true);
-    textEdit->setStyleSheet("background-color: #f5f5f5; border-radius: 8px; padding: 10px;");
+    textEdit->setStyleSheet("border-radius: 10px; padding: 20px;");
     layout->addWidget(textEdit);
 }
 
 void ViewVisitor::visit(Media* media) {
-    addLabel("Title: " + media->getTitle(), "font-size: 30px; font-weight: bold;");
-    addLabel("Description: " + media->getShortDescription());
+    addLabel(media->getTitle(), "font-size: 30px; font-weight: bold;");
+    addLabel(media->getShortDescription());
 }
 
 void ViewVisitor::visit(Literature* literature) {
     visit(static_cast<Media*>(literature));
     addLabel("Author: " + literature->getAuthor());
-    addTextBlock("Long Description:\n" + literature->getLongDescription());
+    addTextBlock("\n" + literature->getLongDescription());
     addLabel("Year: " + QString::number(literature->getPublicationYear()));
     addLabel("Rating: " + QString::number(literature->getRating()) + "/5");
 }
@@ -46,7 +46,7 @@ void ViewVisitor::visit(Book* book) {
 
 void ViewVisitor::visit(Poem* poem) {
     visit(static_cast<Literature*>(poem));
-    addLabel("City of Origin: " + poem->getCity());
+    addLabel("Written in: " + poem->getCity());
     //addTextBlock(poem->getLongDescription());
 }
 
@@ -54,11 +54,11 @@ void ViewVisitor::visit(AcademicArticle* academicArticle) {
     visit(static_cast<Articles*>(academicArticle));
     addLabel("University: " + academicArticle->getUniversityName());
     addLabel("Citations: " + QString::number(academicArticle->getCitationCount()));
-    addLabel("Peer Reviewed: " + QString(academicArticle->isPeerReviewed() ? "Yes" : "No"));
+    addLabel("is Peer Reviewed? " + QString(academicArticle->isPeerReviewed() ? "Yes" : "No"));
 }
 
 void ViewVisitor::visit(NewspaperArticle* newspaperArticle) {
     visit(static_cast<Articles*>(newspaperArticle));
-    addLabel("Headline: " + newspaperArticle->getHeadline(), "font-size: 25px; font-weight: bold;");
-    addLabel("Politics Section: " + QString(newspaperArticle->isPolitics() ? "Yes" : "No"));
+    addLabel("Headline: " + newspaperArticle->getHeadline(), "font-size: 30px; font-weight: bold;");
+    addLabel("is About Politics?: " + QString(newspaperArticle->isPolitics() ? "Yes" : "No! :)"));
 }
