@@ -6,7 +6,6 @@
 #include <QScrollBar>
 #include <QCoreApplication>
 
-
 MediaListController::MediaListController(QListView* listView, QObject* parent) : listView(listView), QObject(parent) {
     // populate the list view
     model = new QStandardItemModel(listView);
@@ -84,6 +83,9 @@ void MediaListController::removeMedia(const int index) {
 
 void MediaListController::searchMedia(const QString& searchText) const {
     filterController->setSearchQuery(searchText);
+    // TBD: those 2 lines, should they be HERE?, if different views are implementes?
+    listView->clearSelection();
+    listView->setCurrentIndex(QModelIndex());
 }
 
 QList<Media*> MediaListController::getMediaList() const {
@@ -95,7 +97,12 @@ Media* MediaListController::getCurrentSelectedMedia() const {
     if (!currentIndex.isValid()) {
         return nullptr;
     }
-    return mediaList.at(currentIndex.row());
+    // map the filtered index to the original model index
+    const QModelIndex sourceIndex = filterController->mapToSource(currentIndex);
+    if (!sourceIndex.isValid() || sourceIndex.row() >= mediaList.size()) {
+        return nullptr;
+    }
+    return mediaList.at(sourceIndex.row());
 }
 
 void MediaListController::setMediaList(const QList<Media*>& mediaList) {
