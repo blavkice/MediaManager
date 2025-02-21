@@ -104,6 +104,8 @@ void MainWindow::onRemoveButtonClicked() {
                                                               QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::Yes) {
         mediaListController->removeMedia(currentIndex.row());
+        rightInfoWidget->clear();
+        searchBox->clear();
     }
 }
 
