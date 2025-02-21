@@ -3,6 +3,7 @@
 #include <QListView>
 #include <QStandardItemModel>
 #include <QList>
+#include "MediaFilterController.h"
 #include "../Model/Media.h"
 
 class MediaListController : public QObject {
@@ -10,6 +11,7 @@ class MediaListController : public QObject {
 private:
     QListView* listView;
     QStandardItemModel* model;
+    MediaFilterController* filterController;
     QList<Media*> mediaList;
 public:
     explicit MediaListController(QListView* listView, QObject* parent = nullptr);
@@ -19,6 +21,7 @@ public:
     void populateList() const;
     void setMediaList(const QList<Media*>& mediaList);
     void removeMedia(int index);
+    void searchMedia(const QString& searchText) const;
     Media* getCurrentSelectedMedia() const;
 signals:
     void elementSelected(bool selected);

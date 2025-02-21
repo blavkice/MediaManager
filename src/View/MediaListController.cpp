@@ -14,9 +14,16 @@ MediaListController::MediaListController(QListView* listView, QObject* parent) :
         throw std::invalid_argument("listView cannot be null");
     }
 
+    // initialize the filter controller
+    filterController = new MediaFilterController(this);
+    filterController->setSourceModel(model);
+    listView->setModel(filterController);
+    connect(listView->selectionModel(), &QItemSelectionModel::selectionChanged,
+        this, &MediaListController::onSelectionChanged);
+
     // important attributes for listview
     listView->setSelectionMode(QAbstractItemView::SingleSelection);
-    listView->setModel(model);
+    // listView->setModel(model); the model is already set in the filter controller
     listView->setItemDelegate(new InfoListPainter(listView));
     listView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     listView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -73,6 +80,10 @@ void MediaListController::removeMedia(const int index) {
     delete mediaList.takeAt(index);
     listView->model()->removeRow(index);
     populateList();
+}
+
+void MediaListController::searchMedia(const QString& searchText) const {
+    filterController->setSearchQuery(searchText);
 }
 
 QList<Media*> MediaListController::getMediaList() const {

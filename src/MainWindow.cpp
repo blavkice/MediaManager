@@ -22,6 +22,11 @@ MainWindow::MainWindow(QWidget* parent):
     connect(mediaListController, &MediaListController::elementSelected, this, &MainWindow::updateSelectionState);
     connect(removeButton, &QPushButton::clicked, this, &MainWindow::onRemoveButtonClicked);
 
+    // connect the search box to the search function
+    connect(searchBox, &QLineEdit::textChanged, this, [this](const QString& text) {
+        mediaListController->searchMedia(text);
+    });
+
     // json visitor for the import/export actions
     auto jsonVisitor = new JSONVisitor(mediaListController);
     menuBar->setJSONVisitor(jsonVisitor);

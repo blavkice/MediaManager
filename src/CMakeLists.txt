@@ -52,7 +52,9 @@ add_executable(MediaManager main.cpp
         View/ViewMediaWidget.cpp
         View/ViewMediaWidget.h
         Model/ViewVisitor.cpp
-        Model/ViewVisitor.h)
+        Model/ViewVisitor.h
+        View/MediaFilterController.cpp
+        View/MediaFilterController.h)
 target_link_libraries(MediaManager
   Qt::Core
   Qt::Gui
