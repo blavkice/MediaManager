@@ -76,9 +76,27 @@ void MediaListController::populateList() const {
 
 void MediaListController::removeMedia(const int index) {
     if (index < 0 || index >= mediaList.size()) return;
-    delete mediaList.takeAt(index);
-    listView->model()->removeRow(index);
+
+    // get the index in the filtered list
+    QModelIndex sourceIndex = filterController->mapToSource(listView->model()->index(index, 0));
+    if (!sourceIndex.isValid()) return;
+
+    // get the actual row in the original list
+    int actualRow = sourceIndex.row();
+
+    // block signals to avoid unnecessary selection (stability...)
+    QSignalBlocker blocker(listView->selectionModel());
+
+    // delete the element from the original list
+    delete mediaList.takeAt(actualRow);
+
+    // repopulate the list and reapply the search
     populateList();
+    searchMedia("");
+
+    // clear selection
+    listView->clearSelection();
+    listView->setCurrentIndex(QModelIndex());
 }
 
 void MediaListController::searchMedia(const QString& searchText) const {
