@@ -11,9 +11,12 @@ private:
     Media* media;
     QVBoxLayout* mainLayout;
     ViewVisitor* viewVisitor;
+    void onEditButtonClicked();
 public:
     explicit ViewMediaWidget(Media* media, QWidget* parent = nullptr);
-    virtual ~ViewMediaWidget();
+    ~ViewMediaWidget() override;
+signals:
+    void mediaEdited(Media* media);
 };
 
 #endif // VIEWMEDIAWIDGET_H

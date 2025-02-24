@@ -8,7 +8,7 @@
 
 #include <QPushButton>
 
-AddVisitor::AddVisitor(QLayout* layout, QWidget* parent) : layout(layout) { }
+AddVisitor::AddVisitor(QLayout* layout, QWidget* parent, QObject* obj_parent) : layout(layout) { }
 
 void AddVisitor::visit(Media* media) {
     layout->addWidget(new QLabel("Title:"));
@@ -127,7 +127,7 @@ void AddVisitor::visit(NewspaperArticle* newspaperArticle) {
     inputFields["politics"] = politicsEdit;
 }
 
-void AddVisitor::saveInput(Media* media) {
+bool AddVisitor::saveInput(Media* media) {
     media->setTitle(inputFields["title"]->text());
     media->setShortDescription(inputFields["shortDescription"]->text());
 
@@ -164,6 +164,7 @@ void AddVisitor::saveInput(Media* media) {
             newspaperArticle->setPolitics(inputFields["politics"]->text() == "Yes");
         }
     }
+    return true;
 }
 
 void AddVisitor::saveImage(Media* media, const QString& imagePath) {

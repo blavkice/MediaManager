@@ -13,6 +13,8 @@ public:
     void setMediaCreated();
     void viewMedia(Media* media);
     void clear();
+signals:
+    void mediaEdited(Media* media);
 };
 
 #endif //RIGHTDYNAMICWIDGET_H

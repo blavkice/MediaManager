@@ -35,8 +35,11 @@ MainWindow::MainWindow(QWidget* parent):
 
 void MainWindow::initLayouts() {
     hMainViewLayout = new QHBoxLayout(centralWidget);
-    // the "multifunctional" widget that will be used to display the media info
+    // the "multifunctional" widget that will be used to display the media info and edit it
     rightInfoWidget = new RightDynamicWidget(centralWidget);
+    // connect the mediaEdit signal in order to clear and re-view
+    connect(rightInfoWidget, &RightDynamicWidget::mediaEdited, this, &MainWindow::onMediaEdited);
+
     // the widget for the left "fixed" part
     auto vLeftWidget = new QWidget(centralWidget);
     // the widget containing the search box and add and remove buttons
@@ -151,4 +154,9 @@ void MainWindow::onMediaCreated(Media* media) const {
     rightInfoWidget->setMediaCreated();
     // the clear up is done by rightInfoWidget after a widget is set: the previous widget is deleted from heap
     // and so createMediaWidget is deleted correctly everytime
+}
+
+void MainWindow::onMediaEdited(Media* media) const {
+    mediaListController->populateList();
+    rightInfoWidget->viewMedia(media); // "auto-clear" from rightInfoWidget
 }

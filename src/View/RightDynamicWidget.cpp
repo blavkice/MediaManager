@@ -38,6 +38,11 @@ void RightDynamicWidget::viewMedia(Media* media) {
     clear();
     const auto viewMediaWidget = new ViewMediaWidget(media, this);
     setWidget(viewMediaWidget);
+
+    // after a media is viewed it can be edited, and so we need to connect the mediaEdited to the main window
+    connect(viewMediaWidget, &ViewMediaWidget::mediaEdited, this, [this, media]() {
+        emit mediaEdited(media);
+    });
 }
 
 void RightDynamicWidget::clear() {

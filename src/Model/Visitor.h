@@ -1,5 +1,6 @@
 #ifndef VISITOR_H
 #define VISITOR_H
+#include <QObject>
 
 class Media;
 class Literature;
@@ -9,7 +10,8 @@ class Poem;
 class AcademicArticle;
 class NewspaperArticle;
 
-class Visitor {
+class Visitor : public QObject {
+    Q_OBJECT
 public:
     virtual ~Visitor() = default;
     virtual void visit(Media* media) = 0;
