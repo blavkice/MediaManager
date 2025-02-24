@@ -123,8 +123,9 @@ void MainWindow::onComboBoxActivated(const int index) const {
 }
 
 void MainWindow::onMediaSelected(const int index) const {
-    // clear search box when adding a new media
+    // clear search box and selection when adding a new media
     searchBox->clear();
+    mediaListController->clearSelection();
 
     // get type of media and create the widget for it
     if (index < 0) return;
@@ -136,10 +137,13 @@ void MainWindow::onMediaSelected(const int index) const {
         case 3: media = new NewspaperArticle(); break;
     }
     const auto createMediaWidget = new CreateMediaWidget(rightInfoWidget, media);
-
-    connect(createMediaWidget, &CreateMediaWidget::mediaCreated, this, &MainWindow::onMediaCreated);
-
-    rightInfoWidget->setWidget(createMediaWidget);
+    try {
+        connect(createMediaWidget, &CreateMediaWidget::mediaCreated, this, &MainWindow::onMediaCreated);
+        rightInfoWidget->setWidget(createMediaWidget);
+    } catch (std::invalid_argument& e) {
+        delete createMediaWidget;
+        QMessageBox::warning(rightInfoWidget, "Error creating media", e.what());
+    }
 }
 
 void MainWindow::onMediaCreated(Media* media) const {

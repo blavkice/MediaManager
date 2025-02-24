@@ -23,6 +23,7 @@ public:
     void removeMedia(int index);
     void searchMedia(const QString& searchText) const;
     Media* getCurrentSelectedMedia() const;
+    void clearSelection() const;
 signals:
     void elementSelected(bool selected);
 private slots:

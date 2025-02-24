@@ -8,6 +8,10 @@
 
 CreateMediaWidget::CreateMediaWidget(QWidget* parent, Media* media)
     : QWidget(parent), currentMedia(media) {
+    if (media == nullptr) {
+        throw std::invalid_argument("media cannot be null");
+    }
+
     auto layout = new QVBoxLayout(this);
     auto scrollArea = new QScrollArea(this);
     auto contentWidget = new QWidget(scrollArea);

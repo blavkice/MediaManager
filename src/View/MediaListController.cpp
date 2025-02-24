@@ -129,3 +129,8 @@ void MediaListController::setMediaList(const QList<Media*>& mediaList) {
     this->mediaList = mediaList;
     populateList();
 }
+
+void MediaListController::clearSelection() const {
+    listView->clearSelection();
+    listView->setCurrentIndex(QModelIndex());
+}
