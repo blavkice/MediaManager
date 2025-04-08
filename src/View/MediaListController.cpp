@@ -7,7 +7,6 @@
 #include <QCoreApplication>
 
 MediaListController::MediaListController(QListView* listView, QObject* parent) : listView(listView), QObject(parent) {
-    // populate the list view
     model = new QStandardItemModel(listView);
     if (listView == nullptr) {
         throw std::invalid_argument("listView cannot be null");
