@@ -7,7 +7,7 @@
 #include "../Model/AddVisitor.h"
 
 CreateMediaWidget::CreateMediaWidget(QWidget* parent, Media* media)
-    : QWidget(parent), currentMedia(media) {
+    : QWidget(parent), currentMedia(media), createButton(nullptr) {
     if (media == nullptr) {
         throw std::invalid_argument("media cannot be null");
     }
@@ -33,7 +33,7 @@ CreateMediaWidget::CreateMediaWidget(QWidget* parent, Media* media)
     addVisitor = std::make_unique<AddVisitor>(contentLayout);
     media->accept(addVisitor.get());
 
-    const auto createButton = new QPushButton("Create", this);
+    createButton = new QPushButton("Create", this);  // Assign to member variable
     contentLayout->addWidget(createButton);
 
     contentWidget->setLayout(contentLayout);
@@ -50,6 +50,10 @@ CreateMediaWidget::CreateMediaWidget(QWidget* parent, Media* media)
             emit mediaCreated(currentMedia);
         }
     });
+
+    // in order for the keyPressEvent to work, we need to set focus policy
+    setFocusPolicy(Qt::StrongFocus);
+    setFocus();
 }
 
 void CreateMediaWidget::chooseImage() {
@@ -61,4 +65,16 @@ void CreateMediaWidget::chooseImage() {
 
 QVBoxLayout* CreateMediaWidget::getContentLayout() const {
     return contentLayout;
+}
+
+void CreateMediaWidget::keyPressEvent(QKeyEvent *event) {
+    if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
+        // if the create button is enabled, simulate a click
+        if (createButton && createButton->isEnabled()) {
+            createButton->click();
+        }
+    } else {
+        // default key press handling
+        QWidget::keyPressEvent(event);
+    }
 }
