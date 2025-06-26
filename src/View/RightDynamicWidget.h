@@ -7,6 +7,7 @@ class RightDynamicWidget : public QWidget {
     Q_OBJECT
 private:
     QWidget* currentWidget;
+    static void clearLayout(QLayout* layout);
 public:
     explicit RightDynamicWidget(QWidget* parent = nullptr);
     void setWidget(QWidget* widget);

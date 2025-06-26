@@ -17,8 +17,6 @@ MediaListController::MediaListController(QListView* listView, QObject* parent) :
     filterController = new MediaFilterController(this);
     filterController->setSourceModel(model);
     listView->setModel(filterController);
-    connect(listView->selectionModel(), &QItemSelectionModel::selectionChanged,
-        this, &MediaListController::onSelectionChanged);
 
     // important attributes for listview
     listView->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -108,7 +106,14 @@ std::shared_ptr<Media> MediaListController::getCurrentSelectedMedia() const {
     if (!currentIndex.isValid()) {
         return nullptr;
     }
-    return mediaList.at(currentIndex.row());
+
+    // due to filtering the index might be off so we need to map it to the source model
+    const QModelIndex sourceIndex = filterController->mapToSource(currentIndex);
+    if (!sourceIndex.isValid() || sourceIndex.row() >= mediaList.size()) {
+        return nullptr;
+    }
+
+    return mediaList.at(sourceIndex.row());
 }
 
 void MediaListController::setMediaList(const QList<Media*>& mediaList) {

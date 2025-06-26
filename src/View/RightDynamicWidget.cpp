@@ -4,6 +4,25 @@
 #include "RightDynamicWidget.h"
 #include "ViewMediaWidget.h"
 
+void RightDynamicWidget::clearLayout(QLayout* layout) {
+    QLayoutItem* item;
+    while ((item = layout->takeAt(0)) != nullptr) {
+        if (QWidget* widget = item->widget()) {
+            widget->setParent(nullptr);
+            widget->deleteLater(); // safe qt deletion
+        }
+        delete item;
+    }
+}
+
+// note: clearLayout but without deleting the layout itself
+void RightDynamicWidget::clear() {
+    if (layout()) {
+        clearLayout(layout());
+    }
+    currentWidget = nullptr;
+}
+
 RightDynamicWidget::RightDynamicWidget(QWidget* parent) : QWidget(parent), currentWidget(nullptr) {
     auto layout = new QVBoxLayout(this);
     auto welcomeLabel = new QLabel("Welcome to MediaManager!", this);
@@ -43,14 +62,4 @@ void RightDynamicWidget::viewMedia(Media* media) {
     connect(viewMediaWidget, &ViewMediaWidget::mediaEdited, this, [this, media]() {
         emit mediaEdited(media);
     });
-}
-
-void RightDynamicWidget::clear() {
-    // to delete recursively all the widgets in the layout
-    QLayoutItem* item;
-    while ((item = layout()->takeAt(0)) != nullptr) {
-        delete item->widget();
-        delete item;
-    }
-    currentWidget = nullptr;
 }
