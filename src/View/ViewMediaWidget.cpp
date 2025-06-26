@@ -4,6 +4,9 @@
 #include <QVBoxLayout>
 #include <QScrollArea>
 #include <QPushButton>
+#include <QLabel>
+#include <QDir>
+#include <QCoreApplication>
 
 ViewMediaWidget::ViewMediaWidget(Media* media, QWidget* parent)
     : QWidget(parent), media(media) {
@@ -12,7 +15,7 @@ ViewMediaWidget::ViewMediaWidget(Media* media, QWidget* parent)
     // adding the edit button and connecting it to the editVisitor
     const auto topLayout = new QHBoxLayout();
     QPushButton* editButton = new QPushButton("Edit", this);
-    topLayout->addStretch(); // Push the button to the right
+    topLayout->addStretch(); // push the button to the right
     topLayout->addWidget(editButton);
     connect(editButton, &QPushButton::clicked, this, &ViewMediaWidget::onEditButtonClicked);
     mainLayout->addLayout(topLayout);
@@ -43,19 +46,18 @@ ViewMediaWidget::ViewMediaWidget(Media* media, QWidget* parent)
     imageLabel->setAlignment(Qt::AlignCenter);
     contentLayout->addWidget(imageLabel);
 
-    // Visit media for dynamic visualization
-    viewVisitor = new ViewVisitor(contentLayout);
-    media->accept(viewVisitor);
+    // visit media for dynamic visualization, with safe memory management
+    viewVisitor = std::make_unique<ViewVisitor>(contentLayout);
+    media->accept(viewVisitor.get());
 }
 
 void ViewMediaWidget::onEditButtonClicked() {
-    auto* editVisitor = new EditVisitor(mainLayout);
+    auto editVisitor = new EditVisitor(mainLayout); // qt parent takes ownership
     media->accept(editVisitor);
+
     connect(editVisitor, &EditVisitor::mediaEdited, this, [=](Media* media) {
-        emit mediaEdited(media); // emit to the main window
+        emit mediaEdited(media);
     });
 }
 
-ViewMediaWidget::~ViewMediaWidget() {
-    delete viewVisitor;
-}
+ViewMediaWidget::~ViewMediaWidget() = default;

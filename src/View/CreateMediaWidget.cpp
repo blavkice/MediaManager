@@ -29,9 +29,9 @@ CreateMediaWidget::CreateMediaWidget(QWidget* parent, Media* media)
     contentLayout->addWidget(chooseButton);
     connect(chooseButton, &QPushButton::clicked, this, &CreateMediaWidget::chooseImage);
 
-    // visualize the input fields for the selected concrete media
-    addVisitor = new AddVisitor(contentLayout);
-    media->accept(addVisitor);
+    // visualize the input fields for the selected concrete media (with safe memory management)
+    addVisitor = std::make_unique<AddVisitor>(contentLayout);
+    media->accept(addVisitor.get());
 
     const auto createButton = new QPushButton("Create", this);
     contentLayout->addWidget(createButton);
@@ -46,9 +46,8 @@ CreateMediaWidget::CreateMediaWidget(QWidget* parent, Media* media)
     connect(createButton, &QPushButton::clicked, this, [this]() {
         if (currentMedia) {
             currentMedia->setImagePath(imagePathEdit->text());
-            addVisitor->saveInput(currentMedia);
+            addVisitor->saveInput(currentMedia); // no need to manually delete addVisitor
             emit mediaCreated(currentMedia);
-            delete addVisitor;
         }
     });
 }

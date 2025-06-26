@@ -9,7 +9,7 @@ class CreateMediaWidget : public QWidget {
 private:
     Media* currentMedia;
     QVBoxLayout* contentLayout;
-    AddVisitor* addVisitor;
+    std::unique_ptr<AddVisitor> addVisitor;
     // to add image from dialog
     QLineEdit* imagePathEdit;
     QPushButton* chooseButton;

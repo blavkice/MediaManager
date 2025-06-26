@@ -10,7 +10,7 @@ class ViewMediaWidget : public QWidget {
 private:
     Media* media;
     QVBoxLayout* mainLayout;
-    ViewVisitor* viewVisitor;
+    std::unique_ptr<ViewVisitor> viewVisitor;
     void onEditButtonClicked();
 public:
     explicit ViewMediaWidget(Media* media, QWidget* parent = nullptr);
