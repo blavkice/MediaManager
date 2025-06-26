@@ -12,17 +12,18 @@ private:
     QListView* listView;
     QStandardItemModel* model;
     MediaFilterController* filterController;
-    QList<Media*> mediaList;
+    QList<std::shared_ptr<Media>> mediaList;
 public:
     explicit MediaListController(QListView* listView, QObject* parent = nullptr);
-    void addMedia(Media* media);
+    void addMedia(const std::shared_ptr<Media>& media);
     void clearMedia();
-    QList<Media*> getMediaList() const;
+    QList<std::shared_ptr<Media>> getMediaList() const;
     void populateList() const;
     void setMediaList(const QList<Media*>& mediaList);
     void removeMedia(int index);
     void searchMedia(const QString& searchText) const;
-    Media* getCurrentSelectedMedia() const;
+
+    std::shared_ptr<Media> getCurrentSelectedMedia() const;
     void clearSelection() const;
 signals:
     void elementSelected(bool selected);

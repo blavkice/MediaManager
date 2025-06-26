@@ -88,7 +88,8 @@ void MainWindow::initAddComboBox() {
 // view the element selected in the list and activate the delete button
 void MainWindow::updateSelectionState(bool selected) const {
     if (selected) {
-        rightInfoWidget->viewMedia(mediaListController->getCurrentSelectedMedia());
+        auto mediaPtr = mediaListController->getCurrentSelectedMedia();
+        rightInfoWidget->viewMedia(mediaPtr ? mediaPtr.get() : nullptr);
         removeButton->setEnabled(selected);
     } else {
         rightInfoWidget->clear();
@@ -99,7 +100,9 @@ void MainWindow::onRemoveButtonClicked() {
     const QModelIndex currentIndex = listView->currentIndex();
     if (!currentIndex.isValid()) return;
 
-    const Media* media = mediaListController->getMediaList().at(currentIndex.row());
+    const std::shared_ptr<Media>& mediaPtr = mediaListController->getMediaList().at(currentIndex.row());
+    const Media* media = mediaPtr.get();
+
     const QString mediaTitle = media->getTitle();
 
     const QMessageBox::StandardButton reply = QMessageBox::question(this, "Deleting Media",
@@ -150,7 +153,7 @@ void MainWindow::onMediaSelected(const int index) const {
 }
 
 void MainWindow::onMediaCreated(Media* media) const {
-    mediaListController->addMedia(media);
+    mediaListController->addMedia(std::shared_ptr<Media>(media));
     rightInfoWidget->setMediaCreated();
     // the clear up is done by rightInfoWidget after a widget is set: the previous widget is deleted from heap
     // and so createMediaWidget is deleted correctly everytime

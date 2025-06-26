@@ -6,7 +6,7 @@
 #include <QScrollBar>
 #include <QCoreApplication>
 
-MediaListController::MediaListController(QListView* listView, QObject* parent) : listView(listView), QObject(parent) {
+MediaListController::MediaListController(QListView* listView, QObject* parent) : QObject(parent), listView(listView) {
     // populate the list view
     model = new QStandardItemModel(listView);
     if (listView == nullptr) {
@@ -39,8 +39,7 @@ void MediaListController::onSelectionChanged(const QItemSelection& selected, con
 }
 
 
-void MediaListController::addMedia(Media* media) {
-    // block signals to avoid unnecessary selection (stability...)
+void MediaListController::addMedia(const std::shared_ptr<Media>& media) {
     QSignalBlocker blocker(listView->selectionModel());
     mediaList.append(media);
     populateList();
@@ -78,25 +77,17 @@ void MediaListController::populateList() const {
 
 void MediaListController::removeMedia(const int index) {
     if (index < 0 || index >= mediaList.size()) return;
-
-    // get the index in the filtered list
     QModelIndex sourceIndex = filterController->mapToSource(listView->model()->index(index, 0));
+
     if (!sourceIndex.isValid()) return;
 
-    // get the actual row in the original list
     int actualRow = sourceIndex.row();
 
-    // block signals to avoid unnecessary selection (stability...)
     QSignalBlocker blocker(listView->selectionModel());
-
-    // delete the element from the original list
-    delete mediaList.takeAt(actualRow);
-
-    // repopulate the list and reapply the search
+    mediaList.removeAt(actualRow);
     populateList();
     searchMedia("");
 
-    // clear selection
     listView->clearSelection();
     listView->setCurrentIndex(QModelIndex());
 }
@@ -108,25 +99,23 @@ void MediaListController::searchMedia(const QString& searchText) const {
     listView->setCurrentIndex(QModelIndex());
 }
 
-QList<Media*> MediaListController::getMediaList() const {
+QList<std::shared_ptr<Media>> MediaListController::getMediaList() const {
     return mediaList;
 }
 
-Media* MediaListController::getCurrentSelectedMedia() const {
+std::shared_ptr<Media> MediaListController::getCurrentSelectedMedia() const {
     const QModelIndex currentIndex = listView->currentIndex();
     if (!currentIndex.isValid()) {
         return nullptr;
     }
-    // map the filtered index to the original model index
-    const QModelIndex sourceIndex = filterController->mapToSource(currentIndex);
-    if (!sourceIndex.isValid() || sourceIndex.row() >= mediaList.size()) {
-        return nullptr;
-    }
-    return mediaList.at(sourceIndex.row());
+    return mediaList.at(currentIndex.row());
 }
 
 void MediaListController::setMediaList(const QList<Media*>& mediaList) {
-    this->mediaList = mediaList;
+    this->mediaList.clear();
+    for (Media* media : mediaList) {
+        this->mediaList.append(std::shared_ptr<Media>(media));
+    }
     populateList();
 }
 

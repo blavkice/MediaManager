@@ -40,7 +40,7 @@ bool JSONVisitor::importFromFile(const QString& filePath) const {
         QJsonObject jsonObject = value.toObject();
         Media* media = deserialize(jsonObject);
         if (media) {
-            mediaListController->addMedia(media);
+            mediaListController->addMedia(std::shared_ptr<Media>(media));
         } else {
             qDebug() << "Failed to deserialize media.";
         }
@@ -57,8 +57,10 @@ bool JSONVisitor::exportToFile(const QString& filePath) {
     }
 
     jsonArray = QJsonArray();
-    for (Media* media : mediaListController->getMediaList()) {
-        media->accept(this);
+    for (const std::shared_ptr<Media>& mediaPtr : mediaListController->getMediaList()) {
+        if (mediaPtr) {
+            mediaPtr->accept(this);
+        }
     }
 
     const QJsonDocument doc(jsonArray);
