@@ -1,4 +1,5 @@
 src/cmake-build-debug/
+cmake-build-*/
 .idea/
 **/.DS_Store
 **/*.iml
@@ -96,3 +97,4 @@ Icon
 Thumbs.db
 ehthumbs.db
 /cmake-build-debug/*
+/src/cmake-build-debug-homebrew-llvm-updated/
