@@ -1,18 +1,18 @@
+#include "MainWindow.h"
+
 #include <QComboBox>
 #include <QMessageBox>
-#include "MainWindow.h"
+
+#include "Model/AddVisitor.h"
+#include "Model/ArticlesClasses/AcademicArticle.h"
+#include "Model/ArticlesClasses/NewspaperArticle.h"
 #include "Model/LiteratureClasses/Book.h"
 #include "Model/LiteratureClasses/Poem.h"
-#include "Model/ArticlesClasses/NewspaperArticle.h"
-#include "Model/ArticlesClasses/AcademicArticle.h"
-#include "View/MediaFilterController.h"
 #include "View/CreateMediaWidget.h"
-#include "Model/AddVisitor.h"
+#include "View/MediaFilterController.h"
 
-MainWindow::MainWindow(QWidget* parent):
-    QMainWindow(parent),
-    centralWidget(new QWidget(this)),
-    menuBar(new MenuBar(this)) {
+MainWindow::MainWindow(QWidget* parent)
+    : QMainWindow(parent), centralWidget(new QWidget(this)), menuBar(new MenuBar(this)) {
     resize(800, 600);
     initLayouts();
     setMenuBar(menuBar);
@@ -24,17 +24,14 @@ MainWindow::MainWindow(QWidget* parent):
     connect(removeButton, &QPushButton::clicked, this, &MainWindow::onRemoveButtonClicked);
 
     // connect the search box to the search function
-    connect(searchBox, &QLineEdit::textChanged, this, [this](const QString& text) {
-        mediaListController->searchMedia(text);
-    });
+    connect(searchBox, &QLineEdit::textChanged, this,
+            [this](const QString& text) { mediaListController->searchMedia(text); });
 
     // connect the filter box to the filter function
-    connect(typeFilterBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, [this](int index) {
+    connect(typeFilterBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int index) {
         QVariant data = typeFilterBox->itemData(index);
         if (data.isValid()) {
-            const auto filter =
-                static_cast<MediaFilterController::MediaTypeFilter>(data.toInt());
+            const auto filter = static_cast<MediaFilterController::MediaTypeFilter>(data.toInt());
             mediaListController->setMediaTypeFilter(filter);
         }
     });
@@ -64,8 +61,12 @@ void MainWindow::initLayouts() {
     typeFilterBox->addItem("All", QVariant::fromValue(static_cast<int>(MediaFilterController::MediaTypeFilter::All)));
     typeFilterBox->addItem("Book", QVariant::fromValue(static_cast<int>(MediaFilterController::MediaTypeFilter::Book)));
     typeFilterBox->addItem("Poem", QVariant::fromValue(static_cast<int>(MediaFilterController::MediaTypeFilter::Poem)));
-    typeFilterBox->addItem("Academic Article", QVariant::fromValue(static_cast<int>(MediaFilterController::MediaTypeFilter::AcademicArticle)));
-    typeFilterBox->addItem("Newspaper Article", QVariant::fromValue(static_cast<int>(MediaFilterController::MediaTypeFilter::NewspaperArticle)));
+    typeFilterBox->addItem(
+        "Academic Article",
+        QVariant::fromValue(static_cast<int>(MediaFilterController::MediaTypeFilter::AcademicArticle)));
+    typeFilterBox->addItem(
+        "Newspaper Article",
+        QVariant::fromValue(static_cast<int>(MediaFilterController::MediaTypeFilter::NewspaperArticle)));
 
     vLeftLayout = new QVBoxLayout(vLeftWidget);
 
@@ -133,9 +134,8 @@ void MainWindow::onRemoveButtonClicked() {
 
     const QString mediaTitle = media->getTitle();
 
-    const QMessageBox::StandardButton reply = QMessageBox::question(this, "Deleting Media",
-                                                              "Do you really want to delete " + mediaTitle + "?",
-                                                              QMessageBox::Yes | QMessageBox::No);
+    const QMessageBox::StandardButton reply = QMessageBox::question(
+        this, "Deleting Media", "Do you really want to delete " + mediaTitle + "?", QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::Yes) {
         mediaListController->removeMedia(currentIndex.row());
         rightInfoWidget->clear();
@@ -165,10 +165,18 @@ void MainWindow::onMediaSelected(const int index) const {
     if (index < 0) return;
     Media* media = nullptr;
     switch (index) {
-        case 0: media = new Book(); break;
-        case 1: media = new Poem(); break;
-        case 2: media = new AcademicArticle(); break;
-        case 3: media = new NewspaperArticle(); break;
+        case 0:
+            media = new Book();
+            break;
+        case 1:
+            media = new Poem();
+            break;
+        case 2:
+            media = new AcademicArticle();
+            break;
+        case 3:
+            media = new NewspaperArticle();
+            break;
     }
     const auto createMediaWidget = new CreateMediaWidget(rightInfoWidget, media);
     try {
@@ -189,5 +197,5 @@ void MainWindow::onMediaCreated(Media* media) const {
 
 void MainWindow::onMediaEdited(Media* media) const {
     mediaListController->populateList();
-    rightInfoWidget->viewMedia(media); // "auto-clear" from rightInfoWidget
+    rightInfoWidget->viewMedia(media);  // "auto-clear" from rightInfoWidget
 }

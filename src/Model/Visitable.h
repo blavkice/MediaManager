@@ -4,9 +4,9 @@
 class Visitor;
 
 class Visitable {
-public:
+   public:
     virtual ~Visitable() = default;
     virtual void accept(Visitor *visitor) = 0;
 };
 
-#endif //VISITABLE_H
+#endif  // VISITABLE_H

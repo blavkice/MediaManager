@@ -1,14 +1,15 @@
-#include <QLabel>
-#include <QLineEdit>
-#include <QImage>
+#include "AddVisitor.h"
+
 #include <QCoreApplication>
 #include <QDir>
 #include <QFileDialog>
-#include "AddVisitor.h"
-
+#include <QImage>
+#include <QLabel>
+#include <QLineEdit>
 #include <QPushButton>
 
-AddVisitor::AddVisitor(QLayout* layout, QWidget* parent, QObject* obj_parent) : layout(layout) { }
+AddVisitor::AddVisitor(QLayout* layout, QWidget* parent, QObject* obj_parent) : layout(layout) {
+}
 
 void AddVisitor::visit(Media* media) {
     layout->addWidget(new QLabel("Title:"));
@@ -148,7 +149,8 @@ bool AddVisitor::saveInput(Media* media) {
             poem->setCity(inputFields["city"]->text());
         }
         // now articles
-    } else { auto article = dynamic_cast<Articles*>(media);
+    } else {
+        auto article = dynamic_cast<Articles*>(media);
         article->setAuthor(inputFields["author"]->text());
         article->setCategory(inputFields["category"]->text());
         article->setUrl(inputFields["url"]->text());
@@ -182,7 +184,8 @@ void AddVisitor::saveImage(Media* media, const QString& imagePath) {
     // then the image is valid
     const QString appDirPath = QCoreApplication::applicationDirPath();
     QDir dir(appDirPath);
-    dir.cdUp(); dir.cdUp();
+    dir.cdUp();
+    dir.cdUp();
 
     // check existence of media directory
     const QString mediaDirPath = dir.filePath("media");
@@ -196,5 +199,6 @@ void AddVisitor::saveImage(Media* media, const QString& imagePath) {
     if (image.save(newFilePath, "JPG", 75)) {
         media->setImagePath(media->getId() + ".jpg");
         qDebug() << "Image saved to:" << newFilePath;
-    } else media->setImagePath(":default.jpg");
+    } else
+        media->setImagePath(":default.jpg");
 }

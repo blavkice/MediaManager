@@ -1,25 +1,27 @@
 #ifndef ADDVISITOR_H
 #define ADDVISITOR_H
-#include <QWidget>
 #include <QLayout>
-#include <QMap>
 #include <QLineEdit>
+#include <QMap>
 #include <QObject>
-#include "Visitor.h"
-#include "Literature.h"
+#include <QWidget>
+
 #include "Articles.h"
-#include "LiteratureClasses/Book.h"
-#include "LiteratureClasses/Poem.h"
 #include "ArticlesClasses/AcademicArticle.h"
 #include "ArticlesClasses/NewspaperArticle.h"
+#include "Literature.h"
+#include "LiteratureClasses/Book.h"
+#include "LiteratureClasses/Poem.h"
+#include "Visitor.h"
 
 class AddVisitor : public Visitor {
     Q_OBJECT
-private:
+   private:
     QLayout* layout;
     QMap<QString, QLineEdit*> inputFields;
     QPushButton* chooseButton;
-public:
+
+   public:
     explicit AddVisitor(QLayout* layout, QWidget* parent = nullptr, QObject* obj_parent = nullptr);
     void chooseImage();
     void visit(Media* media) override;
@@ -33,4 +35,4 @@ public:
     static void saveImage(Media* media, const QString& imagePath);
 };
 
-#endif // ADDVISITOR_H
+#endif  // ADDVISITOR_H

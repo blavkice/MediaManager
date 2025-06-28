@@ -1,22 +1,23 @@
 #include "ViewMediaWidget.h"
-#include "../Model/ViewVisitor.h"
-#include "../Model/EditVisitor.h"
-#include <QVBoxLayout>
-#include <QScrollArea>
-#include <QPushButton>
-#include <QLabel>
-#include <QDir>
-#include <QCoreApplication>
-#include <QKeyEvent>
 
-ViewMediaWidget::ViewMediaWidget(Media* media, QWidget* parent)
-    : QWidget(parent), media(media) {
+#include <QCoreApplication>
+#include <QDir>
+#include <QKeyEvent>
+#include <QLabel>
+#include <QPushButton>
+#include <QScrollArea>
+#include <QVBoxLayout>
+
+#include "../Model/EditVisitor.h"
+#include "../Model/ViewVisitor.h"
+
+ViewMediaWidget::ViewMediaWidget(Media* media, QWidget* parent) : QWidget(parent), media(media) {
     mainLayout = new QVBoxLayout(this);
 
     // adding the edit button and connecting it to the editVisitor
     const auto topLayout = new QHBoxLayout();
     QPushButton* editButton = new QPushButton("Edit", this);
-    topLayout->addStretch(); // push the button to the right
+    topLayout->addStretch();  // push the button to the right
     topLayout->addWidget(editButton);
     connect(editButton, &QPushButton::clicked, this, &ViewMediaWidget::onEditButtonClicked);
     mainLayout->addLayout(topLayout);
@@ -54,25 +55,22 @@ ViewMediaWidget::ViewMediaWidget(Media* media, QWidget* parent)
 
 void ViewMediaWidget::onEditButtonClicked() {
     saveButton = new QPushButton("Save Changes", this);
-    auto editVisitor = new EditVisitor(mainLayout, saveButton); // qt parent takes ownership
+    auto editVisitor = new EditVisitor(mainLayout, saveButton);  // qt parent takes ownership
     media->accept(editVisitor);
 
     // to allow keyboard shortcuts
     setFocusPolicy(Qt::StrongFocus);
     setFocus();
 
-    connect(editVisitor, &EditVisitor::mediaEdited, this, [=](Media* media) {
-        emit mediaEdited(media);
-    });
+    connect(editVisitor, &EditVisitor::mediaEdited, this, [=](Media* media) { emit mediaEdited(media); });
 }
 
 void ViewMediaWidget::keyPressEvent(QKeyEvent* event) {
-    if ((event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) &&
-        saveButton && saveButton->isEnabled()) {
+    if ((event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) && saveButton && saveButton->isEnabled()) {
         saveButton->click();
-        } else {
-            QWidget::keyPressEvent(event);
-        }
+    } else {
+        QWidget::keyPressEvent(event);
+    }
 }
 
 ViewMediaWidget::~ViewMediaWidget() = default;

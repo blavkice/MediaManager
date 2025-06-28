@@ -1,13 +1,14 @@
 #ifndef JSONVISITOR_H
 #define JSONVISITOR_H
-#include <QString>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QString>
+
 #include "../View/MediaListController.h"
 #include "Visitor.h"
 
 class JSONVisitor : public Visitor {
-public:
+   public:
     explicit JSONVisitor(MediaListController* mediaListController);
     bool importFromFile(const QString& filePath) const;
     bool exportToFile(const QString& filePath);
@@ -19,9 +20,10 @@ public:
     void visit(AcademicArticle* academicArticle) override;
     void visit(NewspaperArticle* newspaperArticle) override;
     static Media* deserialize(const QJsonObject& json);
-private:
+
+   private:
     MediaListController* mediaListController;
     mutable QJsonArray jsonArray;
 };
 
-#endif // JSONVISITOR_H
+#endif  // JSONVISITOR_H

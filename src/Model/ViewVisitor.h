@@ -1,28 +1,29 @@
 #ifndef VIEWVISITOR_H
 #define VIEWVISITOR_H
-#include "Visitor.h"
-#include "Visitor.h"
-#include "Literature.h"
-#include "Articles.h"
-#include "LiteratureClasses/Book.h"
-#include "LiteratureClasses/Poem.h"
-#include "ArticlesClasses/AcademicArticle.h"
-#include "ArticlesClasses/NewspaperArticle.h"
-#include <QLayout>
-#include <QLabel>
-#include <QTextEdit>
-#include <QGroupBox>
-#include <QPixmap>
 #include <QCoreApplication>
 #include <QDir>
+#include <QGroupBox>
 #include <QImage>
+#include <QLabel>
+#include <QLayout>
+#include <QPixmap>
+#include <QTextEdit>
+
+#include "Articles.h"
+#include "ArticlesClasses/AcademicArticle.h"
+#include "ArticlesClasses/NewspaperArticle.h"
+#include "Literature.h"
+#include "LiteratureClasses/Book.h"
+#include "LiteratureClasses/Poem.h"
+#include "Visitor.h"
 
 class ViewVisitor : public Visitor {
-private:
+   private:
     QLayout* layout;
     void addLabel(const QString& text, const QString& style = "font-size:16px;") const;
     void addTextBlock(const QString& text) const;
-public:
+
+   public:
     explicit ViewVisitor(QLayout* layout);
     void visit(Media* media) override;
     void visit(Literature* literature) override;
@@ -32,4 +33,4 @@ public:
     void visit(AcademicArticle* academicArticle) override;
     void visit(NewspaperArticle* newspaperArticle) override;
 };
-#endif // VIEWVISITOR_H
+#endif  // VIEWVISITOR_H

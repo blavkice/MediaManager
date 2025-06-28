@@ -1,10 +1,12 @@
 #include "MediaListController.h"
-#include "InfoListPainter.h"
+
 #include <QApplication>
-#include <QImage>
-#include <QDir>
-#include <QScrollBar>
 #include <QCoreApplication>
+#include <QDir>
+#include <QImage>
+#include <QScrollBar>
+
+#include "InfoListPainter.h"
 
 MediaListController::MediaListController(QListView* listView, QObject* parent) : QObject(parent), listView(listView) {
     // populate the list view
@@ -28,14 +30,13 @@ MediaListController::MediaListController(QListView* listView, QObject* parent) :
     listView->verticalScrollBar()->setSingleStep(10);
 
     // connect the selectionChanged signal to the onSelectionChanged slot
-    connect(listView->selectionModel(), &QItemSelectionModel::selectionChanged,
-            this, &MediaListController::onSelectionChanged);
+    connect(listView->selectionModel(), &QItemSelectionModel::selectionChanged, this,
+            &MediaListController::onSelectionChanged);
 }
 
 void MediaListController::onSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected) {
     emit elementSelected(!selected.isEmpty());
 }
-
 
 void MediaListController::addMedia(const std::shared_ptr<Media>& media) {
     QSignalBlocker blocker(listView->selectionModel());
@@ -50,13 +51,14 @@ void MediaListController::clearMedia() {
 
 void MediaListController::populateList() const {
     model->clear();
-    for(const auto& media : mediaList) {
+    for (const auto& media : mediaList) {
         const auto item = new QStandardItem();
 
         // check if the image is valid and load it into the item
         const QString appDirPath = QCoreApplication::applicationDirPath();
         QDir dir(appDirPath);
-        dir.cdUp(); dir.cdUp();
+        dir.cdUp();
+        dir.cdUp();
         const QString imgPath = dir.filePath("media") + "/" + media->getId() + ".jpg";
         qDebug() << "imgPath:" << imgPath;
 
@@ -69,7 +71,7 @@ void MediaListController::populateList() const {
         item->setData(QVariant::fromValue(image), Qt::DecorationRole);
         item->setData(media->getTitle(), Qt::DisplayRole);
         item->setData(media->getShortDescription(), Qt::UserRole + 1);
-        item->setData(QVariant::fromValue(media), Qt::UserRole); // to filter type of media
+        item->setData(QVariant::fromValue(media), Qt::UserRole);  // to filter type of media
         model->appendRow(item);
     }
 }

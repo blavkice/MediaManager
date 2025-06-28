@@ -1,20 +1,22 @@
 #ifndef ARTICLES_H
 #define ARTICLES_H
 #include <QDate>
+
 #include "Media.h"
 
 class Articles : public Media {
-private:
+   private:
     QString author;
     QString category;
     QString url;
     QDate date;
     unsigned int wordCount;
-public:
+
+   public:
     Articles();
-    Articles(const QString &title, const QString &short_description, const QString &image_path,
-        const QString &author, const QString &category, const QString &url, const QDate &date, const unsigned int word_count);
-    ~Articles() override = 0; // to make the class abstract
+    Articles(const QString &title, const QString &short_description, const QString &image_path, const QString &author,
+             const QString &category, const QString &url, const QDate &date, const unsigned int word_count);
+    ~Articles() override = 0;  // to make the class abstract
     QString getAuthor() const;
     QString getCategory() const;
     QString getUrl() const;
@@ -28,4 +30,4 @@ public:
     virtual void accept(Visitor *visitor) override = 0;
 };
 
-#endif //ARTICLES_H
+#endif  // ARTICLES_H

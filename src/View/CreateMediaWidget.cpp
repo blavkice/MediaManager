@@ -1,9 +1,11 @@
-#include <QVBoxLayout>
-#include <QPushButton>
-#include <QScrollArea>
+#include "CreateMediaWidget.h"
+
 #include <QFileDialog>
 #include <QLabel>
-#include "CreateMediaWidget.h"
+#include <QPushButton>
+#include <QScrollArea>
+#include <QVBoxLayout>
+
 #include "../Model/AddVisitor.h"
 
 CreateMediaWidget::CreateMediaWidget(QWidget* parent, Media* media)
@@ -46,7 +48,7 @@ CreateMediaWidget::CreateMediaWidget(QWidget* parent, Media* media)
     connect(createButton, &QPushButton::clicked, this, [this]() {
         if (currentMedia) {
             currentMedia->setImagePath(imagePathEdit->text());
-            addVisitor->saveInput(currentMedia); // no need to manually delete addVisitor
+            addVisitor->saveInput(currentMedia);  // no need to manually delete addVisitor
             emit mediaCreated(currentMedia);
         }
     });
@@ -57,7 +59,8 @@ CreateMediaWidget::CreateMediaWidget(QWidget* parent, Media* media)
 }
 
 void CreateMediaWidget::chooseImage() {
-    const auto selectedImagePath = QFileDialog::getOpenFileName(this, "Choose Image", "", "Images (*.png *.jpg *.jpeg)");
+    const auto selectedImagePath =
+        QFileDialog::getOpenFileName(this, "Choose Image", "", "Images (*.png *.jpg *.jpeg)");
     if (!selectedImagePath.isEmpty()) {
         imagePathEdit->setText(selectedImagePath);
     }
@@ -67,7 +70,7 @@ QVBoxLayout* CreateMediaWidget::getContentLayout() const {
     return contentLayout;
 }
 
-void CreateMediaWidget::keyPressEvent(QKeyEvent *event) {
+void CreateMediaWidget::keyPressEvent(QKeyEvent* event) {
     if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
         // if the create button is enabled, simulate a click
         if (createButton && createButton->isEnabled()) {

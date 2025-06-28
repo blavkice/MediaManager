@@ -1,19 +1,21 @@
 #ifndef LITERATURE_H
 #define LITERATURE_H
 #include <QString>
+
 #include "Media.h"
 
 class Literature : public Media {
-private:
+   private:
     QString author;
     QString longDescription;
     int publicationYear;
     short rating;
-public:
+
+   public:
     Literature();
-    Literature(const QString &title, const QString &short_description, const QString &image_path,
-        const QString &author, const QString &long_description, int publication_year, short rating);
-    virtual ~Literature() = 0; // to make the class abstract
+    Literature(const QString &title, const QString &short_description, const QString &image_path, const QString &author,
+               const QString &long_description, int publication_year, short rating);
+    virtual ~Literature() = 0;  // to make the class abstract
     QString getAuthor() const;
     QString getLongDescription() const;
     int getPublicationYear() const;
@@ -25,4 +27,4 @@ public:
     virtual void accept(Visitor *visitor) override = 0;
 };
 
-#endif //LITERATURE_H
+#endif  // LITERATURE_H

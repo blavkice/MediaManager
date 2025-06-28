@@ -1,11 +1,13 @@
 #include "InfoListPainter.h"
+
+#include <QFontDatabase>
+#include <QGraphicsDropShadowEffect>
 #include <QImage>
 #include <QPainterPath>
-#include <QFontDatabase>
 #include <QTextOption>
-#include <QGraphicsDropShadowEffect>
 
-InfoListPainter::InfoListPainter(QObject* parent) : QStyledItemDelegate(parent) { }
+InfoListPainter::InfoListPainter(QObject* parent) : QStyledItemDelegate(parent) {
+}
 
 void InfoListPainter::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const {
     painter->save();
@@ -55,7 +57,7 @@ void InfoListPainter::paint(QPainter* painter, const QStyleOptionViewItem& optio
         titleOption.setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         painter->drawText(titleRect, title, titleOption);
     }
-    //painter->drawText(titleRect, Qt::AlignLeft | Qt::AlignVCenter, title);
+    // painter->drawText(titleRect, Qt::AlignLeft | Qt::AlignVCenter, title);
 
     // reset font to default font for description
     QFont descFont = option.font;
@@ -73,6 +75,7 @@ void InfoListPainter::paint(QPainter* painter, const QStyleOptionViewItem& optio
 QSize InfoListPainter::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const {
     QFontMetrics fontMetrics(option.font);
     QString description = index.data(Qt::UserRole + 1).toString();
-    int textHeight = fontMetrics.boundingRect(QRect(0, 0, option.rect.width() - 85, 0), Qt::TextWordWrap, description).height();
+    int textHeight =
+        fontMetrics.boundingRect(QRect(0, 0, option.rect.width() - 85, 0), Qt::TextWordWrap, description).height();
     return QSize(option.rect.width(), 80 + textHeight);
 }

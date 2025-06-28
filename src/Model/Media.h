@@ -1,19 +1,21 @@
 #ifndef MEDIA_H
 #define MEDIA_H
-#include "Visitable.h"
-#include "Visitor.h"
 #include <QString>
 
+#include "Visitable.h"
+#include "Visitor.h"
+
 class Media : public Visitable {
-private:
+   private:
     QString id;
     QString title;
     QString shortDescription;
     QString imagePath;
-public:
+
+   public:
     Media();
     Media(const QString &title, const QString &short_description, const QString &image_path = ":/img/default.jpg");
-    virtual ~Media() = 0; // to make the class abstract
+    virtual ~Media() = 0;  // to make the class abstract
     QString getId() const;
     QString getTitle() const;
     QString getShortDescription() const;
@@ -31,4 +33,4 @@ public:
 // specifically, in order to use it in the search filter inside MediaListController
 Q_DECLARE_METATYPE(std::shared_ptr<Media>);
 
-#endif //MEDIA_H
+#endif  // MEDIA_H

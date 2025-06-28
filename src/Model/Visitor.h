@@ -12,7 +12,7 @@ class NewspaperArticle;
 
 class Visitor : public QObject {
     Q_OBJECT
-public:
+   public:
     virtual ~Visitor() = default;
     virtual void visit(Media* media) = 0;
     virtual void visit(Literature* literature) = 0;
@@ -23,4 +23,4 @@ public:
     virtual void visit(NewspaperArticle* newspaperArticle) = 0;
 };
 
-#endif //VISITOR_H
+#endif  // VISITOR_H

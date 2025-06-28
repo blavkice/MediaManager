@@ -1,19 +1,21 @@
 #ifndef MEDIALISTCONTROLLER_H
 #define MEDIALISTCONTROLLER_H
+#include <QList>
 #include <QListView>
 #include <QStandardItemModel>
-#include <QList>
-#include "MediaFilterController.h"
+
 #include "../Model/Media.h"
+#include "MediaFilterController.h"
 
 class MediaListController : public QObject {
     Q_OBJECT
-private:
+   private:
     QListView* listView;
     QStandardItemModel* model;
     MediaFilterController* filterController;
     QList<std::shared_ptr<Media>> mediaList;
-public:
+
+   public:
     explicit MediaListController(QListView* listView, QObject* parent = nullptr);
     void addMedia(const std::shared_ptr<Media>& media);
     void clearMedia();
@@ -25,10 +27,10 @@ public:
     std::shared_ptr<Media> getCurrentSelectedMedia() const;
     void setMediaTypeFilter(MediaFilterController::MediaTypeFilter filter) const;
     void clearSelection() const;
-signals:
+   signals:
     void elementSelected(bool selected);
-private slots:
+   private slots:
     void onSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 };
 
-#endif //MEDIALISTCONTROLLER_H
+#endif  // MEDIALISTCONTROLLER_H

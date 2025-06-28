@@ -1,4 +1,5 @@
 #include <QApplication>
+
 #include "MainWindow.h"
 #include "View/StyleManager.h"
 

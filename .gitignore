@@ -99,3 +99,6 @@ Thumbs.db
 ehthumbs.db
 /cmake-build-debug/*
 /src/cmake-build-debug-homebrew-llvm-updated/
+
+# Clang Format
+/.clang-format

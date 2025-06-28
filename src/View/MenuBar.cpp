@@ -1,12 +1,12 @@
 #include "MenuBar.h"
-#include <QFileDialog>
-#include <QCoreApplication>
-#include <QDir>
-#include <QMessageBox>
-#include <QDebug>
 
-MenuBar::MenuBar(QWidget* parent)
-    : QMenuBar(parent) {
+#include <QCoreApplication>
+#include <QDebug>
+#include <QDir>
+#include <QFileDialog>
+#include <QMessageBox>
+
+MenuBar::MenuBar(QWidget* parent) : QMenuBar(parent) {
     actionsMenu = new QMenu(tr("Actions"), this);
     exit = new QAction(tr("Exit MediaManager"), this);
     importAction = new QAction(tr("Import"), this);
@@ -29,7 +29,8 @@ void MenuBar::importLastDefaultMedia() {
     if (jsonVisitor) {
         QString appDirPath = QCoreApplication::applicationDirPath();
         QDir dir(appDirPath);
-        dir.cdUp(); dir.cdUp();
+        dir.cdUp();
+        dir.cdUp();
         QString filePath = dir.filePath("saves/last.json");
         qDebug() << "Importing last default media from:" << filePath;
         if (jsonVisitor->importFromFile(filePath)) {
@@ -46,7 +47,8 @@ void MenuBar::replaceLastDefaultMedia(const QString& filePath) {
 
     const QString appDirPath = QCoreApplication::applicationDirPath();
     QDir dir(appDirPath);
-    dir.cdUp(); dir.cdUp();
+    dir.cdUp();
+    dir.cdUp();
     const QString lastJsonPath = dir.filePath("saves/last.json");
 
     if (QFile::remove(lastJsonPath)) QFile::copy(filePath, lastJsonPath);

@@ -1,21 +1,23 @@
 #ifndef EDITVISITOR_H
 #define EDITVISITOR_H
-#include <QPushButton>
 #include <QLayout>
+#include <QPushButton>
 #include <QWidget>
+
 #include "AddVisitor.h"
 
 class EditVisitor : public AddVisitor {
     Q_OBJECT
-private:
+   private:
     Media* currentMedia = nullptr;
     QPushButton* saveButton;
-public:
+
+   public:
     explicit EditVisitor(QLayout* layout, QPushButton* saveButton, QWidget* parent = nullptr);
     void visit(Media* media) override;
     void saveChanges(Media* media);
-signals:
+   signals:
     void mediaEdited(Media* media);
 };
 
-#endif //EDITVISITOR_H
+#endif  // EDITVISITOR_H

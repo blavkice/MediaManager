@@ -1,15 +1,18 @@
 #include "Articles.h"
 
-Articles::Articles() : author("No author set"), category("General"), url("No url"), date(QDate()), wordCount(0) { }
+Articles::Articles() : author("No author set"), category("General"), url("No url"), date(QDate()), wordCount(0) {
+}
 
 Articles::Articles(const QString &title, const QString &short_description, const QString &image_path,
-    const QString &author, const QString &category, const QString &url, const QDate &date, const unsigned int word_count)
+                   const QString &author, const QString &category, const QString &url, const QDate &date,
+                   const unsigned int word_count)
     : Media(title, short_description, image_path),
       author(author),
       category(category),
       url(url),
       date(date),
-      wordCount(word_count) { }
+      wordCount(word_count) {
+}
 
 Articles::~Articles() = default;
 

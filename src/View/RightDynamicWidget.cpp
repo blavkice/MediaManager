@@ -1,7 +1,9 @@
-#include <QVBoxLayout>
-#include <QLabel>
-#include <QFontDatabase>
 #include "RightDynamicWidget.h"
+
+#include <QFontDatabase>
+#include <QLabel>
+#include <QVBoxLayout>
+
 #include "ViewMediaWidget.h"
 
 void RightDynamicWidget::clearLayout(QLayout* layout) {
@@ -9,7 +11,7 @@ void RightDynamicWidget::clearLayout(QLayout* layout) {
     while ((item = layout->takeAt(0)) != nullptr) {
         if (QWidget* widget = item->widget()) {
             widget->setParent(nullptr);
-            widget->deleteLater(); // safe qt deletion
+            widget->deleteLater();  // safe qt deletion
         }
         delete item;
     }
@@ -42,7 +44,7 @@ RightDynamicWidget::RightDynamicWidget(QWidget* parent) : QWidget(parent), curre
 void RightDynamicWidget::setWidget(QWidget* widget) {
     clear();
     currentWidget = widget;
-    if(currentWidget) {
+    if (currentWidget) {
         layout()->addWidget(currentWidget);
         currentWidget->show();
     }
@@ -59,7 +61,5 @@ void RightDynamicWidget::viewMedia(Media* media) {
     setWidget(viewMediaWidget);
 
     // after a media is viewed it can be edited, and so we need to connect the mediaEdited to the main window
-    connect(viewMediaWidget, &ViewMediaWidget::mediaEdited, this, [this, media]() {
-        emit mediaEdited(media);
-    });
+    connect(viewMediaWidget, &ViewMediaWidget::mediaEdited, this, [this, media]() { emit mediaEdited(media); });
 }

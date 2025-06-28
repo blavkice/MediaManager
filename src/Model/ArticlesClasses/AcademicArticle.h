@@ -3,15 +3,17 @@
 #include "../Articles.h"
 
 class AcademicArticle : public Articles {
-private:
+   private:
     QString universityName;
     unsigned int citationCount;
     bool peerReviewed;
-public:
+
+   public:
     AcademicArticle();
     AcademicArticle(const QString &title, const QString &short_description, const QString &image_path,
-        const QString &author, const QString &category, const QString &url, const QDate &date, const unsigned int word_count,
-        const QString &university_name, const unsigned int citation_count, const bool peer_reviewed);
+                    const QString &author, const QString &category, const QString &url, const QDate &date,
+                    const unsigned int word_count, const QString &university_name, const unsigned int citation_count,
+                    const bool peer_reviewed);
     QString getUniversityName() const;
     unsigned int getCitationCount() const;
     bool isPeerReviewed() const;
@@ -21,4 +23,4 @@ public:
     void accept(Visitor *visitor) override;
 };
 
-#endif //ACADEMICARTICLE_H
+#endif  // ACADEMICARTICLE_H

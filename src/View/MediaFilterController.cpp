@@ -1,17 +1,17 @@
 #include "MediaFilterController.h"
-#include "MediaFilterController.h"
-#include "../Model/LiteratureClasses/Book.h"
-#include "../Model/LiteratureClasses/Poem.h"
+
 #include "../Model/ArticlesClasses/AcademicArticle.h"
 #include "../Model/ArticlesClasses/NewspaperArticle.h"
+#include "../Model/LiteratureClasses/Book.h"
+#include "../Model/LiteratureClasses/Poem.h"
+#include "MediaFilterController.h"
 
-MediaFilterController::MediaFilterController(QObject* parent):
-    QSortFilterProxyModel(parent) {
+MediaFilterController::MediaFilterController(QObject* parent) : QSortFilterProxyModel(parent) {
     setFilterCaseSensitivity(Qt::CaseInsensitive);
     setFilterRole(Qt::DisplayRole);
 }
 
-void MediaFilterController:: setSearchQuery(const QString& searchQuery) {
+void MediaFilterController::setSearchQuery(const QString& searchQuery) {
     this->searchQuery = searchQuery;
     // and trigger the filtering
     invalidateFilter();
@@ -22,17 +22,14 @@ bool MediaFilterController::filterAcceptsRow(const int sourceRow, const QModelIn
 
     // text search filter
     const QString mediaName = sourceModel()->data(index, Qt::DisplayRole).toString();
-    if (!mediaName.contains(searchQuery, Qt::CaseInsensitive))
-        return false;
+    if (!mediaName.contains(searchQuery, Qt::CaseInsensitive)) return false;
 
     // "type" filter
     auto mediaPtr = sourceModel()->data(index, Qt::UserRole).value<std::shared_ptr<Media>>();
-    if (!mediaPtr)
-        return false;
+    if (!mediaPtr) return false;
 
     // if no type filter is set, accept all media types
-    if (mediaTypeFilter == MediaTypeFilter::All)
-        return true;
+    if (mediaTypeFilter == MediaTypeFilter::All) return true;
 
     // otherwise filter by type
     switch (mediaTypeFilter) {

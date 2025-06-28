@@ -1,15 +1,17 @@
 #include "JSONVisitor.h"
+
 #include <QFile>
-#include <QJsonDocument>
 #include <QJsonArray>
+#include <QJsonDocument>
 #include <QJsonObject>
-#include "LiteratureClasses/Book.h"
-#include "LiteratureClasses/Poem.h"
+
 #include "ArticlesClasses/AcademicArticle.h"
 #include "ArticlesClasses/NewspaperArticle.h"
+#include "LiteratureClasses/Book.h"
+#include "LiteratureClasses/Poem.h"
 
-JSONVisitor::JSONVisitor(MediaListController* mediaListController)
-    : mediaListController(mediaListController) { }
+JSONVisitor::JSONVisitor(MediaListController* mediaListController) : mediaListController(mediaListController) {
+}
 
 bool JSONVisitor::importFromFile(const QString& filePath) const {
     QFile file(filePath);

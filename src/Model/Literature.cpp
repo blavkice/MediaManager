@@ -1,14 +1,16 @@
 #include "Literature.h"
 
-Literature::Literature() : author("No Author"), longDescription("No description set"), publicationYear(0), rating(0) { }
+Literature::Literature() : author("No Author"), longDescription("No description set"), publicationYear(0), rating(0) {
+}
 
 Literature::Literature(const QString &title, const QString &short_description, const QString &image_path,
-    const QString &author, const QString &long_description, int publication_year, short rating)
+                       const QString &author, const QString &long_description, int publication_year, short rating)
     : Media(title, short_description, image_path),
       author(author),
       longDescription(long_description),
       publicationYear(publication_year),
-      rating(rating) { }
+      rating(rating) {
+}
 
 Literature::~Literature() = default;
 

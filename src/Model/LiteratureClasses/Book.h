@@ -3,14 +3,15 @@
 #include "../Literature.h"
 
 class Book : public Literature {
-private:
+   private:
     QString publishing;
     unsigned int pages;
-public:
+
+   public:
     Book();
-    Book(const QString &title, const QString &short_description, const QString &image_path,
-        const QString &author, const QString &long_description, int publication_year, short rating,
-        const QString &publishing, unsigned int pages);
+    Book(const QString &title, const QString &short_description, const QString &image_path, const QString &author,
+         const QString &long_description, int publication_year, short rating, const QString &publishing,
+         unsigned int pages);
     QString getPublishing() const;
     unsigned int getPages() const;
     void setPublishing(const QString &publishing);
@@ -18,4 +19,4 @@ public:
     void accept(Visitor *visitor) override;
 };
 
-#endif //BOOK_H
+#endif  // BOOK_H

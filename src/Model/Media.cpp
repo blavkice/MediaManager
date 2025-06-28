@@ -1,15 +1,16 @@
-#include <QUuid>
 #include "Media.h"
 
-Media::Media() :
-    id(QUuid::createUuid().toString(QUuid::WithoutBraces)),
-    title("Unknown"), shortDescription(" "),
-    imagePath(":/img/default.jpg") { }
+#include <QUuid>
+
+Media::Media()
+    : id(QUuid::createUuid().toString(QUuid::WithoutBraces)),
+      title("Unknown"),
+      shortDescription(" "),
+      imagePath(":/img/default.jpg") {
+}
 
 Media::Media(const QString &title, const QString &short_description, const QString &image_path)
-    : title(title),
-      shortDescription(short_description),
-      imagePath(image_path) {
+    : title(title), shortDescription(short_description), imagePath(image_path) {
     id = QUuid::createUuid().toString(QUuid::WithoutBraces);
 }
 

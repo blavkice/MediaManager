@@ -1,6 +1,7 @@
 #include "ViewVisitor.h"
 
-ViewVisitor::ViewVisitor(QLayout* layout) : layout(layout) {}
+ViewVisitor::ViewVisitor(QLayout* layout) : layout(layout) {
+}
 
 void ViewVisitor::addLabel(const QString& text, const QString& style) const {
     auto* label = new QLabel(text);
@@ -47,7 +48,7 @@ void ViewVisitor::visit(Book* book) {
 void ViewVisitor::visit(Poem* poem) {
     visit(static_cast<Literature*>(poem));
     addLabel("Written in: " + poem->getCity());
-    //addTextBlock(poem->getLongDescription());
+    // addTextBlock(poem->getLongDescription());
 }
 
 void ViewVisitor::visit(AcademicArticle* academicArticle) {
