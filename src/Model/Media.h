@@ -27,4 +27,8 @@ public:
     virtual void accept(Visitor *visitor) override = 0;
 };
 
+// to allow the use of "std::shared_ptr<Media>" in qt signals and slots
+// specifically, in order to use it in the search filter inside MediaListController
+Q_DECLARE_METATYPE(std::shared_ptr<Media>);
+
 #endif //MEDIA_H

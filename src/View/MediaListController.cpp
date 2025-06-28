@@ -69,6 +69,7 @@ void MediaListController::populateList() const {
         item->setData(QVariant::fromValue(image), Qt::DecorationRole);
         item->setData(media->getTitle(), Qt::DisplayRole);
         item->setData(media->getShortDescription(), Qt::UserRole + 1);
+        item->setData(QVariant::fromValue(media), Qt::UserRole); // to filter type of media
         model->appendRow(item);
     }
 }
@@ -127,4 +128,8 @@ void MediaListController::setMediaList(const QList<Media*>& mediaList) {
 void MediaListController::clearSelection() const {
     listView->clearSelection();
     listView->setCurrentIndex(QModelIndex());
+}
+
+void MediaListController::setMediaTypeFilter(const MediaFilterController::MediaTypeFilter filter) const {
+    filterController->setMediaTypeFilter(filter);
 }

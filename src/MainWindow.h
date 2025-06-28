@@ -27,6 +27,7 @@ private:
     // vertical left layout elements
     QVBoxLayout* vLeftLayout;
     QLineEdit* searchBox;
+    QComboBox* typeFilterBox;
     QPushButton* addButton;
     QPushButton* removeButton;
     QComboBox* addComboBox;

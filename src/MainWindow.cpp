@@ -5,6 +5,7 @@
 #include "Model/LiteratureClasses/Poem.h"
 #include "Model/ArticlesClasses/NewspaperArticle.h"
 #include "Model/ArticlesClasses/AcademicArticle.h"
+#include "View/MediaFilterController.h"
 #include "View/CreateMediaWidget.h"
 #include "Model/AddVisitor.h"
 
@@ -27,6 +28,17 @@ MainWindow::MainWindow(QWidget* parent):
         mediaListController->searchMedia(text);
     });
 
+    // connect the filter box to the filter function
+    connect(typeFilterBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, [this](int index) {
+        QVariant data = typeFilterBox->itemData(index);
+        if (data.isValid()) {
+            MediaFilterController::MediaTypeFilter filter =
+                static_cast<MediaFilterController::MediaTypeFilter>(data.toInt());
+            mediaListController->setMediaTypeFilter(filter);
+        }
+    });
+
     // json visitor for the import/export actions
     auto jsonVisitor = new JSONVisitor(mediaListController);
     menuBar->setJSONVisitor(jsonVisitor);
@@ -46,27 +58,43 @@ void MainWindow::initLayouts() {
     auto utilsWidget = new QWidget(vLeftWidget);
     auto utilsHorizontalLayout = new QHBoxLayout(utilsWidget);
     utilsWidget->setLayout(utilsHorizontalLayout);
-    auto searchLabel = new QLabel("Search:", utilsWidget);
+
+    // the filter button
+    typeFilterBox = new QComboBox(utilsWidget);
+    typeFilterBox->addItem("All", QVariant::fromValue(static_cast<int>(MediaFilterController::MediaTypeFilter::All)));
+    typeFilterBox->addItem("Book", QVariant::fromValue(static_cast<int>(MediaFilterController::MediaTypeFilter::Book)));
+    typeFilterBox->addItem("Poem", QVariant::fromValue(static_cast<int>(MediaFilterController::MediaTypeFilter::Poem)));
+    typeFilterBox->addItem("Academic Article", QVariant::fromValue(static_cast<int>(MediaFilterController::MediaTypeFilter::AcademicArticle)));
+    typeFilterBox->addItem("Newspaper Article", QVariant::fromValue(static_cast<int>(MediaFilterController::MediaTypeFilter::NewspaperArticle)));
+
     vLeftLayout = new QVBoxLayout(vLeftWidget);
+
     searchBox = new QLineEdit(utilsWidget);
+    searchBox->setPlaceholderText("Search by title or short description");
+    searchBox->setFixedSize(130, 25);
+
+    typeFilterBox->setFixedSize(60, 25);
+
     addButton = new QPushButton("+", utilsWidget);
     addButton->setToolTip("add new media");
     addButton->setFixedSize(25, 25);
+
     removeButton = new QPushButton("-", utilsWidget);
     removeButton->setToolTip("remove selected media");
     removeButton->setFixedSize(25, 25);
+
     listView = new QListView(vLeftWidget);
     mediaListController = new MediaListController(listView);
 
-    utilsHorizontalLayout->addWidget(searchLabel);
     utilsHorizontalLayout->addWidget(searchBox);
+    utilsHorizontalLayout->addWidget(typeFilterBox);
     utilsHorizontalLayout->addWidget(addButton);
     utilsHorizontalLayout->addWidget(removeButton);
 
     vLeftLayout->addWidget(utilsWidget);
     vLeftLayout->addWidget(listView);
     // listView->sIDelegate is already set in MediaListController
-    vLeftWidget->setFixedWidth(250);
+    vLeftWidget->setFixedWidth(300);
 
     hMainViewLayout->addWidget(vLeftWidget);
     hMainViewLayout->addWidget(rightInfoWidget);
