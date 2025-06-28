@@ -14,7 +14,7 @@ private:
     // to add image from dialog
     QLineEdit* imagePathEdit;
     QPushButton* chooseButton;
-    QPushButton *createButton; // it is a member variable to allow the keyPressEvent
+    QPushButton* createButton; // it is a member variable to allow the keyPressEvent
     void chooseImage();
 public:
     explicit CreateMediaWidget(QWidget* parent = nullptr, Media* media = nullptr);

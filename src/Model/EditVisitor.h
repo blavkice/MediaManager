@@ -8,10 +8,10 @@
 class EditVisitor : public AddVisitor {
     Q_OBJECT
 private:
-    QPushButton* saveButton;
     Media* currentMedia = nullptr;
+    QPushButton* saveButton;
 public:
-    explicit EditVisitor(QLayout* layout, QWidget* parent = nullptr);
+    explicit EditVisitor(QLayout* layout, QPushButton* saveButton, QWidget* parent = nullptr);
     void visit(Media* media) override;
     void saveChanges(Media* media);
 signals:

@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget* parent):
             this, [this](int index) {
         QVariant data = typeFilterBox->itemData(index);
         if (data.isValid()) {
-            MediaFilterController::MediaTypeFilter filter =
+            const auto filter =
                 static_cast<MediaFilterController::MediaTypeFilter>(data.toInt());
             mediaListController->setMediaTypeFilter(filter);
         }
@@ -86,8 +86,8 @@ void MainWindow::initLayouts() {
     listView = new QListView(vLeftWidget);
     mediaListController = new MediaListController(listView);
 
-    utilsHorizontalLayout->addWidget(searchBox);
     utilsHorizontalLayout->addWidget(typeFilterBox);
+    utilsHorizontalLayout->addWidget(searchBox);
     utilsHorizontalLayout->addWidget(addButton);
     utilsHorizontalLayout->addWidget(removeButton);
 

@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QDir>
 #include <QCoreApplication>
+#include <QKeyEvent>
 
 ViewMediaWidget::ViewMediaWidget(Media* media, QWidget* parent)
     : QWidget(parent), media(media) {
@@ -52,12 +53,26 @@ ViewMediaWidget::ViewMediaWidget(Media* media, QWidget* parent)
 }
 
 void ViewMediaWidget::onEditButtonClicked() {
-    auto editVisitor = new EditVisitor(mainLayout); // qt parent takes ownership
+    saveButton = new QPushButton("Save Changes", this);
+    auto editVisitor = new EditVisitor(mainLayout, saveButton); // qt parent takes ownership
     media->accept(editVisitor);
+
+    // to allow keyboard shortcuts
+    setFocusPolicy(Qt::StrongFocus);
+    setFocus();
 
     connect(editVisitor, &EditVisitor::mediaEdited, this, [=](Media* media) {
         emit mediaEdited(media);
     });
+}
+
+void ViewMediaWidget::keyPressEvent(QKeyEvent* event) {
+    if ((event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) &&
+        saveButton && saveButton->isEnabled()) {
+        saveButton->click();
+        } else {
+            QWidget::keyPressEvent(event);
+        }
 }
 
 ViewMediaWidget::~ViewMediaWidget() = default;
