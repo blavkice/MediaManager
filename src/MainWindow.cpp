@@ -89,6 +89,14 @@ void MainWindow::initLayouts() {
     searchBox->setFixedSize(180, 28);
     addButton->setFixedSize(32, 28);
     removeButton->setFixedSize(32, 28);
+    addButton->setStyleSheet(
+    "QPushButton { background-color: #217a3b; color: white; border-radius: 6px; font-weight: bold; }"
+    "QPushButton:hover { background-color: #269944; }"
+    );
+    removeButton->setStyleSheet(
+        "QPushButton { background-color: #a31919; color: white; border-radius: 6px; font-weight: bold; }"
+        "QPushButton:hover { background-color: #c62d2d; }"
+    );
     QFont btnFont = gridViewButton->font();
     btnFont.setBold(true);
     gridViewButton->setFont(btnFont);
