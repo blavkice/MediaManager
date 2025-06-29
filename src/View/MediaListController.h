@@ -25,6 +25,7 @@ class MediaListController : public QObject {
     void searchMedia(const QString& searchText) const;
     QList<std::shared_ptr<Media>> getMediaList() const;
     std::shared_ptr<Media> getCurrentSelectedMedia() const;
+    QAbstractItemModel* getFilterModel() const;
     void setMediaTypeFilter(MediaFilterController::MediaTypeFilter filter) const;
     void clearSelection() const;
    signals:

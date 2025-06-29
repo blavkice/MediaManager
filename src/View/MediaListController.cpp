@@ -49,6 +49,10 @@ void MediaListController::clearMedia() {
     model->clear();
 }
 
+QAbstractItemModel* MediaListController::getFilterModel() const {
+    return filterController;
+}
+
 void MediaListController::populateList() const {
     model->clear();
     for (const auto& media : mediaList) {

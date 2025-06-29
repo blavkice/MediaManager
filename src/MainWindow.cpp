@@ -10,13 +10,14 @@
 #include "Model/LiteratureClasses/Poem.h"
 #include "View/CreateMediaWidget.h"
 #include "View/MediaFilterController.h"
+#include "View/GridView.h"
+#include "View/ViewMediaWidget.h"
 
 MainWindow::MainWindow(QWidget* parent)
-    : QMainWindow(parent), centralWidget(new QWidget(this)), menuBar(new MenuBar(this)) {
+    : QMainWindow(parent), menuBar(new MenuBar(this)) {
     resize(800, 600);
     initLayouts();
     setMenuBar(menuBar);
-    setCentralWidget(centralWidget);
     initAddComboBox();
 
     // delete button is activated only if a media is selected
@@ -43,21 +44,16 @@ MainWindow::MainWindow(QWidget* parent)
 }
 
 void MainWindow::initLayouts() {
-    hMainViewLayout = new QHBoxLayout(centralWidget);
-    // the "multifunctional" widget that will be used to display the media info and edit it
-    rightInfoWidget = new RightDynamicWidget(centralWidget);
-    // connect the mediaEdit signal in order to clear and re-view
-    connect(rightInfoWidget, &RightDynamicWidget::mediaEdited, this, &MainWindow::onMediaEdited);
+    // central stack to switch between views and detailed view
+    centralStack = new QStackedWidget(this);
 
-    // the widget for the left "fixed" part
-    auto vLeftWidget = new QWidget(centralWidget);
-    // the widget containing the search box and add and remove buttons
-    auto utilsWidget = new QWidget(vLeftWidget);
-    auto utilsHorizontalLayout = new QHBoxLayout(utilsWidget);
-    utilsWidget->setLayout(utilsHorizontalLayout);
+    // TOOLS widget (the top bar with buttons and filters)
+    toolsWidget = new QWidget(this);
+    auto toolsLayout = new QHBoxLayout(toolsWidget);
+    toolsLayout->setContentsMargins(4, 4, 4, 4);
 
     // the filter button
-    typeFilterBox = new QComboBox(utilsWidget);
+    typeFilterBox = new QComboBox(toolsWidget);
     typeFilterBox->addItem("All", QVariant::fromValue(static_cast<int>(MediaFilterController::MediaTypeFilter::All)));
     typeFilterBox->addItem("Book", QVariant::fromValue(static_cast<int>(MediaFilterController::MediaTypeFilter::Book)));
     typeFilterBox->addItem("Poem", QVariant::fromValue(static_cast<int>(MediaFilterController::MediaTypeFilter::Poem)));
@@ -67,40 +63,114 @@ void MainWindow::initLayouts() {
     typeFilterBox->addItem(
         "Newspaper Article",
         QVariant::fromValue(static_cast<int>(MediaFilterController::MediaTypeFilter::NewspaperArticle)));
+    typeFilterBox->setFixedSize(60, 25);
 
-    vLeftLayout = new QVBoxLayout(vLeftWidget);
-
-    searchBox = new QLineEdit(utilsWidget);
+    searchBox = new QLineEdit(toolsWidget);
     searchBox->setPlaceholderText("Search by title or short description");
     searchBox->setFixedSize(130, 25);
 
-    typeFilterBox->setFixedSize(60, 25);
-
-    addButton = new QPushButton("+", utilsWidget);
+    addButton = new QPushButton("+", toolsWidget);
     addButton->setToolTip("add new media");
     addButton->setFixedSize(25, 25);
 
-    removeButton = new QPushButton("-", utilsWidget);
+    removeButton = new QPushButton("-", toolsWidget);
     removeButton->setToolTip("remove selected media");
     removeButton->setFixedSize(25, 25);
 
+    // switch buttons for the views
+    gridViewButton = new QPushButton("Grid View", toolsWidget);
+    splitViewButton = new QPushButton("Split View", toolsWidget);
+    splitViewButton->setVisible(false);
+
+    // BUTTON STYLING
+    gridViewButton->setFixedSize(90, 28);
+    splitViewButton->setFixedSize(90, 28);
+    typeFilterBox->setFixedSize(90, 28);
+    searchBox->setFixedSize(180, 28);
+    addButton->setFixedSize(32, 28);
+    removeButton->setFixedSize(32, 28);
+    QFont btnFont = gridViewButton->font();
+    btnFont.setBold(true);
+    gridViewButton->setFont(btnFont);
+    splitViewButton->setFont(btnFont);
+    toolsLayout->setSpacing(8);
+    toolsLayout->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    toolsLayout->setContentsMargins(8, 6, 8, 6);
+
+    // buttons layout (barra in alto)
+    toolsLayout->addWidget(gridViewButton);
+    toolsLayout->addWidget(splitViewButton);
+    toolsLayout->addWidget(typeFilterBox);
+    toolsLayout->addWidget(searchBox);
+    toolsLayout->addWidget(addButton);
+    toolsLayout->addWidget(removeButton);
+
+    // SPLIT view (default view)
+    splitViewWidget = new QWidget(this);
+    hMainViewLayout = new QHBoxLayout(splitViewWidget);
+
+    // the widget for the left "fixed" part
+    const auto vLeftWidget = new QWidget(splitViewWidget);
+    vLeftLayout = new QVBoxLayout(vLeftWidget);
+
+    // the list view for the media elements
     listView = new QListView(vLeftWidget);
     mediaListController = new MediaListController(listView);
-
-    utilsHorizontalLayout->addWidget(typeFilterBox);
-    utilsHorizontalLayout->addWidget(searchBox);
-    utilsHorizontalLayout->addWidget(addButton);
-    utilsHorizontalLayout->addWidget(removeButton);
-
-    vLeftLayout->addWidget(utilsWidget);
     vLeftLayout->addWidget(listView);
-    // listView->sIDelegate is already set in MediaListController
-    vLeftWidget->setFixedWidth(300);
+    vLeftWidget->setFixedWidth(320);
 
     hMainViewLayout->addWidget(vLeftWidget);
+
+    // the "multifunctional" widget that will be used to display the media info and edit it
+    rightInfoWidget = new RightDynamicWidget(splitViewWidget);
     hMainViewLayout->addWidget(rightInfoWidget);
     rightInfoWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-    centralWidget->setLayout(hMainViewLayout);
+
+    splitViewWidget->setLayout(hMainViewLayout);
+
+    // GRID view (fullscreen view)
+    gridView = new GridView(this);
+
+    // STACKED (detailed) view
+    centralStack->addWidget(splitViewWidget); // 0: split view (default)
+    centralStack->addWidget(gridView);        // 1: grid view fullscreen
+
+    // LAYOUT
+    QVBoxLayout* mainLayout = new QVBoxLayout;
+    mainLayout->setContentsMargins(0, 0, 0, 0);
+    mainLayout->setSpacing(0);
+    mainLayout->addWidget(toolsWidget);     // barra in alto
+    mainLayout->addWidget(centralStack);    // viste sotto
+    QWidget* mainWidget = new QWidget(this);
+    mainWidget->setLayout(mainLayout);
+    setCentralWidget(mainWidget);
+
+    // CONNECTIONS
+    // to switch to grid view
+    connect(gridViewButton, &QPushButton::clicked, this, &MainWindow::switchToGridView);
+    // to switch to split view
+    connect(splitViewButton, &QPushButton::clicked, this, &MainWindow::switchToSplitView);
+
+    // select an element in the grid view and show it in fullscreen detail
+    connect(gridView, &QListView::activated, this, &MainWindow::showFullscreenDetail);
+    connect(gridView, &QListView::doubleClicked, this, &MainWindow::showFullscreenDetail);
+
+    // delete button is activated only if a media is selected
+    connect(mediaListController, &MediaListController::elementSelected, this, &MainWindow::updateSelectionState);
+    connect(removeButton, &QPushButton::clicked, this, &MainWindow::onRemoveButtonClicked);
+
+    // connect the search box to the search function
+    connect(searchBox, &QLineEdit::textChanged, this,
+            [this](const QString& text) { mediaListController->searchMedia(text); });
+
+    // connect the filter box to the filter function
+    connect(typeFilterBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int index) {
+        const QVariant data = typeFilterBox->itemData(index);
+        if (data.isValid()) {
+            const auto filter = static_cast<MediaFilterController::MediaTypeFilter>(data.toInt());
+            mediaListController->setMediaTypeFilter(filter);
+        }
+    });
 }
 
 void MainWindow::initAddComboBox() {
@@ -115,14 +185,69 @@ void MainWindow::initAddComboBox() {
 }
 
 // view the element selected in the list and activate the delete button
-void MainWindow::updateSelectionState(bool selected) const {
+void MainWindow::updateSelectionState(const bool selected) const {
     if (selected) {
-        auto mediaPtr = mediaListController->getCurrentSelectedMedia();
+        const auto mediaPtr = mediaListController->getCurrentSelectedMedia();
         rightInfoWidget->viewMedia(mediaPtr ? mediaPtr.get() : nullptr);
         removeButton->setEnabled(selected);
     } else {
         rightInfoWidget->clear();
     }
+}
+
+void MainWindow::switchToGridView() {
+    gridView->setModel(mediaListController->getFilterModel());
+    currentViewMode = FullscreenGrid;
+    centralStack->setCurrentWidget(gridView);
+    gridViewButton->setVisible(false);
+    splitViewButton->setVisible(true);
+}
+
+void MainWindow::switchToSplitView() {
+    currentViewMode = Split;
+    centralStack->setCurrentWidget(splitViewWidget);
+    gridViewButton->setVisible(true);
+    splitViewButton->setVisible(false);
+}
+
+void MainWindow::showFullscreenDetail(const QModelIndex& index) {
+    // check if the index is valid
+    const auto mediaPtr = index.data(Qt::UserRole).value<std::shared_ptr<Media>>();
+    if (!mediaPtr) return;
+
+    // if we are already in fullscreen detail mode, do nothing
+    if(detailWidget) {
+        centralStack->removeWidget(detailWidget);
+        delete detailWidget;
+        detailWidget = nullptr;
+    }
+
+    detailWidget = new QWidget(this);
+    QVBoxLayout* layout = new QVBoxLayout(detailWidget);
+
+    // "back" button to return to the grid view
+    QPushButton* backButton = new QPushButton("Back", detailWidget);
+    layout->addWidget(backButton, 0, Qt::AlignLeft);
+
+    // detail view for the media
+    ViewMediaWidget* viewMediaWidget = new ViewMediaWidget(mediaPtr.get(), detailWidget);
+    layout->addWidget(viewMediaWidget);
+
+    // go back to the grid view when the back button is clicked
+    connect(backButton, &QPushButton::clicked, this, [this]() {
+        centralStack->setCurrentWidget(gridView);
+        currentViewMode = FullscreenGrid;
+        if(detailWidget) {
+            centralStack->removeWidget(detailWidget);
+            delete detailWidget;
+            detailWidget = nullptr;
+        }
+    });
+
+    detailWidget->setLayout(layout);
+    centralStack->addWidget(detailWidget);
+    centralStack->setCurrentWidget(detailWidget);
+    currentViewMode = FullscreenDetail;
 }
 
 void MainWindow::onRemoveButtonClicked() {
