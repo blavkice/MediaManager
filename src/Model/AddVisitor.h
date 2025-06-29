@@ -4,8 +4,9 @@
 #include <QLineEdit>
 #include <QMap>
 #include <QObject>
-#include <QWidget>
 #include <QPushButton>
+#include <QWidget>
+
 #include "Articles.h"
 #include "ArticlesClasses/AcademicArticle.h"
 #include "ArticlesClasses/NewspaperArticle.h"

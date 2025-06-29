@@ -9,11 +9,10 @@ void GridViewDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
     const QString title = index.data(Qt::DisplayRole).toString();
 
     // selection highlight
-    if (option.state & QStyle::State_Selected)
-        painter->fillRect(rect, option.palette.highlight());
+    if (option.state & QStyle::State_Selected) painter->fillRect(rect, option.palette.highlight());
 
     // draw the image and title
-    const int imgHeight = rect.height() - 48; // more space for text
+    const int imgHeight = rect.height() - 48;  // more space for text
     const QRect imgRect(rect.x(), rect.y(), rect.width(), imgHeight);
     painter->drawImage(imgRect, img.scaled(imgRect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
 

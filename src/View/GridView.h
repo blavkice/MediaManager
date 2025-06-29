@@ -1,23 +1,24 @@
 #ifndef GRIDVIEW_H
 #define GRIDVIEW_H
 
-#include <QListView>
-#include <QStyledItemDelegate>
 #include <QImage>
+#include <QListView>
 #include <QPainter>
+#include <QStyledItemDelegate>
 
 // delegate to render items in a grid view
 class GridViewDelegate : public QStyledItemDelegate {
     Q_OBJECT
-public:
-    explicit GridViewDelegate(QObject* parent = nullptr) : QStyledItemDelegate(parent) {}
+   public:
+    explicit GridViewDelegate(QObject* parent = nullptr) : QStyledItemDelegate(parent) {
+    }
     void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
     QSize sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const override;
 };
 
 class GridView : public QListView {
     Q_OBJECT
-public:
+   public:
     explicit GridView(QWidget* parent = nullptr) : QListView(parent) {
         setItemDelegate(new GridViewDelegate(this));
         setViewMode(QListView::IconMode);
@@ -30,4 +31,4 @@ public:
     }
 };
 
-#endif //GRIDVIEW_H
+#endif  // GRIDVIEW_H

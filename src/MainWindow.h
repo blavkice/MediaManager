@@ -10,13 +10,13 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QPushButton>
-#include <QVBoxLayout>
 #include <QStackedWidget>
+#include <QVBoxLayout>
 
+#include "View/GridView.h"
 #include "View/MediaListController.h"
 #include "View/MenuBar.h"
 #include "View/RightDynamicWidget.h"
-#include "View/GridView.h"
 
 // ReSharper disable once CppClassCanBeFinal
 class MainWindow : public QMainWindow {
@@ -44,7 +44,7 @@ class MainWindow : public QMainWindow {
     QPushButton* splitViewButton;
     enum ViewMode { Split, FullscreenGrid, FullscreenDetail };
     ViewMode currentViewMode = Split;
-    QWidget* detailWidget = nullptr; // for the detail view in fullscreen mode
+    QWidget* detailWidget = nullptr;  // for the detail view in fullscreen mode
     // for the list of currently active elements
     MediaListController* mediaListController;
     void initLayouts();
@@ -62,6 +62,7 @@ class MainWindow : public QMainWindow {
     void onMediaCreated(Media* media) const;
     void updateSelectionState(bool selected) const;
     void onMediaEdited(Media* media);
+
    public:
     explicit MainWindow(QWidget* parent = nullptr);
 };

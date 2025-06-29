@@ -2,8 +2,8 @@
 
 #include <QComboBox>
 #include <QMessageBox>
-#include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
+#include <QPropertyAnimation>
 
 #include "Model/AddVisitor.h"
 #include "Model/ArticlesClasses/AcademicArticle.h"
@@ -11,12 +11,11 @@
 #include "Model/LiteratureClasses/Book.h"
 #include "Model/LiteratureClasses/Poem.h"
 #include "View/CreateMediaWidget.h"
-#include "View/MediaFilterController.h"
 #include "View/GridView.h"
+#include "View/MediaFilterController.h"
 #include "View/ViewMediaWidget.h"
 
-MainWindow::MainWindow(QWidget* parent)
-    : QMainWindow(parent), menuBar(new MenuBar(this)) {
+MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), menuBar(new MenuBar(this)) {
     resize(800, 600);
     initLayouts();
     setMenuBar(menuBar);
@@ -92,13 +91,11 @@ void MainWindow::initLayouts() {
     addButton->setFixedSize(32, 28);
     removeButton->setFixedSize(32, 28);
     addButton->setStyleSheet(
-    "QPushButton { background-color: #217a3b; color: white; border-radius: 6px; font-weight: bold; }"
-    "QPushButton:hover { background-color: #269944; }"
-    );
+        "QPushButton { background-color: #217a3b; color: white; border-radius: 6px; font-weight: bold; }"
+        "QPushButton:hover { background-color: #269944; }");
     removeButton->setStyleSheet(
         "QPushButton { background-color: #a31919; color: white; border-radius: 6px; font-weight: bold; }"
-        "QPushButton:hover { background-color: #c62d2d; }"
-    );
+        "QPushButton:hover { background-color: #c62d2d; }");
     QFont btnFont = gridViewButton->font();
     btnFont.setBold(true);
     gridViewButton->setFont(btnFont);
@@ -142,15 +139,15 @@ void MainWindow::initLayouts() {
     gridView = new GridView(this);
 
     // STACKED (detailed) view
-    centralStack->addWidget(splitViewWidget); // 0: split view (default)
-    centralStack->addWidget(gridView);        // 1: grid view fullscreen
+    centralStack->addWidget(splitViewWidget);  // 0: split view (default)
+    centralStack->addWidget(gridView);         // 1: grid view fullscreen
 
     // LAYOUT
     QVBoxLayout* mainLayout = new QVBoxLayout;
     mainLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->setSpacing(0);
-    mainLayout->addWidget(toolsWidget);     // barra in alto
-    mainLayout->addWidget(centralStack);    // viste sotto
+    mainLayout->addWidget(toolsWidget);   // barra in alto
+    mainLayout->addWidget(centralStack);  // viste sotto
     QWidget* mainWidget = new QWidget(this);
     mainWidget->setLayout(mainLayout);
     setCentralWidget(mainWidget);
@@ -212,17 +209,16 @@ void MainWindow::switchToGridView() {
     gridView->setModel(mediaListController->getFilterModel());
     // animate the transition to the grid view
     if (centralStack->currentWidget() != gridView)
-        animateStackedWidgetTransition(centralStack->currentWidget(), gridView, false); // false = left->right
+        animateStackedWidgetTransition(centralStack->currentWidget(), gridView, false);  // false = left->right
     currentViewMode = FullscreenGrid;
     gridViewButton->setVisible(false);
     splitViewButton->setVisible(true);
 }
 
-
 void MainWindow::switchToSplitView() {
     // animate the transition to the split view
     if (centralStack->currentWidget() != splitViewWidget)
-        animateStackedWidgetTransition(centralStack->currentWidget(), splitViewWidget, true); // true = right->left
+        animateStackedWidgetTransition(centralStack->currentWidget(), splitViewWidget, true);  // true = right->left
     currentViewMode = Split;
     gridViewButton->setVisible(true);
     splitViewButton->setVisible(false);
@@ -234,7 +230,7 @@ void MainWindow::showFullscreenDetail(const QModelIndex& index) {
     if (!mediaPtr) return;
 
     // if we are already in fullscreen detail mode, do nothing
-    if(detailWidget) {
+    if (detailWidget) {
         centralStack->removeWidget(detailWidget);
         delete detailWidget;
         detailWidget = nullptr;
@@ -264,7 +260,7 @@ void MainWindow::showFullscreenDetail(const QModelIndex& index) {
         QParallelAnimationGroup* group = findChild<QParallelAnimationGroup*>("currentTransitionGroup");
         if (group) {
             connect(group, &QParallelAnimationGroup::finished, this, [this, from]() {
-                if(from != gridView && from != splitViewWidget) {
+                if (from != gridView && from != splitViewWidget) {
                     centralStack->removeWidget(from);
                     delete from;
                     detailWidget = nullptr;
@@ -330,11 +326,20 @@ void MainWindow::onMediaSelected(const int index) {
     if (index < 0) return;
     Media* media = nullptr;
     switch (index) {
-        case 0: media = new Book(); break;
-        case 1: media = new Poem(); break;
-        case 2: media = new AcademicArticle(); break;
-        case 3: media = new NewspaperArticle(); break;
-        default: return;
+        case 0:
+            media = new Book();
+            break;
+        case 1:
+            media = new Poem();
+            break;
+        case 2:
+            media = new AcademicArticle();
+            break;
+        case 3:
+            media = new NewspaperArticle();
+            break;
+        default:
+            return;
     }
 
     // grid mode => fullscreen mode for adding new media
@@ -415,10 +420,10 @@ void MainWindow::onMediaEdited(Media* media) {
         }
         currentViewMode = FullscreenGrid;
     } else {
-        rightInfoWidget->viewMedia(media); // update the right panel
+        rightInfoWidget->viewMedia(media);  // update the right panel
     }
 
-    gridView->reset();                // reload everything from the model
+    gridView->reset();  // reload everything from the model
     gridView->viewport()->update();
 }
 
