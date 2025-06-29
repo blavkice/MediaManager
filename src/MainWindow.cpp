@@ -191,7 +191,27 @@ void MainWindow::initAddComboBox() {
     addComboBox->addItem("Academic Article");
     addComboBox->addItem("Newspaper Article");
     addComboBox->setVisible(false);
+    addComboBox->installEventFilter(this);
     connect(addComboBox, QOverload<int>::of(&QComboBox::activated), this, &MainWindow::onComboBoxActivated);
+}
+
+bool MainWindow::eventFilter(QObject* obj, QEvent* event) {
+    if (obj == addComboBox) {
+        if (event->type() == QEvent::FocusOut) {
+            addComboBox->hide();
+            addComboBox->setVisible(false);
+            addComboBox->setCurrentIndex(-1); // clear selection on focus lost
+        } else if (event->type() == QEvent::KeyPress) {
+            QKeyEvent const* keyEvent = static_cast<QKeyEvent*>(event);
+            if (keyEvent->key() == Qt::Key_Escape) {
+                addComboBox->hide();
+                addComboBox->setVisible(false);
+                addComboBox->setCurrentIndex(-1); // clear selection on escape key
+                return true;
+            }
+        }
+    }
+    return QMainWindow::eventFilter(obj, event);
 }
 
 // view the element selected in the list and activate the delete button
@@ -213,6 +233,7 @@ void MainWindow::switchToGridView() {
     currentViewMode = FullscreenGrid;
     gridViewButton->setVisible(false);
     splitViewButton->setVisible(true);
+    gridView->clearSelection();
 }
 
 void MainWindow::switchToSplitView() {
@@ -222,6 +243,7 @@ void MainWindow::switchToSplitView() {
     currentViewMode = Split;
     gridViewButton->setVisible(true);
     splitViewButton->setVisible(false);
+    listView->clearSelection();
 }
 
 void MainWindow::showFullscreenDetail(const QModelIndex& index) {
@@ -304,6 +326,7 @@ void MainWindow::onRemoveButtonClicked() {
 }
 
 void MainWindow::onAddButtonClicked() const {
+    addComboBox->setCurrentIndex(-1); // to make appear the combo box empty
     QPoint pos = addButton->mapToGlobal(QPoint(0, addButton->height()));
     pos = mapFromGlobal(pos);
     addComboBox->move(pos);
@@ -313,7 +336,9 @@ void MainWindow::onAddButtonClicked() const {
 
 void MainWindow::onComboBoxActivated(const int index) {
     onMediaSelected(index);
+    addComboBox->setCurrentIndex(-1); // reset the combo box to empty
     addComboBox->setVisible(false);
+    addComboBox->hide();
 }
 
 // media selected from the combo box for CREATION
@@ -366,6 +391,8 @@ void MainWindow::onMediaSelected(const int index) {
                 detailWidget = nullptr;
             }
             currentViewMode = FullscreenGrid;
+            addComboBox->hide();
+            addComboBox->setVisible(false);
         });
 
         // handle "back" button: just return to grid view
