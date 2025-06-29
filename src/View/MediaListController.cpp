@@ -53,6 +53,10 @@ QAbstractItemModel* MediaListController::getFilterModel() const {
     return filterController;
 }
 
+MediaFilterController* MediaListController::getFilterController() const {
+    return filterController;
+}
+
 void MediaListController::populateList() const {
     model->clear();
     for (const auto& media : mediaList) {

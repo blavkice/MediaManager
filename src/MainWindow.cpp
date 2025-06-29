@@ -283,18 +283,25 @@ void MainWindow::showFullscreenDetail(const QModelIndex& index) {
 }
 
 void MainWindow::onRemoveButtonClicked() {
-    const QModelIndex currentIndex = listView->currentIndex();
+    QListView const* activeView = (currentViewMode == FullscreenGrid) ? gridView : listView;
+    const QModelIndex currentIndex = activeView->currentIndex();
     if (!currentIndex.isValid()) return;
 
-    const std::shared_ptr<Media>& mediaPtr = mediaListController->getMediaList().at(currentIndex.row());
-    const Media* media = mediaPtr.get();
+    // filterController is a MediaFilterController*
+    const QModelIndex sourceIndex = mediaListController->getFilterController()->mapToSource(currentIndex);
+    if (!sourceIndex.isValid()) return;
 
+    const int actualRow = sourceIndex.row();
+    const QList<std::shared_ptr<Media>>& mediaList = mediaListController->getMediaList();
+    if (actualRow < 0 || actualRow >= mediaList.size()) return;
+
+    const Media* media = mediaList.at(actualRow).get();
     const QString mediaTitle = media->getTitle();
 
     const QMessageBox::StandardButton reply = QMessageBox::question(
         this, "Deleting Media", "Do you really want to delete " + mediaTitle + "?", QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::Yes) {
-        mediaListController->removeMedia(currentIndex.row());
+        mediaListController->removeMedia(actualRow);
         rightInfoWidget->clear();
         searchBox->clear();
     }
@@ -308,41 +315,79 @@ void MainWindow::onAddButtonClicked() const {
     addComboBox->showPopup();
 }
 
-void MainWindow::onComboBoxActivated(const int index) const {
+void MainWindow::onComboBoxActivated(const int index) {
     onMediaSelected(index);
     addComboBox->setVisible(false);
 }
 
 // media selected from the combo box for CREATION
-void MainWindow::onMediaSelected(const int index) const {
+void MainWindow::onMediaSelected(const int index) {
     // clear search box and selection when adding a new media
     searchBox->clear();
     mediaListController->clearSelection();
 
-    // get type of media and create the widget for it
+    // get the media type based on the combo box index
     if (index < 0) return;
     Media* media = nullptr;
     switch (index) {
-        case 0:
-            media = new Book();
-            break;
-        case 1:
-            media = new Poem();
-            break;
-        case 2:
-            media = new AcademicArticle();
-            break;
-        case 3:
-            media = new NewspaperArticle();
-            break;
+        case 0: media = new Book(); break;
+        case 1: media = new Poem(); break;
+        case 2: media = new AcademicArticle(); break;
+        case 3: media = new NewspaperArticle(); break;
+        default: return;
     }
-    const auto createMediaWidget = new CreateMediaWidget(rightInfoWidget, media);
-    try {
-        connect(createMediaWidget, &CreateMediaWidget::mediaCreated, this, &MainWindow::onMediaCreated);
-        rightInfoWidget->setWidget(createMediaWidget);
-    } catch (std::invalid_argument& e) {
-        delete createMediaWidget;
-        QMessageBox::warning(rightInfoWidget, "Error creating media", e.what());
+
+    // grid mode => fullscreen mode for adding new media
+    if (currentViewMode == FullscreenGrid) {
+        detailWidget = new QWidget(this);
+        auto* layout = new QVBoxLayout(detailWidget);
+
+        // back button to go back to grid view without saving
+        auto* backButton = new QPushButton("Back", detailWidget);
+        layout->addWidget(backButton, 0, Qt::AlignLeft);
+
+        // CreateMediaWidget for adding new media
+        auto* createMediaWidget = new CreateMediaWidget(detailWidget, media);
+        layout->addWidget(createMediaWidget);
+
+        // handle "mediaCreated" signal: add the new media, close fullscreen, return to grid view
+        connect(createMediaWidget, &CreateMediaWidget::mediaCreated, this, [this](Media* newMedia) {
+            onMediaCreated(newMedia);
+            // close fullscreen and return to grid view
+            centralStack->setCurrentWidget(gridView);
+            if (detailWidget) {
+                centralStack->removeWidget(detailWidget);
+                delete detailWidget;
+                detailWidget = nullptr;
+            }
+            currentViewMode = FullscreenGrid;
+        });
+
+        // handle "back" button: just return to grid view
+        connect(backButton, &QPushButton::clicked, this, [this]() {
+            centralStack->setCurrentWidget(gridView);
+            if (detailWidget) {
+                centralStack->removeWidget(detailWidget);
+                delete detailWidget;
+                detailWidget = nullptr;
+            }
+            currentViewMode = FullscreenGrid;
+        });
+
+        detailWidget->setLayout(layout);
+        centralStack->addWidget(detailWidget);
+        centralStack->setCurrentWidget(detailWidget);
+        currentViewMode = FullscreenDetail;
+    } else {
+        // list or split view => right info widget for adding new media
+        const auto createMediaWidget = new CreateMediaWidget(rightInfoWidget, media);
+        try {
+            connect(createMediaWidget, &CreateMediaWidget::mediaCreated, this, &MainWindow::onMediaCreated);
+            rightInfoWidget->setWidget(createMediaWidget);
+        } catch (std::invalid_argument& e) {
+            delete createMediaWidget;
+            QMessageBox::warning(rightInfoWidget, "Error creating media", e.what());
+        }
     }
 }
 
@@ -378,10 +423,10 @@ void MainWindow::onMediaEdited(Media* media) {
 }
 
 void MainWindow::animateStackedWidgetTransition(QWidget* from, QWidget* to, bool leftToRight) {
-    int w = centralStack->width();
+    const int w = centralStack->width();
 
     // start position
-    QRect endGeom = centralStack->geometry();
+    const QRect endGeom = centralStack->geometry();
     QRect startGeom = endGeom;
     startGeom.moveLeft(leftToRight ? -w : w);
 
@@ -390,17 +435,17 @@ void MainWindow::animateStackedWidgetTransition(QWidget* from, QWidget* to, bool
     centralStack->setCurrentWidget(to);
 
     // from out to in
-    auto animOut = new QPropertyAnimation(from, "geometry");
-    animOut->setDuration(100);
+    const auto animOut = new QPropertyAnimation(from, "geometry");
+    animOut->setDuration(80);
     animOut->setStartValue(endGeom);
     animOut->setEndValue(leftToRight ? endGeom.translated(w, 0) : endGeom.translated(-w, 0));
 
-    auto animIn = new QPropertyAnimation(to, "geometry");
-    animIn->setDuration(100);
+    const auto animIn = new QPropertyAnimation(to, "geometry");
+    animIn->setDuration(80);
     animIn->setStartValue(startGeom);
     animIn->setEndValue(endGeom);
 
-    auto group = new QParallelAnimationGroup(this);
+    const auto group = new QParallelAnimationGroup(this);
     group->addAnimation(animOut);
     group->addAnimation(animIn);
 

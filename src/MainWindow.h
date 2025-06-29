@@ -57,8 +57,8 @@ class MainWindow : public QMainWindow {
     void animateStackedWidgetTransition(QWidget* from, QWidget* to, bool leftToRight);
    private slots:
     void onAddButtonClicked() const;
-    void onComboBoxActivated(int index) const;
-    void onMediaSelected(int index) const;
+    void onComboBoxActivated(int index);
+    void onMediaSelected(int index);
     void onMediaCreated(Media* media) const;
     void updateSelectionState(bool selected) const;
     void onMediaEdited(Media* media);
