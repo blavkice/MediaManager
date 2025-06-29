@@ -54,6 +54,7 @@ class MainWindow : public QMainWindow {
     void switchToGridView();
     void switchToSplitView();
     void showFullscreenDetail(const QModelIndex& index);
+    void animateStackedWidgetTransition(QWidget* from, QWidget* to, bool leftToRight);
    private slots:
     void onAddButtonClicked() const;
     void onComboBoxActivated(int index) const;

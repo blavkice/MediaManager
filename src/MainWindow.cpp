@@ -2,6 +2,8 @@
 
 #include <QComboBox>
 #include <QMessageBox>
+#include <QPropertyAnimation>
+#include <QParallelAnimationGroup>
 
 #include "Model/AddVisitor.h"
 #include "Model/ArticlesClasses/AcademicArticle.h"
@@ -208,15 +210,20 @@ void MainWindow::updateSelectionState(const bool selected) const {
 
 void MainWindow::switchToGridView() {
     gridView->setModel(mediaListController->getFilterModel());
+    // animate the transition to the grid view
+    if (centralStack->currentWidget() != gridView)
+        animateStackedWidgetTransition(centralStack->currentWidget(), gridView, false); // false = left->right
     currentViewMode = FullscreenGrid;
-    centralStack->setCurrentWidget(gridView);
     gridViewButton->setVisible(false);
     splitViewButton->setVisible(true);
 }
 
+
 void MainWindow::switchToSplitView() {
+    // animate the transition to the split view
+    if (centralStack->currentWidget() != splitViewWidget)
+        animateStackedWidgetTransition(centralStack->currentWidget(), splitViewWidget, true); // true = right->left
     currentViewMode = Split;
-    centralStack->setCurrentWidget(splitViewWidget);
     gridViewButton->setVisible(true);
     splitViewButton->setVisible(false);
 }
@@ -249,18 +256,29 @@ void MainWindow::showFullscreenDetail(const QModelIndex& index) {
 
     // go back to the grid view when the back button is clicked
     connect(backButton, &QPushButton::clicked, this, [this]() {
-        centralStack->setCurrentWidget(gridView);
-        currentViewMode = FullscreenGrid;
-        if(detailWidget) {
-            centralStack->removeWidget(detailWidget);
-            delete detailWidget;
-            detailWidget = nullptr;
+        QWidget* from = centralStack->currentWidget();
+        QWidget* to = gridView;
+        animateStackedWidgetTransition(from, to, true);
+
+        // clean up after the transition
+        QParallelAnimationGroup* group = findChild<QParallelAnimationGroup*>("currentTransitionGroup");
+        if (group) {
+            connect(group, &QParallelAnimationGroup::finished, this, [this, from]() {
+                if(from != gridView && from != splitViewWidget) {
+                    centralStack->removeWidget(from);
+                    delete from;
+                    detailWidget = nullptr;
+                }
+            });
         }
+        currentViewMode = FullscreenGrid;
     });
 
     detailWidget->setLayout(layout);
     centralStack->addWidget(detailWidget);
     centralStack->setCurrentWidget(detailWidget);
+    // animate the transition to the detail view
+    animateStackedWidgetTransition(centralStack->currentWidget(), detailWidget, false);
     currentViewMode = FullscreenDetail;
 }
 
@@ -355,6 +373,36 @@ void MainWindow::onMediaEdited(Media* media) {
         rightInfoWidget->viewMedia(media); // update the right panel
     }
 
-    gridView->reset();                // This tells the view to reload everything from the model
+    gridView->reset();                // reload everything from the model
     gridView->viewport()->update();
+}
+
+void MainWindow::animateStackedWidgetTransition(QWidget* from, QWidget* to, bool leftToRight) {
+    int w = centralStack->width();
+
+    // start position
+    QRect endGeom = centralStack->geometry();
+    QRect startGeom = endGeom;
+    startGeom.moveLeft(leftToRight ? -w : w);
+
+    // place to offscreen
+    to->setGeometry(startGeom);
+    centralStack->setCurrentWidget(to);
+
+    // from out to in
+    auto animOut = new QPropertyAnimation(from, "geometry");
+    animOut->setDuration(100);
+    animOut->setStartValue(endGeom);
+    animOut->setEndValue(leftToRight ? endGeom.translated(w, 0) : endGeom.translated(-w, 0));
+
+    auto animIn = new QPropertyAnimation(to, "geometry");
+    animIn->setDuration(100);
+    animIn->setStartValue(startGeom);
+    animIn->setEndValue(endGeom);
+
+    auto group = new QParallelAnimationGroup(this);
+    group->addAnimation(animOut);
+    group->addAnimation(animIn);
+
+    group->start(QAbstractAnimation::DeleteWhenStopped);
 }
