@@ -171,6 +171,9 @@ void MainWindow::initLayouts() {
     connect(searchBox, &QLineEdit::textChanged, this,
             [this](const QString& text) { mediaListController->searchMedia(text); });
 
+    // edit connection
+    connect(rightInfoWidget, &RightDynamicWidget::mediaEdited, this, &MainWindow::onMediaEdited);
+
     // connect the filter box to the filter function
     connect(typeFilterBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int index) {
         const QVariant data = typeFilterBox->itemData(index);
@@ -241,6 +244,9 @@ void MainWindow::showFullscreenDetail(const QModelIndex& index) {
     ViewMediaWidget* viewMediaWidget = new ViewMediaWidget(mediaPtr.get(), detailWidget);
     layout->addWidget(viewMediaWidget);
 
+    // in order, from fullscreen detail view, to edit the media
+    connect(viewMediaWidget, &ViewMediaWidget::mediaEdited, this, &MainWindow::onMediaEdited);
+
     // go back to the grid view when the back button is clicked
     connect(backButton, &QPushButton::clicked, this, [this]() {
         centralStack->setCurrentWidget(gridView);
@@ -289,6 +295,7 @@ void MainWindow::onComboBoxActivated(const int index) const {
     addComboBox->setVisible(false);
 }
 
+// media selected from the combo box for CREATION
 void MainWindow::onMediaSelected(const int index) const {
     // clear search box and selection when adding a new media
     searchBox->clear();
@@ -328,7 +335,26 @@ void MainWindow::onMediaCreated(Media* media) const {
     // and so createMediaWidget is deleted correctly everytime
 }
 
-void MainWindow::onMediaEdited(Media* media) const {
+void MainWindow::onMediaEdited(Media* media) {
+    // update the media in the list
     mediaListController->populateList();
-    rightInfoWidget->viewMedia(media);  // "auto-clear" from rightInfoWidget
+    listView->setModel(mediaListController->getFilterModel());
+    gridView->setModel(mediaListController->getFilterModel());
+
+    // if in fullscreen detail mode, return to grid view
+    if (currentViewMode == FullscreenDetail) {
+        // Return to grid view and clean up detailWidget
+        centralStack->setCurrentWidget(gridView);
+        if (detailWidget) {
+            centralStack->removeWidget(detailWidget);
+            delete detailWidget;
+            detailWidget = nullptr;
+        }
+        currentViewMode = FullscreenGrid;
+    } else {
+        rightInfoWidget->viewMedia(media); // update the right panel
+    }
+
+    gridView->reset();                // This tells the view to reload everything from the model
+    gridView->viewport()->update();
 }

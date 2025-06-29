@@ -12,7 +12,6 @@ class MediaFilterController : public QSortFilterProxyModel {
     void setSearchQuery(const QString& searchQuery);
     enum class MediaTypeFilter { All, Book, Poem, AcademicArticle, NewspaperArticle };
     void setMediaTypeFilter(MediaTypeFilter type);
-
    private:
     QString searchQuery;
     MediaTypeFilter mediaTypeFilter = MediaTypeFilter::All;  // default filter is set to all

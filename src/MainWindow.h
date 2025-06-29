@@ -60,8 +60,7 @@ class MainWindow : public QMainWindow {
     void onMediaSelected(int index) const;
     void onMediaCreated(Media* media) const;
     void updateSelectionState(bool selected) const;
-    void onMediaEdited(Media* media) const;
-
+    void onMediaEdited(Media* media);
    public:
     explicit MainWindow(QWidget* parent = nullptr);
 };
