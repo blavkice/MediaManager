@@ -33,6 +33,7 @@ class MainWindow : public QMainWindow {
     QLineEdit* searchBox;
     QComboBox* typeFilterBox;
     QPushButton* addButton;
+    QMenu* addMenu;
     QPushButton* removeButton;
     QComboBox* addComboBox;
     QListView* listView;
@@ -48,17 +49,15 @@ class MainWindow : public QMainWindow {
     // for the list of currently active elements
     MediaListController* mediaListController;
     void initLayouts();
-    void initAddComboBox();
+    void initAddMenu();
     void onRemoveButtonClicked();
     // to switch between the two views
     void switchToGridView();
     void switchToSplitView();
     void showFullscreenDetail(const QModelIndex& index);
     void animateStackedWidgetTransition(QWidget* from, QWidget* to, bool leftToRight);
-    bool eventFilter(QObject*, QEvent*) override;  // for the focus on the creation combo box
    private slots:
     void onAddButtonClicked() const;
-    void onComboBoxActivated(int index);
     void onMediaSelected(int index);
     void onMediaCreated(Media* media) const;
     void updateSelectionState(bool selected) const;
