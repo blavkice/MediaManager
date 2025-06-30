@@ -55,7 +55,7 @@ class MainWindow : public QMainWindow {
     void switchToSplitView();
     void showFullscreenDetail(const QModelIndex& index);
     void animateStackedWidgetTransition(QWidget* from, QWidget* to, bool leftToRight);
-    bool eventFilter(QObject*, QEvent*) override; // for the focus on the creation combo box
+    bool eventFilter(QObject*, QEvent*) override;  // for the focus on the creation combo box
    private slots:
     void onAddButtonClicked() const;
     void onComboBoxActivated(int index);

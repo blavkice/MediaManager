@@ -170,7 +170,7 @@ bool AddVisitor::saveInput(Media* media) {
 }
 
 void AddVisitor::saveImage(Media* media, const QString& imagePath) {
-    // check if the image path is empty or invalid or we are not changing it (EditVisitor)
+    // check if the image path is empty or invalid, or we are not changing it (EditVisitor)
     if (imagePath.isEmpty() || imagePath == media->getImagePath()) {
         return;
     }
@@ -184,7 +184,8 @@ void AddVisitor::saveImage(Media* media, const QString& imagePath) {
     // get the application directory path and create a media directory if it doesn't exist
     const QString appDirPath = QCoreApplication::applicationDirPath();
     QDir dir(appDirPath);
-    dir.cdUp(); dir.cdUp();
+    dir.cdUp();
+    dir.cdUp();
 
     const QString mediaDirPath = dir.filePath("media");
     if (!dir.exists(mediaDirPath)) {

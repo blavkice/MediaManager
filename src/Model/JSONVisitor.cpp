@@ -1,11 +1,11 @@
 #include "JSONVisitor.h"
 
+#include <QCoreApplication>
+#include <QDir>
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QDir>
-#include <QCoreApplication>
 
 #include "ArticlesClasses/AcademicArticle.h"
 #include "ArticlesClasses/NewspaperArticle.h"
@@ -69,7 +69,8 @@ bool JSONVisitor::exportToFile(const QString& filePath) {
 
     // clean up the images directory: if an image is not used, it will be removed
     QDir dir(QCoreApplication::applicationDirPath());
-    dir.cdUp(); dir.cdUp();
+    dir.cdUp();
+    dir.cdUp();
     QDir mediaDir(dir.filePath("media"));
 
     // collect all used image file names (normalized to lower-case)

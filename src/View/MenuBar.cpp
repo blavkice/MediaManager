@@ -87,7 +87,8 @@ void MenuBar::onSaveActionTriggered() {
     // save the current state to last.json in the saves directory
     const QString appDirPath = QCoreApplication::applicationDirPath();
     QDir dir(appDirPath);
-    dir.cdUp(); dir.cdUp();
+    dir.cdUp();
+    dir.cdUp();
     const QString lastJsonPath = dir.filePath("saves/last.json");
 
     if (jsonVisitor->exportToFile(lastJsonPath)) {

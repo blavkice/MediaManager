@@ -200,13 +200,13 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* event) {
         if (event->type() == QEvent::FocusOut) {
             addComboBox->hide();
             addComboBox->setVisible(false);
-            addComboBox->setCurrentIndex(-1); // clear selection on focus lost
+            addComboBox->setCurrentIndex(-1);  // clear selection on focus lost
         } else if (event->type() == QEvent::KeyPress) {
             QKeyEvent const* keyEvent = static_cast<QKeyEvent*>(event);
             if (keyEvent->key() == Qt::Key_Escape) {
                 addComboBox->hide();
                 addComboBox->setVisible(false);
-                addComboBox->setCurrentIndex(-1); // clear selection on escape key
+                addComboBox->setCurrentIndex(-1);  // clear selection on escape key
                 return true;
             }
         }
@@ -326,7 +326,7 @@ void MainWindow::onRemoveButtonClicked() {
 }
 
 void MainWindow::onAddButtonClicked() const {
-    addComboBox->setCurrentIndex(-1); // to make appear the combo box empty
+    addComboBox->setCurrentIndex(-1);  // to make appear the combo box empty
     QPoint pos = addButton->mapToGlobal(QPoint(0, addButton->height()));
     pos = mapFromGlobal(pos);
     addComboBox->move(pos);
@@ -336,7 +336,7 @@ void MainWindow::onAddButtonClicked() const {
 
 void MainWindow::onComboBoxActivated(const int index) {
     onMediaSelected(index);
-    addComboBox->setCurrentIndex(-1); // reset the combo box to empty
+    addComboBox->setCurrentIndex(-1);  // reset the combo box to empty
     addComboBox->setVisible(false);
     addComboBox->hide();
 }
