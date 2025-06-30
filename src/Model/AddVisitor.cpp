@@ -132,7 +132,7 @@ bool AddVisitor::saveInput(Media* media) {
     media->setTitle(inputFields["title"]->text());
     media->setShortDescription(inputFields["shortDescription"]->text());
 
-    // now for the image there is a separate method checking its integrity and saving it into ./media/
+    // for the image there is a separate method checking its integrity and saving it into ./media/
     saveImage(media, media->getImagePath());
 
     // do for literature
@@ -170,9 +170,8 @@ bool AddVisitor::saveInput(Media* media) {
 }
 
 void AddVisitor::saveImage(Media* media, const QString& imagePath) {
-    // check if the image path is empty or invalid
-    if (imagePath.isEmpty()) {
-        media->setImagePath(":default.jpg");
+    // check if the image path is empty or invalid or we are not changing it (EditVisitor)
+    if (imagePath.isEmpty() || imagePath == media->getImagePath()) {
         return;
     }
 

@@ -26,6 +26,7 @@ CreateMediaWidget::CreateMediaWidget(QWidget* parent, Media* media)
     contentLayout->addWidget(new QLabel("Image Path:"));
     imagePathEdit = new QLineEdit();
     imagePathEdit->setReadOnly(true);
+    imagePathEdit->setText(media->getImagePath());
     contentLayout->addWidget(imagePathEdit);
     chooseButton = new QPushButton("Choose");
     contentLayout->addWidget(chooseButton);
@@ -47,8 +48,12 @@ CreateMediaWidget::CreateMediaWidget(QWidget* parent, Media* media)
 
     connect(createButton, &QPushButton::clicked, this, [this]() {
         if (currentMedia) {
-            currentMedia->setImagePath(imagePathEdit->text());
-            addVisitor->saveInput(currentMedia);  // no need to manually delete addVisitor
+            // editing will call this function so we need to check if the image is already set
+            const QString chosenPath = imagePathEdit->text();
+            if (!chosenPath.isEmpty() && chosenPath != currentMedia->getImagePath()) {
+                currentMedia->setImagePath(chosenPath);
+            }
+            addVisitor->saveInput(currentMedia);
             emit mediaCreated(currentMedia);
         }
     });
