@@ -52,5 +52,17 @@
         "type": "NewspaperArticle",
         "url": "No url",
         "wordCount": 0
+    },
+    {
+        "author": "Pascoli",
+        "city": " Bologna",
+        "id": "c36ad297-516a-4316-a2f3-f55467bea2b0",
+        "imagePath": "c36ad297-516a-4316-a2f3-f55467bea2b0.jpg",
+        "longDescription": "«Nel campo mezzo grigio e mezzo nero\nresta un aratro senza buoi, che pare\ndimenticato, tra il vapor leggero.\n\nE cadenzato dalla gora viene\nlo sciabordare delle lavandare\ncon tonfi spessi e lunghe cantilene\n\nIl vento soffia e nevica la frasca,\ne tu non torni ancora al tuo paese!\nquando partisti, come son rimasta!\ncome l'aratro in mezzo alla maggese.»",
+        "publicationYear": 1891,
+        "rating": 5,
+        "shortDescription": " È inverno. La natura, assopita in un sonno profondo, sembra quasi morta; l'unico segno di vita viene dal canto delle lavandaie:",
+        "title": "Lavandare",
+        "type": "Poem"
     }
 ]

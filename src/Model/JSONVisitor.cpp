@@ -4,6 +4,8 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QDir>
+#include <QCoreApplication>
 
 #include "ArticlesClasses/AcademicArticle.h"
 #include "ArticlesClasses/NewspaperArticle.h"
@@ -65,9 +67,34 @@ bool JSONVisitor::exportToFile(const QString& filePath) {
         }
     }
 
+    // clean up the images directory: if an image is not used, it will be removed
+    QDir dir(QCoreApplication::applicationDirPath());
+    dir.cdUp(); dir.cdUp();
+    QDir mediaDir(dir.filePath("media"));
+
+    // collect all used image file names (normalized to lower-case)
+    QSet<QString> usedImages;
+    for (const auto& media : mediaListController->getMediaList()) {
+        QString fileName = QFileInfo(media->getImagePath()).fileName().toLower();
+        if (!fileName.isEmpty()) {
+            usedImages.insert(fileName);
+            qDebug() << "Used image:" << fileName;
+        }
+    }
+
+    // get all image files in the media directory (normalized to lower-case and by extension)
+    QStringList allFiles = mediaDir.entryList(QStringList() << "*.jpg" << "*.jpeg", QDir::Files);
+    for (const QString& fileName : allFiles) {
+        QString normalized = fileName.toLower();
+        if (!usedImages.contains(normalized)) {
+            mediaDir.remove(fileName);
+        }
+    }
+
     const QJsonDocument doc(jsonArray);
     qDebug() << "Writing JSON data to file:" << doc.toJson();
     file.write(doc.toJson());
+
     return true;
 }
 

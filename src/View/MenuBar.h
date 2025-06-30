@@ -12,6 +12,7 @@ class MenuBar : public QMenuBar {
     QAction* exit;
     QAction* importAction;
     QAction* exportAction;
+    QAction* saveAction;
     JSONVisitor* jsonVisitor;
     static void replaceLastDefaultMedia(const QString& filePath);
 
@@ -27,6 +28,7 @@ class MenuBar : public QMenuBar {
    public slots:
     void onImportActionTriggered();
     void onExportActionTriggered();
+    void onSaveActionTriggered();
 };
 
 #endif  // MENUBAR_H

@@ -11,7 +11,9 @@ MenuBar::MenuBar(QWidget* parent) : QMenuBar(parent) {
     exit = new QAction(tr("Exit MediaManager"), this);
     importAction = new QAction(tr("Import"), this);
     exportAction = new QAction(tr("Export"), this);
+    saveAction = new QAction(tr("Save"), this);
 
+    actionsMenu->addAction(saveAction);
     actionsMenu->addAction(importAction);
     actionsMenu->addAction(exportAction);
     actionsMenu->addAction(exit);
@@ -20,6 +22,7 @@ MenuBar::MenuBar(QWidget* parent) : QMenuBar(parent) {
     // in order to show the personalized exit button in macOS
     exit->setMenuRole(QAction::NoRole);
 
+    connect(saveAction, &QAction::triggered, this, &MenuBar::onSaveActionTriggered);
     connect(importAction, &QAction::triggered, this, &MenuBar::onImportActionTriggered);
     connect(exportAction, &QAction::triggered, this, &MenuBar::onExportActionTriggered);
 }
@@ -75,6 +78,22 @@ void MenuBar::onExportActionTriggered() {
         } else {
             QMessageBox::warning(this, tr("Export"), tr("Export failed!"));
         }
+    }
+}
+
+void MenuBar::onSaveActionTriggered() {
+    if (!jsonVisitor) return;
+
+    // save the current state to last.json in the saves directory
+    const QString appDirPath = QCoreApplication::applicationDirPath();
+    QDir dir(appDirPath);
+    dir.cdUp(); dir.cdUp();
+    const QString lastJsonPath = dir.filePath("saves/last.json");
+
+    if (jsonVisitor->exportToFile(lastJsonPath)) {
+        QMessageBox::information(this, tr("Save"), tr("Data saved correctly!"));
+    } else {
+        QMessageBox::warning(this, tr("Save"), tr("Save failed."));
     }
 }
 

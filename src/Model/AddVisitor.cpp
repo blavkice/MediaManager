@@ -170,35 +170,40 @@ bool AddVisitor::saveInput(Media* media) {
 }
 
 void AddVisitor::saveImage(Media* media, const QString& imagePath) {
-    qDebug() << "media uuid:" << media->getId();
+    // check if the image path is empty or invalid
     if (imagePath.isEmpty()) {
-        media->setImagePath(":default.jpg");
-    }
-    QImage image(imagePath);
-    if (image.isNull()) {
-        qDebug() << "Error: Invalid image at path:" << imagePath;
         media->setImagePath(":default.jpg");
         return;
     }
 
-    // then the image is valid
+    QImage image(imagePath);
+    if (image.isNull()) {
+        media->setImagePath(":default.jpg");
+        return;
+    }
+
+    // get the application directory path and create a media directory if it doesn't exist
     const QString appDirPath = QCoreApplication::applicationDirPath();
     QDir dir(appDirPath);
-    dir.cdUp();
-    dir.cdUp();
+    dir.cdUp(); dir.cdUp();
 
-    // check existence of media directory
     const QString mediaDirPath = dir.filePath("media");
     if (!dir.exists(mediaDirPath)) {
         dir.mkpath(mediaDirPath);
     }
 
-    // TBD, saveFilePath is maybe redundant, we can just access the media folder and search for id.jpg
+    // construct the new file path for the image
     const QString newFilePath = mediaDirPath + "/" + media->getId() + ".jpg";
 
-    if (image.save(newFilePath, "JPG", 75)) {
+    // avoid overwriting existing files
+    if (QFile::exists(newFilePath)) {
         media->setImagePath(media->getId() + ".jpg");
-        qDebug() << "Image saved to:" << newFilePath;
-    } else
+        return;
+    }
+
+    if (image.save(newFilePath, "JPG", 65)) {
+        media->setImagePath(media->getId() + ".jpg");
+    } else {
         media->setImagePath(":default.jpg");
+    }
 }
