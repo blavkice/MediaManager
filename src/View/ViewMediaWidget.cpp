@@ -16,7 +16,7 @@ ViewMediaWidget::ViewMediaWidget(Media* media, QWidget* parent) : QWidget(parent
 
     // adding the edit button and connecting it to the editVisitor
     const auto topLayout = new QHBoxLayout();
-    QPushButton* editButton = new QPushButton("Edit", this);
+    editButton = new QPushButton("Edit", this);
     topLayout->addStretch();  // push the button to the right
     topLayout->addWidget(editButton);
     connect(editButton, &QPushButton::clicked, this, &ViewMediaWidget::onEditButtonClicked);
@@ -54,6 +54,7 @@ ViewMediaWidget::ViewMediaWidget(Media* media, QWidget* parent) : QWidget(parent
 }
 
 void ViewMediaWidget::onEditButtonClicked() {
+    editButton->setEnabled(false); // in order to avoid multiple edits
     saveButton = new QPushButton("Save Changes", this);
     auto editVisitor = new EditVisitor(mainLayout, saveButton);  // qt parent takes ownership
     media->accept(editVisitor);
@@ -62,7 +63,10 @@ void ViewMediaWidget::onEditButtonClicked() {
     setFocusPolicy(Qt::StrongFocus);
     setFocus();
 
-    connect(editVisitor, &EditVisitor::mediaEdited, this, [=](Media* media) { emit mediaEdited(media); });
+    connect(editVisitor, &EditVisitor::mediaEdited, this, [=](Media* media) {
+        emit mediaEdited(media);
+        editButton->setEnabled(true); // re-enable the edit button
+    });
 }
 
 void ViewMediaWidget::keyPressEvent(QKeyEvent* event) {

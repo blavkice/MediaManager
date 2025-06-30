@@ -15,7 +15,7 @@ class ViewMediaWidget : public QWidget {
     std::unique_ptr<ViewVisitor> viewVisitor;
     void onEditButtonClicked();
     QPushButton* saveButton;
-
+    QPushButton* editButton;
    protected:
     void keyPressEvent(QKeyEvent* event) override;
 
