@@ -141,6 +141,7 @@ void MainWindow::initLayouts() {
     // STACKED (detailed) view
     centralStack->addWidget(splitViewWidget);  // 0: split view (default)
     centralStack->addWidget(gridView);         // 1: grid view fullscreen
+    centralStack->setContentsMargins(0, 0, 0, 0);
 
     // LAYOUT
     QVBoxLayout* mainLayout = new QVBoxLayout;

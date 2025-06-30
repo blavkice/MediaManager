@@ -1,6 +1,14 @@
 #include "GridView.h"
 
-void GridViewDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const {
+#include <QPainter>
+#include <QStyleOptionViewItem>
+#include <QTextOption>
+
+GridView::GridViewDelegate::GridViewDelegate(QObject* parent) : QStyledItemDelegate(parent) {
+}
+
+void GridView::GridViewDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option,
+                                       const QModelIndex& index) const {
     // draw the specific item in the grid view
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing);
@@ -32,6 +40,21 @@ void GridViewDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
     painter->restore();
 }
 
-QSize GridViewDelegate::sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const {
+QSize GridView::GridViewDelegate::sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const {
     return QSize(180, 230);
+}
+
+GridView::GridView(QWidget* parent) : QListView(parent) {
+    setItemDelegate(new GridViewDelegate(this));
+    setViewMode(QListView::IconMode);
+    setResizeMode(QListView::Adjust);
+    setMovement(QListView::Static);
+    setSpacing(10);
+    setUniformItemSizes(true);
+    setSelectionMode(QAbstractItemView::SingleSelection);
+    setGridSize(QSize(150, 180));
+    setContentsMargins(0, 0, 0, 0);
+    setStyleSheet("margin: 0; padding: 0;");
+    setViewportMargins(0, 0, 0, 0);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
