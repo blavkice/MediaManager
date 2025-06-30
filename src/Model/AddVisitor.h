@@ -19,7 +19,7 @@ class AddVisitor : public Visitor {
     Q_OBJECT
    private:
     QLayout* layout;
-    QMap<QString, QLineEdit*> inputFields;
+    QMap<QString, QWidget*> inputFields;
     QPushButton* chooseButton;
 
    public:
@@ -33,7 +33,6 @@ class AddVisitor : public Visitor {
     void visit(AcademicArticle* academicArticle) override;
     void visit(NewspaperArticle* newspaperArticle) override;
     bool saveInput(Media* media);
-    static void saveImage(Media* media, const QString& imagePath);
 };
 
 #endif  // ADDVISITOR_H

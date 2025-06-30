@@ -47,15 +47,31 @@ CreateMediaWidget::CreateMediaWidget(QWidget* parent, Media* media)
     setLayout(layout);
 
     connect(createButton, &QPushButton::clicked, this, [this]() {
-        if (currentMedia) {
-            // editing will call this function so we need to check if the image is already set
-            const QString chosenPath = imagePathEdit->text();
-            if (!chosenPath.isEmpty() && chosenPath != currentMedia->getImagePath()) {
-                currentMedia->setImagePath(chosenPath);
+        if (!currentMedia) return;
+        // has the user chosen a new image?
+        QString chosenPath = imagePathEdit->text();
+        // if the user has not chosen a new image, we keep the old one
+        if (!chosenPath.isEmpty() && chosenPath != currentMedia->getImagePath() && QFile::exists(chosenPath)) {
+            // save the image to the media directory
+            QString appDirPath = QCoreApplication::applicationDirPath();
+            QDir dir(appDirPath);
+            dir.cdUp();
+            dir.cdUp();
+            QString mediaDirPath = dir.filePath("media");
+            if (!dir.exists(mediaDirPath)) dir.mkpath(mediaDirPath);
+            QString destFilePath = mediaDirPath + "/" + currentMedia->getId() + ".jpg";
+            QImage img(chosenPath);
+            if (!img.isNull()) {
+                img.save(destFilePath, "JPG", 65);
+                currentMedia->setImagePath(currentMedia->getId() + ".jpg");
+            } else {
+                // if the image is not valid, we set a default image
+                currentMedia->setImagePath(":default.jpg");
             }
-            addVisitor->saveInput(currentMedia);
-            emit mediaCreated(currentMedia);
         }
+        // save the input fields
+        addVisitor->saveInput(currentMedia);
+        emit mediaCreated(currentMedia);
     });
 
     // in order for the keyPressEvent to work, we need to set focus policy
