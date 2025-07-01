@@ -69,8 +69,6 @@ bool JSONVisitor::exportToFile(const QString& filePath) {
 
     // clean up the images directory: if an image is not used, it will be removed
     QDir dir(QCoreApplication::applicationDirPath());
-    dir.cdUp();
-    dir.cdUp();
     QDir mediaDir(dir.filePath("media"));
 
     // collect all used image file names (normalized to lower-case)
