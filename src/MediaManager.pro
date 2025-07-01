@@ -1,14 +1,13 @@
 QT       += core gui widgets
 
-# Nome del progetto
 TARGET = MediaManager
 TEMPLATE = app
 
-# Versione minima Qt
+# versione minima qt, per sicurezza...
 CONFIG += c++17
 QMAKE_CXXFLAGS += -std=c++17
 
-# File principali
+# file di progetto
 SOURCES += \
     main.cpp \
     MainWindow.cpp \
@@ -58,10 +57,9 @@ HEADERS += \
     View/StyleManager.h \
     View/ViewMediaWidget.h
 
-# Immagini, risorse, font
 RESOURCES += resources.qrc
 
-# Font: (non serve includerli qui se già in .qrc, ma se vuoi puoi specificare dove stanno)
+# meglio specificare dove sono le risorse
 DISTFILES += \
     default.jpg \
     Fonts/AceSansExtrabold.ttf \
@@ -69,10 +67,8 @@ DISTFILES += \
     Fonts/cmu.serif-bold.ttf \
     Fonts/Quicksand-Regular-400.ttf
 
-# INCLUDEPATH (opzionale se tutto è sotto Model/ e View/)
+# per sicurezza, anche se è tutto sotto Model e View
 INCLUDEPATH += $$PWD/Model $$PWD/Model/ArticlesClasses $$PWD/Model/LiteratureClasses $$PWD/View
 
-# Extra: rimuove warning macOS su QFontDatabase (se ti servisse)
+# rimuove warning non intelligenti su macOS
 macx: QMAKE_LFLAGS += -framework ApplicationServices
-
-
