@@ -6,6 +6,7 @@
 #include <QScrollArea>
 #include <QVBoxLayout>
 #include <QShortcut>
+#include <QCoreApplication>
 
 #include "../Model/AddVisitor.h"
 
@@ -61,8 +62,6 @@ CreateMediaWidget::CreateMediaWidget(QWidget* parent, Media* media)
             // save the image to the media directory
             QString appDirPath = QCoreApplication::applicationDirPath();
             QDir dir(appDirPath);
-            dir.cdUp();
-            dir.cdUp();
             QString mediaDirPath = dir.filePath("media");
             if (!dir.exists(mediaDirPath)) dir.mkpath(mediaDirPath);
             QString destFilePath = mediaDirPath + "/" + currentMedia->getId() + ".jpg";

@@ -56,16 +56,17 @@ ViewMediaWidget::ViewMediaWidget(Media* media, QWidget* parent) : QWidget(parent
 void ViewMediaWidget::onEditButtonClicked() {
     editButton->setEnabled(false);  // in order to avoid multiple edits
     saveButton = new QPushButton("Save Changes", this);
-    auto editVisitor = new EditVisitor(mainLayout, saveButton);  // qt parent takes ownership
-    media->accept(editVisitor);
+    editVisitor = std::make_unique<EditVisitor>(mainLayout, saveButton);
+    media->accept(editVisitor.get());
 
     // to allow keyboard shortcuts
     setFocusPolicy(Qt::StrongFocus);
     setFocus();
 
-    connect(editVisitor, &EditVisitor::mediaEdited, this, [=](Media* media) {
+    connect(editVisitor.get(), &EditVisitor::mediaEdited, this, [=](Media* media) {
         emit mediaEdited(media);
         editButton->setEnabled(true);  // re-enable the edit button
+        // edit visitor will automatically be destroyed
     });
 }
 

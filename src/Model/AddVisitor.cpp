@@ -11,7 +11,7 @@
 #include <QPushButton>
 #include <QSpinBox>
 
-AddVisitor::AddVisitor(QLayout* layout, QWidget* parent, QObject* obj_parent) : layout(layout) {
+AddVisitor::AddVisitor(QLayout* layout) : layout(layout) {
 }
 
 void AddVisitor::visit(Media* media) {

@@ -23,7 +23,7 @@ class AddVisitor : public Visitor {
     QPushButton* chooseButton;
 
    public:
-    explicit AddVisitor(QLayout* layout, QWidget* parent = nullptr, QObject* obj_parent = nullptr);
+    explicit AddVisitor(QLayout* layout);
     void chooseImage();
     void visit(Media* media) override;
     void visit(Literature* literature) override;

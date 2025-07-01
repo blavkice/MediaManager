@@ -6,6 +6,7 @@
 
 #include "../Model/Media.h"
 #include "../Model/ViewVisitor.h"
+#include "../Model/EditVisitor.h"
 
 class ViewMediaWidget : public QWidget {
     Q_OBJECT
@@ -13,6 +14,7 @@ class ViewMediaWidget : public QWidget {
     Media* media;
     QVBoxLayout* mainLayout;
     std::unique_ptr<ViewVisitor> viewVisitor;
+    std::unique_ptr<EditVisitor> editVisitor;
     void onEditButtonClicked();
     QPushButton* saveButton;
     QPushButton* editButton;

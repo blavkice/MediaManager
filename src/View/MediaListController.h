@@ -32,7 +32,7 @@ class MediaListController : public QObject {
    signals:
     void elementSelected(bool selected);
    private slots:
-    void onSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
+    void onSelectionChanged(const QItemSelection& selected);
 };
 
 #endif  // MEDIALISTCONTROLLER_H
