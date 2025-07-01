@@ -5,6 +5,7 @@
 #include <QPushButton>
 #include <QScrollArea>
 #include <QVBoxLayout>
+#include <QShortcut>
 
 #include "../Model/AddVisitor.h"
 
@@ -36,8 +37,13 @@ CreateMediaWidget::CreateMediaWidget(QWidget* parent, Media* media)
     addVisitor = std::make_unique<AddVisitor>(contentLayout);
     media->accept(addVisitor.get());
 
-    createButton = new QPushButton("Create", this);  // Assign to member variable
+    createButton = new QPushButton("Create", this);
     contentLayout->addWidget(createButton);
+
+    // in fullscreen mode this is the only way to make "enter" key work...
+    QShortcut const* enterShortcut = new QShortcut(QKeySequence(Qt::Key_Enter), this);
+    connect(enterShortcut, &QShortcut::activated, createButton, &QPushButton::click);
+
 
     contentWidget->setLayout(contentLayout);
     scrollArea->setWidget(contentWidget);
