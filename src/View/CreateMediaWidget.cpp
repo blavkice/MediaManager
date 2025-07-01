@@ -6,6 +6,7 @@
 #include <QScrollArea>
 #include <QVBoxLayout>
 #include <QShortcut>
+#include <QCoreApplication>
 
 #include "../Model/AddVisitor.h"
 
