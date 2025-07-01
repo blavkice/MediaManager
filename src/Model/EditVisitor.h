@@ -13,7 +13,7 @@ class EditVisitor : public AddVisitor {
     QPushButton* saveButton;
 
    public:
-    explicit EditVisitor(QLayout* layout, QPushButton* saveButton, QWidget* parent = nullptr);
+    explicit EditVisitor(QLayout* layout, QPushButton* saveButton);
     void visit(Media* media) override;
     void saveChanges(Media* media);
    signals:

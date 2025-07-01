@@ -34,7 +34,7 @@ MediaListController::MediaListController(QListView* listView, QObject* parent) :
             &MediaListController::onSelectionChanged);
 }
 
-void MediaListController::onSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected) {
+void MediaListController::onSelectionChanged(const QItemSelection& selected) {
     emit elementSelected(!selected.isEmpty());
 }
 

@@ -242,7 +242,7 @@ void MainWindow::showFullscreenDetail(const QModelIndex& index) {
     // if we are already in fullscreen detail mode, do nothing
     if (detailWidget) {
         centralStack->removeWidget(detailWidget);
-        delete detailWidget;
+        detailWidget->deleteLater();
         detailWidget = nullptr;
     }
 
@@ -272,7 +272,7 @@ void MainWindow::showFullscreenDetail(const QModelIndex& index) {
             connect(group, &QParallelAnimationGroup::finished, this, [this, from]() {
                 if (from != gridView && from != splitViewWidget) {
                     centralStack->removeWidget(from);
-                    delete from;
+                    from->deleteLater();
                     detailWidget = nullptr;
                 }
             });
@@ -365,7 +365,7 @@ void MainWindow::onMediaSelected(const int index) {
             centralStack->setCurrentWidget(gridView);
             if (detailWidget) {
                 centralStack->removeWidget(detailWidget);
-                delete detailWidget;
+                detailWidget->deleteLater();
                 detailWidget = nullptr;
             }
             currentViewMode = FullscreenGrid;
@@ -376,7 +376,7 @@ void MainWindow::onMediaSelected(const int index) {
             centralStack->setCurrentWidget(gridView);
             if (detailWidget) {
                 centralStack->removeWidget(detailWidget);
-                delete detailWidget;
+                detailWidget->deleteLater();
                 detailWidget = nullptr;
             }
             currentViewMode = FullscreenGrid;
@@ -393,7 +393,7 @@ void MainWindow::onMediaSelected(const int index) {
             connect(createMediaWidget, &CreateMediaWidget::mediaCreated, this, &MainWindow::onMediaCreated);
             rightInfoWidget->setWidget(createMediaWidget);
         } catch (std::invalid_argument& e) {
-            delete createMediaWidget;
+            createMediaWidget->deleteLater();
             QMessageBox::warning(rightInfoWidget, "Error creating media", e.what());
         }
     }
@@ -402,8 +402,6 @@ void MainWindow::onMediaSelected(const int index) {
 void MainWindow::onMediaCreated(Media* media) const {
     mediaListController->addMedia(std::shared_ptr<Media>(media));
     rightInfoWidget->setMediaCreated();
-    // the clear up is done by rightInfoWidget after a widget is set: the previous widget is deleted from heap
-    // and so createMediaWidget is deleted correctly everytime
 }
 
 void MainWindow::onMediaEdited(Media* media) {
@@ -418,7 +416,7 @@ void MainWindow::onMediaEdited(Media* media) {
         centralStack->setCurrentWidget(gridView);
         if (detailWidget) {
             centralStack->removeWidget(detailWidget);
-            delete detailWidget;
+            detailWidget->deleteLater();
             detailWidget = nullptr;
         }
         currentViewMode = FullscreenGrid;

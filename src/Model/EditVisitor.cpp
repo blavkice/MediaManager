@@ -2,7 +2,7 @@
 
 #include <QMessageBox>
 
-EditVisitor::EditVisitor(QLayout* layout, QPushButton* saveButton, QWidget* parent)
+EditVisitor::EditVisitor(QLayout* layout, QPushButton* saveButton)
     : AddVisitor(layout), saveButton(saveButton) {
     // saveButton is passed from the ViewMediaWidget in order to allow the keyboard shortcut to work
     layout->addWidget(saveButton);
