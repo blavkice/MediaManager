@@ -19,7 +19,7 @@ The code uses some common programming techniques (like Visitor and Observer patt
 
 ## How to run
 
-1. **Build the app** using Qt Creator or running qmake and make (.pro included)
+1. **Build the app** using Qt Creator or running `qmake` and `make` (`.pro` is included)
 2. **Important:**  
    Before running the app for the first time, **copy the `media` and `saves` folders** (included in the project) into the same folder where the executable is created.  
    This is needed for the program to find images and to load/save data.
