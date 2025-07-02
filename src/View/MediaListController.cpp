@@ -66,8 +66,6 @@ void MediaListController::populateList() const {
         const QString appDirPath = QCoreApplication::applicationDirPath();
         QDir dir(appDirPath);
         const QString imgPath = dir.filePath("media") + "/" + media->getId() + ".jpg";
-        qDebug() << "imgPath:" << imgPath;
-
         QImage image(imgPath);
         if (image.isNull()) {
             image.load(":default.jpg");
@@ -101,7 +99,6 @@ void MediaListController::removeMedia(const int index) {
 
 void MediaListController::searchMedia(const QString& searchText) const {
     filterController->setSearchQuery(searchText);
-    // TBD: those 2 lines, should they be HERE?, if different views are implements?
     listView->clearSelection();
     listView->setCurrentIndex(QModelIndex());
 }
