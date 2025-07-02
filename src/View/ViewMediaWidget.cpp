@@ -11,15 +11,40 @@
 #include "../Model/EditVisitor.h"
 #include "../Model/ViewVisitor.h"
 
-ViewMediaWidget::ViewMediaWidget(Media* media, QWidget* parent) : QWidget(parent), media(media) {
+ViewMediaWidget::ViewMediaWidget(Media* media, QWidget* parent)
+    : QWidget(parent),
+      media(media),
+      viewVisitor(nullptr),
+      editVisitor(nullptr),
+      saveButton(nullptr),
+      editButton(nullptr),
+      imageLabel(nullptr),
+      editContainer(nullptr) {
     mainLayout = new QVBoxLayout(this);
+    showMediaView();
+}
 
-    // adding the edit button and connecting it to the editVisitor
+void ViewMediaWidget::showMediaView() {
+    // clean layout (remove all widgets and visitors)
+    QLayoutItem* child;
+    while ((child = mainLayout->takeAt(0)) != nullptr) {
+        if (auto w = child->widget()) w->deleteLater();
+        delete child;
+    }
+    if (editContainer) {
+        editContainer->deleteLater();
+        editContainer = nullptr;
+    }
+
+    // add edit button and connect
     const auto topLayout = new QHBoxLayout();
     editButton = new QPushButton("Edit", this);
     topLayout->addStretch();  // push the button to the right
     topLayout->addWidget(editButton);
-    connect(editButton, &QPushButton::clicked, this, &ViewMediaWidget::onEditButtonClicked);
+    connect(editButton, &QPushButton::clicked, this, [this]() {
+        editButton->setVisible(false);
+        showEditView();
+    });
     mainLayout->addLayout(topLayout);
 
     auto scrollArea = new QScrollArea(this);
@@ -33,17 +58,11 @@ ViewMediaWidget::ViewMediaWidget(Media* media, QWidget* parent) : QWidget(parent
     // image loading
     const QString appDirPath = QCoreApplication::applicationDirPath();
     QDir dir(appDirPath);
-    dir.cdUp();
-    dir.cdUp();
     const QString imgPath = dir.filePath("media") + "/" + media->getId() + ".jpg";
-    qDebug() << "imgPath:" << imgPath;
-
     QImage image(imgPath);
-    if (image.isNull()) {
-        image.load(":default.jpg");
-        qDebug() << "image is null";
-    }
-    QLabel* imageLabel = new QLabel;
+    if (image.isNull()) image.load(":default.jpg");
+
+    imageLabel = new QLabel;
     imageLabel->setPixmap(QPixmap::fromImage(image).scaled(300, 300, Qt::KeepAspectRatio));
     imageLabel->setAlignment(Qt::AlignCenter);
     contentLayout->addWidget(imageLabel);
@@ -53,20 +72,35 @@ ViewMediaWidget::ViewMediaWidget(Media* media, QWidget* parent) : QWidget(parent
     media->accept(viewVisitor.get());
 }
 
-void ViewMediaWidget::onEditButtonClicked() {
-    editButton->setEnabled(false);  // in order to avoid multiple edits
-    saveButton = new QPushButton("Save Changes", this);
-    editVisitor = std::make_unique<EditVisitor>(mainLayout, saveButton);
+void ViewMediaWidget::showEditView() {
+    // clean layout (remove all widgets and visitors), including view!
+    QLayoutItem* child;
+    while ((child = mainLayout->takeAt(0)) != nullptr) {
+        if (auto w = child->widget()) w->deleteLater();
+        delete child;
+    }
+    if (imageLabel) {
+        imageLabel->deleteLater();
+        imageLabel = nullptr;
+    }
+    viewVisitor.reset();
+
+    // edit visitor container
+    editContainer = new QWidget(this);
+    auto editLayout = new QVBoxLayout(editContainer);
+
+    saveButton = new QPushButton("Save Changes", editContainer);
+    editVisitor = std::make_unique<EditVisitor>(editLayout, saveButton);
+
+    // edit visitor will add its own widgets to the layout
     media->accept(editVisitor.get());
 
-    // to allow keyboard shortcuts
-    setFocusPolicy(Qt::StrongFocus);
-    setFocus();
+    mainLayout->addWidget(editContainer);
 
-    connect(editVisitor.get(), &EditVisitor::mediaEdited, this, [=](Media* media) {
-        emit mediaEdited(media);
-        editButton->setEnabled(true);  // re-enable the edit button
-        // edit visitor will automatically be destroyed
+    connect(editVisitor.get(), &EditVisitor::mediaEdited, this, [this](Media* m) {
+        emit mediaEdited(m);
+        // after editing, return to view mode
+        showMediaView();
     });
 }
 

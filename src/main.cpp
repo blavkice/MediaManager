@@ -16,10 +16,8 @@ int main(int argc, char *argv[]) {
     const QString basePath = QCoreApplication::applicationDirPath();
 
     const QDir dir(basePath);
-    if (!dir.exists("media"))
-        dir.mkdir("media");
-    if (!dir.exists("saves"))
-        dir.mkdir("saves");
+    if (!dir.exists("media")) dir.mkdir("media");
+    if (!dir.exists("saves")) dir.mkdir("saves");
 
     MainWindow w;
     w.show();

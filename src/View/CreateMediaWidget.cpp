@@ -1,12 +1,12 @@
 #include "CreateMediaWidget.h"
 
+#include <QCoreApplication>
 #include <QFileDialog>
 #include <QLabel>
 #include <QPushButton>
 #include <QScrollArea>
-#include <QVBoxLayout>
 #include <QShortcut>
-#include <QCoreApplication>
+#include <QVBoxLayout>
 
 #include "../Model/AddVisitor.h"
 
@@ -44,7 +44,6 @@ CreateMediaWidget::CreateMediaWidget(QWidget* parent, Media* media)
     // in fullscreen mode this is the only way to make "enter" key work...
     QShortcut const* enterShortcut = new QShortcut(QKeySequence(Qt::Key_Enter), this);
     connect(enterShortcut, &QShortcut::activated, createButton, &QPushButton::click);
-
 
     contentWidget->setLayout(contentLayout);
     scrollArea->setWidget(contentWidget);

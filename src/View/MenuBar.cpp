@@ -32,14 +32,12 @@ void MenuBar::importLastDefaultMedia() {
     if (jsonVisitor) {
         QString appDirPath = QCoreApplication::applicationDirPath();
         QDir dir(appDirPath);
-        dir.cdUp();
-        dir.cdUp();
         QString filePath = dir.filePath("saves/last.json");
         qDebug() << "Importing last default media from:" << filePath;
         if (jsonVisitor->importFromFile(filePath)) {
             emit mediaImported();
         } else {
-            QMessageBox::warning(this, tr("Import"), tr("Default import failed!"));
+            QMessageBox::warning(this, tr("Import"), tr("Default import failed or this is the first run!"));
         }
     }
 }
@@ -87,8 +85,6 @@ void MenuBar::onSaveActionTriggered() {
     // save the current state to last.json in the saves directory
     const QString appDirPath = QCoreApplication::applicationDirPath();
     QDir dir(appDirPath);
-    dir.cdUp();
-    dir.cdUp();
     const QString lastJsonPath = dir.filePath("saves/last.json");
 
     if (jsonVisitor->exportToFile(lastJsonPath)) {

@@ -67,7 +67,7 @@ void MainWindow::initLayouts() {
     typeFilterBox->setFixedSize(60, 25);
 
     searchBox = new QLineEdit(toolsWidget);
-    searchBox->setPlaceholderText("Search by title or short description");
+    searchBox->setPlaceholderText("Search by title");
     searchBox->setFixedSize(130, 25);
 
     addButton = new QPushButton("+", toolsWidget);
@@ -412,7 +412,7 @@ void MainWindow::onMediaEdited(Media* media) {
 
     // if in fullscreen detail mode, return to grid view
     if (currentViewMode == FullscreenDetail) {
-        // Return to grid view and clean up detailWidget
+        // eeturn to grid view and clean up detailWidget
         centralStack->setCurrentWidget(gridView);
         if (detailWidget) {
             centralStack->removeWidget(detailWidget);

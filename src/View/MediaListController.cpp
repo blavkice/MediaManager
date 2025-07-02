@@ -65,8 +65,6 @@ void MediaListController::populateList() const {
         // check if the image is valid and load it into the item
         const QString appDirPath = QCoreApplication::applicationDirPath();
         QDir dir(appDirPath);
-        dir.cdUp();
-        dir.cdUp();
         const QString imgPath = dir.filePath("media") + "/" + media->getId() + ".jpg";
         qDebug() << "imgPath:" << imgPath;
 

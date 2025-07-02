@@ -4,9 +4,9 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
+#include "../Model/EditVisitor.h"
 #include "../Model/Media.h"
 #include "../Model/ViewVisitor.h"
-#include "../Model/EditVisitor.h"
 
 class ViewMediaWidget : public QWidget {
     Q_OBJECT
@@ -15,9 +15,13 @@ class ViewMediaWidget : public QWidget {
     QVBoxLayout* mainLayout;
     std::unique_ptr<ViewVisitor> viewVisitor;
     std::unique_ptr<EditVisitor> editVisitor;
-    void onEditButtonClicked();
     QPushButton* saveButton;
     QPushButton* editButton;
+    QLabel* imageLabel;
+    QWidget* editContainer;  // to help clean layout when viewing/editing
+
+    void showMediaView();
+    void showEditView();
 
    protected:
     void keyPressEvent(QKeyEvent* event) override;
