@@ -8,7 +8,6 @@
 
 MenuBar::MenuBar(QWidget* parent) : QMenuBar(parent) {
     actionsMenu = new QMenu(tr("Actions"), this);
-    exit = new QAction(tr("Exit MediaManager"), this);
     importAction = new QAction(tr("Import"), this);
     exportAction = new QAction(tr("Export"), this);
     saveAction = new QAction(tr("Save"), this);
@@ -16,11 +15,7 @@ MenuBar::MenuBar(QWidget* parent) : QMenuBar(parent) {
     actionsMenu->addAction(saveAction);
     actionsMenu->addAction(importAction);
     actionsMenu->addAction(exportAction);
-    actionsMenu->addAction(exit);
     addMenu(actionsMenu);
-
-    // in order to show the personalized exit button in macOS
-    exit->setMenuRole(QAction::NoRole);
 
     connect(saveAction, &QAction::triggered, this, &MenuBar::onSaveActionTriggered);
     connect(importAction, &QAction::triggered, this, &MenuBar::onImportActionTriggered);
@@ -93,10 +88,6 @@ void MenuBar::onSaveActionTriggered() {
 
 void MenuBar::setJSONVisitor(JSONVisitor* jsonVisitor) {
     this->jsonVisitor = jsonVisitor;
-}
-
-QAction* MenuBar::getExit() const {
-    return exit;
 }
 
 QAction* MenuBar::getImportAction() const {

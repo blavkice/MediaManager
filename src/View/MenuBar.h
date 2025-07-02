@@ -9,7 +9,6 @@ class MenuBar : public QMenuBar {
     Q_OBJECT
    private:
     QMenu* actionsMenu;
-    QAction* exit;
     QAction* importAction;
     QAction* exportAction;
     QAction* saveAction;
@@ -18,7 +17,6 @@ class MenuBar : public QMenuBar {
 
    public:
     explicit MenuBar(QWidget* parent);
-    QAction* getExit() const;
     QAction* getImportAction() const;
     QAction* getExportAction() const;
     void setJSONVisitor(JSONVisitor* jsonVisitor);
