@@ -62,6 +62,9 @@ void MenuBar::onImportActionTriggered() {
 void MenuBar::onExportActionTriggered() {
     QString filePath = QFileDialog::getSaveFileName(this, tr("Export JSON"), "", tr("JSON Files (*.json)"));
     if (!filePath.isEmpty()) {
+        // to ensure the file has a .json extension
+        if (!filePath.endsWith(".json", Qt::CaseInsensitive))
+            filePath += ".json";
         if (jsonVisitor->exportToFile(filePath)) {
             replaceLastDefaultMedia(filePath);
             QMessageBox::information(this, tr("Export"), tr("Export successful!"));
