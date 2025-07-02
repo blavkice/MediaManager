@@ -1,5 +1,7 @@
 #include "ViewVisitor.h"
 
+#include <QLineEdit>
+
 ViewVisitor::ViewVisitor(QLayout* layout) : layout(layout) {
 }
 
@@ -34,7 +36,11 @@ void ViewVisitor::visit(Articles* article) {
     visit(static_cast<Media*>(article));
     addLabel("Author: " + article->getAuthor());
     addLabel("Category: " + article->getCategory());
-    addLabel("URL: " + article->getUrl());
+    // url is selectable
+    auto* urlEdit = new QLineEdit(article->getUrl());
+    urlEdit->setReadOnly(true);
+    layout->addWidget(new QLabel("URL:"));
+    layout->addWidget(urlEdit);
     addLabel("Date: " + article->getDate().toString());
     addLabel("Word Count: " + QString::number(article->getWordCount()));
 }
@@ -48,7 +54,6 @@ void ViewVisitor::visit(Book* book) {
 void ViewVisitor::visit(Poem* poem) {
     visit(static_cast<Literature*>(poem));
     addLabel("Written in: " + poem->getCity());
-    // addTextBlock(poem->getLongDescription());
 }
 
 void ViewVisitor::visit(AcademicArticle* academicArticle) {

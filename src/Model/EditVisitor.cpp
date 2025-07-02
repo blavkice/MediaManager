@@ -10,7 +10,7 @@ EditVisitor::EditVisitor(QLayout* layout, QPushButton* saveButton) : AddVisitor(
     // saveButton is passed from the ViewMediaWidget in order to allow the keyboard shortcut to work
     layout->addWidget(saveButton);
 
-    // Bottone per cambiare immagine
+    // button to change the image
     auto changeImgBtn = new QPushButton("Change Image", layout->parentWidget());
     layout->addWidget(changeImgBtn);
 
@@ -21,7 +21,7 @@ EditVisitor::EditVisitor(QLayout* layout, QPushButton* saveButton) : AddVisitor(
                                                         "Images (*.png *.jpg *.jpeg *.bmp *.gif)");
         if (fileName.isEmpty()) return;
 
-        // Assicurati che la cartella media esista!
+        // we need to make sure media directory exists
         QString mediaDirPath = QCoreApplication::applicationDirPath() + "/media";
         QDir mediaDir(mediaDirPath);
         if (!mediaDir.exists()) {
@@ -32,7 +32,7 @@ EditVisitor::EditVisitor(QLayout* layout, QPushButton* saveButton) : AddVisitor(
 
         qDebug() << "Copying from:" << fileName << "to:" << destPath;
 
-        // Rimuovi la vecchia immagine e copia la nuova
+        // remove old image if it exists
         QFile::remove(destPath);
         if (!QFile::copy(fileName, destPath)) {
             QMessageBox::warning(nullptr, "Error", "Failed to copy the image!");

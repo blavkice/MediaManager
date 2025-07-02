@@ -27,7 +27,6 @@ MenuBar::MenuBar(QWidget* parent) : QMenuBar(parent) {
     connect(exportAction, &QAction::triggered, this, &MenuBar::onExportActionTriggered);
 }
 
-// IMPORTANT NOTE: it is working because exec is being started from MM/src/build-debug, adjust accordingly!
 void MenuBar::importLastDefaultMedia() {
     if (jsonVisitor) {
         QString appDirPath = QCoreApplication::applicationDirPath();
@@ -48,8 +47,6 @@ void MenuBar::replaceLastDefaultMedia(const QString& filePath) {
 
     const QString appDirPath = QCoreApplication::applicationDirPath();
     QDir dir(appDirPath);
-    dir.cdUp();
-    dir.cdUp();
     const QString lastJsonPath = dir.filePath("saves/last.json");
 
     if (QFile::remove(lastJsonPath)) QFile::copy(filePath, lastJsonPath);

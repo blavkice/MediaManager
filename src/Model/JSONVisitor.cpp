@@ -78,7 +78,6 @@ bool JSONVisitor::exportToFile(const QString& filePath) {
         QString fileName = QFileInfo(media->getImagePath()).fileName().toLower();
         if (!fileName.isEmpty()) {
             usedImages.insert(fileName);
-            qDebug() << "Used image:" << fileName;
         }
     }
 

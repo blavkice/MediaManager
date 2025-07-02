@@ -21,8 +21,7 @@ CreateMediaWidget::CreateMediaWidget(QWidget* parent, Media* media)
     auto contentWidget = new QWidget(scrollArea);
     contentLayout = new QVBoxLayout(contentWidget);
 
-    // note: clearing is not to be done here, rightDynamicWidget
-    // will clear the layout before setting this widget
+    // note: clearing is not to be done here
 
     // to add image from dialog
     contentLayout->addWidget(new QLabel("Image Path:"));

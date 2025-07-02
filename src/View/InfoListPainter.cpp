@@ -32,9 +32,26 @@ void InfoListPainter::paint(QPainter* painter, const QStyleOptionViewItem& optio
         painter->setPen(option.palette.text().color());
     }
 
+    // calculate title height
+    int titleHeight = 25;  // default height
+    QFont titleFont;
+    const int titleFontId = QFontDatabase::addApplicationFont(":/Fonts/AceSansExtrabold.ttf");
+    if (titleFontId != -1) {
+        QString titleFontFamily = QFontDatabase::applicationFontFamilies(titleFontId).at(0);
+        titleFont = QFont(titleFontFamily);
+        titleFont.setPointSize(12);
+        titleFont.setBold(true);
+
+        // calculate title height based on the font and text
+        QFontMetrics titleMetrics(titleFont);
+        QRect titleBounds = titleMetrics.boundingRect(QRect(0, 0, rect.width() - 85, 0), Qt::TextWordWrap, title);
+        titleHeight = qMax(25, titleBounds.height() + 5);  // minimum 25px, with 5px padding
+    }
+
     auto imgRect = QRect(rect.left(), rect.top() + 5, 60, 60);
-    auto titleRect = QRect(rect.left() + 75, rect.top() + 5, rect.width() - 85, 25);
-    auto descriptionRect = QRect(rect.left() + 75, rect.top() + 30, rect.width() - 85, rect.height() - 35);
+    auto titleRect = QRect(rect.left() + 75, rect.top() + 5, rect.width() - 85, titleHeight);
+    auto descriptionRect =
+        QRect(rect.left() + 75, rect.top() + 10 + titleHeight, rect.width() - 85, rect.height() - titleHeight - 15);
 
     // draw rounded image with shadow effect
     QPainterPath imgPath;
@@ -43,21 +60,15 @@ void InfoListPainter::paint(QPainter* painter, const QStyleOptionViewItem& optio
     painter->drawImage(imgRect, img);
     painter->setClipping(false);
 
-    const int titleFontId = QFontDatabase::addApplicationFont(":/Fonts/AceSansExtrabold.ttf");
     if (titleFontId != -1) {
-        QString titleFontFamily = QFontDatabase::applicationFontFamilies(titleFontId).at(0);
-        QFont titleFont(titleFontFamily);
-        titleFont.setPointSize(12);  // Set modern readable size
-        titleFont.setBold(true);
         painter->setFont(titleFont);
 
         // wrapping
         QTextOption titleOption;
         titleOption.setWrapMode(QTextOption::WordWrap);
-        titleOption.setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+        titleOption.setAlignment(Qt::AlignLeft | Qt::AlignTop);
         painter->drawText(titleRect, title, titleOption);
     }
-    // painter->drawText(titleRect, Qt::AlignLeft | Qt::AlignVCenter, title);
 
     // reset font to default font for description
     QFont descFont = option.font;
@@ -74,8 +85,27 @@ void InfoListPainter::paint(QPainter* painter, const QStyleOptionViewItem& optio
 
 QSize InfoListPainter::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const {
     QFontMetrics fontMetrics(option.font);
+    QString title = index.data(Qt::DisplayRole).toString();
     QString description = index.data(Qt::UserRole + 1).toString();
+
+    // calculate title height
+    int titleHeight = 25;  // default height
+    const int titleFontId = QFontDatabase::addApplicationFont(":/Fonts/AceSansExtrabold.ttf");
+    if (titleFontId != -1) {
+        QString titleFontFamily = QFontDatabase::applicationFontFamilies(titleFontId).at(0);
+        QFont titleFont(titleFontFamily);
+        titleFont.setPointSize(12);
+        titleFont.setBold(true);
+
+        QFontMetrics titleMetrics(titleFont);
+        QRect titleBounds =
+            titleMetrics.boundingRect(QRect(0, 0, option.rect.width() - 85, 0), Qt::TextWordWrap, title);
+        titleHeight = qMax(25, titleBounds.height() + 5);
+    }
+
+    // calculate description height
     int textHeight =
         fontMetrics.boundingRect(QRect(0, 0, option.rect.width() - 85, 0), Qt::TextWordWrap, description).height();
-    return QSize(option.rect.width(), 80 + textHeight);
+
+    return QSize(option.rect.width(), 80 + titleHeight + textHeight);
 }
