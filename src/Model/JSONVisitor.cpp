@@ -15,6 +15,7 @@
 JSONVisitor::JSONVisitor(MediaListController* mediaListController) : mediaListController(mediaListController) {
 }
 
+// qDebugs are left for debugging purposes, they can be obv removed
 bool JSONVisitor::importFromFile(const QString& filePath) const {
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly)) {

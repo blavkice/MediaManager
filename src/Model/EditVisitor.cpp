@@ -1,13 +1,12 @@
 #include "EditVisitor.h"
 
-#include <QFileDialog>
-#include <QFile>
 #include <QCoreApplication>
-#include <QString>
+#include <QFile>
+#include <QFileDialog>
 #include <QMessageBox>
+#include <QString>
 
-EditVisitor::EditVisitor(QLayout* layout, QPushButton* saveButton)
-    : AddVisitor(layout), saveButton(saveButton) {
+EditVisitor::EditVisitor(QLayout* layout, QPushButton* saveButton) : AddVisitor(layout), saveButton(saveButton) {
     // saveButton is passed from the ViewMediaWidget in order to allow the keyboard shortcut to work
     layout->addWidget(saveButton);
 
@@ -18,12 +17,9 @@ EditVisitor::EditVisitor(QLayout* layout, QPushButton* saveButton)
     QObject::connect(changeImgBtn, &QPushButton::clicked, this, [this]() {
         if (!currentMedia) return;
 
-        QString fileName = QFileDialog::getOpenFileName(
-            nullptr, "Select Image", QCoreApplication::applicationDirPath(),
-            "Images (*.png *.jpg *.jpeg *.bmp *.gif)"
-        );
-        if (fileName.isEmpty())
-            return;
+        QString fileName = QFileDialog::getOpenFileName(nullptr, "Select Image", QCoreApplication::applicationDirPath(),
+                                                        "Images (*.png *.jpg *.jpeg *.bmp *.gif)");
+        if (fileName.isEmpty()) return;
 
         // Assicurati che la cartella media esista!
         QString mediaDirPath = QCoreApplication::applicationDirPath() + "/media";
@@ -42,7 +38,6 @@ EditVisitor::EditVisitor(QLayout* layout, QPushButton* saveButton)
             QMessageBox::warning(nullptr, "Error", "Failed to copy the image!");
         }
     });
-
 
     QObject::connect(saveButton, &QPushButton::clicked, this, [this]() { saveChanges(currentMedia); });
 }

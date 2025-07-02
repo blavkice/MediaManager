@@ -12,7 +12,14 @@
 #include "../Model/ViewVisitor.h"
 
 ViewMediaWidget::ViewMediaWidget(Media* media, QWidget* parent)
-    : QWidget(parent), media(media), viewVisitor(nullptr), editVisitor(nullptr), saveButton(nullptr), editButton(nullptr), imageLabel(nullptr), editContainer(nullptr) {
+    : QWidget(parent),
+      media(media),
+      viewVisitor(nullptr),
+      editVisitor(nullptr),
+      saveButton(nullptr),
+      editButton(nullptr),
+      imageLabel(nullptr),
+      editContainer(nullptr) {
     mainLayout = new QVBoxLayout(this);
     showMediaView();
 }
@@ -72,7 +79,10 @@ void ViewMediaWidget::showEditView() {
         if (auto w = child->widget()) w->deleteLater();
         delete child;
     }
-    if (imageLabel) { imageLabel->deleteLater(); imageLabel = nullptr; }
+    if (imageLabel) {
+        imageLabel->deleteLater();
+        imageLabel = nullptr;
+    }
     viewVisitor.reset();
 
     // edit visitor container

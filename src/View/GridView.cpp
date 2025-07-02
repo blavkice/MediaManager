@@ -1,12 +1,12 @@
 #include "GridView.h"
 
+#include <QFontDatabase>
 #include <QPainter>
+#include <QPainterPath>
 #include <QStyleOptionViewItem>
 #include <QTextOption>
-#include <QFontDatabase>
-#include <QPainterPath>
 
-// Custom delegate per il rendering a card moderna
+// custom delegate for "modern" look
 GridView::GridViewDelegate::GridViewDelegate(QObject* parent) : QStyledItemDelegate(parent) {
 }
 
@@ -20,20 +20,19 @@ void GridView::GridViewDelegate::paint(QPainter* painter, const QStyleOptionView
     const QString title = index.data(Qt::DisplayRole).toString();
 
     // selection highlight
-    if (option.state & QStyle::State_Selected)
-        painter->fillRect(rect, QColor("#217a3b"));  // Verde acceso (come add button)
+    if (option.state & QStyle::State_Selected) painter->fillRect(rect, QColor("#217a3b"));  // green soft
 
-    // draw "card" background con ombra leggera
+    // draw "card" background with rounded corners
     QRectF cardRect = rect;
     painter->setPen(Qt::NoPen);
-    painter->setBrush(QColor(0, 0, 0, 18));  // ombra molto soft
+    painter->setBrush(QColor(0, 0, 0, 18));  // soft shadow
     painter->drawRoundedRect(cardRect.adjusted(2, 6, 8, 10), 18, 18);
 
-    painter->setBrush(QColor("#232323")); // Card scura
+    painter->setBrush(QColor("#232323"));  // dark background
     painter->drawRoundedRect(cardRect, 18, 18);
 
     // draw the image with rounded corners (a lil bit)
-    const int imgHeight = rect.height() - 52;  // lascia più spazio al testo
+    const int imgHeight = rect.height() - 52;
     QRect imgRect(rect.x() + 12, rect.y() + 12, rect.width() - 24, imgHeight - 8);
 
     QPainterPath clipPath;
@@ -45,21 +44,19 @@ void GridView::GridViewDelegate::paint(QPainter* painter, const QStyleOptionView
     // custom title with font
     QRect textRect(rect.x() + 8, imgRect.bottom() + 12, rect.width() - 16, rect.height() - imgHeight - 16);
 
-    //
     static int aceFontId = QFontDatabase::addApplicationFont(":/fonts/AceSansExtraBold.ttf");
     static QString aceFontFamily = QFontDatabase::applicationFontFamilies(aceFontId).isEmpty()
-                                   ? QString()
-                                   : QFontDatabase::applicationFontFamilies(aceFontId).at(0);
+                                       ? QString()
+                                       : QFontDatabase::applicationFontFamilies(aceFontId).at(0);
     QFont font(aceFontFamily, 13, QFont::Bold);
     painter->setFont(font);
 
-    //
     painter->setPen(Qt::white);
     QTextOption opt;
     opt.setWrapMode(QTextOption::WordWrap);
     opt.setAlignment(Qt::AlignCenter);
 
-    // Titolo massimo 2 righe, ellipsis se troppo lungo
+    // ellipsize the title if it is too long
     QString elidedTitle = painter->fontMetrics().elidedText(title, Qt::ElideRight, textRect.width() * 1);
     painter->drawText(textRect, elidedTitle, opt);
 
@@ -67,7 +64,7 @@ void GridView::GridViewDelegate::paint(QPainter* painter, const QStyleOptionView
 }
 
 QSize GridView::GridViewDelegate::sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const {
-    return QSize(190, 250); // Più largo e alto per respiro
+    return QSize(190, 250);
 }
 
 GridView::GridView(QWidget* parent) : QListView(parent) {

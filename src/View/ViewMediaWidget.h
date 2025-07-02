@@ -4,33 +4,33 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
+#include "../Model/EditVisitor.h"
 #include "../Model/Media.h"
 #include "../Model/ViewVisitor.h"
-#include "../Model/EditVisitor.h"
 
 class ViewMediaWidget : public QWidget {
- Q_OBJECT
-private:
- Media* media;
- QVBoxLayout* mainLayout;
- std::unique_ptr<ViewVisitor> viewVisitor;
- std::unique_ptr<EditVisitor> editVisitor;
- QPushButton* saveButton;
- QPushButton* editButton;
- QLabel* imageLabel;
- QWidget* editContainer;  // to help clean layout when viewing/editing
+    Q_OBJECT
+   private:
+    Media* media;
+    QVBoxLayout* mainLayout;
+    std::unique_ptr<ViewVisitor> viewVisitor;
+    std::unique_ptr<EditVisitor> editVisitor;
+    QPushButton* saveButton;
+    QPushButton* editButton;
+    QLabel* imageLabel;
+    QWidget* editContainer;  // to help clean layout when viewing/editing
 
- void showMediaView();
- void showEditView();
+    void showMediaView();
+    void showEditView();
 
-protected:
- void keyPressEvent(QKeyEvent* event) override;
+   protected:
+    void keyPressEvent(QKeyEvent* event) override;
 
-public:
- explicit ViewMediaWidget(Media* media, QWidget* parent = nullptr);
- ~ViewMediaWidget() override;
- signals:
-  void mediaEdited(Media* media);
+   public:
+    explicit ViewMediaWidget(Media* media, QWidget* parent = nullptr);
+    ~ViewMediaWidget() override;
+   signals:
+    void mediaEdited(Media* media);
 };
 
 #endif  // VIEWMEDIAWIDGET_H
